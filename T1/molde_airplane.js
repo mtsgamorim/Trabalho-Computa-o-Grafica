@@ -30,16 +30,18 @@ let plane = createGroundPlaneWired(1000, 1000);
 scene.add(plane);
 
 // create the airplane (cone)
-var geometry = new THREE.ConeGeometry( 5, 40, 32 );
-var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-var cone = new THREE.Mesh( geometry, material );
+// export default function createAviao() {
+//   var geometry = new THREE.ConeGeometry(5, 40, 32);
+//   var material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+//   var cone = new THREE.Mesh(geometry, material);
 
-cone.position.set(0, 30, 0);
+//   cone.position.set(0, 30, 0);
 
-let angle = degreesToRadians(-90);
-cone.rotateX(angle);
+//   let angle = degreesToRadians(-90);
+//   cone.rotateX(angle);
 
-scene.add( cone );
+//   scene.add(cone);
+// }
 
 // Listen window size changes
 window.addEventListener( 'resize', function(){onWindowResize(camera, renderer)}, false );
