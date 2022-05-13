@@ -16,6 +16,7 @@ var renderer = initRenderer();    // View function in util/utils
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
 var camera = initCamera(new THREE.Vector3(0, 90, 40)); // Init camera in this position
+let cont = 0;
 initDefaultBasicLight(scene);
 
 // Enable mouse rotation, pan, zoom etc.
@@ -26,14 +27,14 @@ var axesHelper = new THREE.AxesHelper( 12 );
 scene.add( axesHelper );
 
 // create the ground plane
-let plane1 = createGroundPlaneWired(100, 100, 10, 10, "rgb(0,0,0)");
-let plane2 = createGroundPlaneWired(100, 100, 10, 10, "rgb(250,250,250)");
-let plane3 = createGroundPlaneWired(100, 100, 10, 10, "rgb(80,70,100)");
+let plane1 = createGroundPlaneWired(200, 300, 10, 10, "rgb(0,0,0)");
+let plane2 = createGroundPlaneWired(200, 300, 10, 10, "rgb(250,250,250)");
+let plane3 = createGroundPlaneWired(200, 300, 10, 10, "rgb(80,70,100)");
 scene.add(plane1);
 scene.add(plane2);
 scene.add(plane3);
-plane2.translateY(100);
-plane3.translateY(200);
+plane2.translateY(300);
+plane3.translateY(600);
 
 // create a cube
 var cameraHolder = new THREE.Object3D();
@@ -68,12 +69,22 @@ function andarCamera() {
     cameraHolder.translateZ(velocidade);
     aviao.translateY(-velocidade);
     //plane.translateY(0.2)
-    setInterval(planoInfinito, 5000);
+    
   }
 }
+setInterval(planoInfinito, 28000);
 function planoInfinito(){
-    if(animationOn){
+    if(cont === 0){
+      plane1.translateY(900)
       
+    }else if(cont === 1){
+      plane2.translateY(900);
+    }else if(cont === 2){
+      plane3.translateY(900);
+    }
+    cont++;
+    if(cont === 3){
+      cont = 0;
     }
 }
  
