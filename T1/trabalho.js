@@ -72,7 +72,7 @@ function andarCamera() {
     
   }
 }
-setInterval(planoInfinito, 28000);
+setInterval(planoInfinito, 25200);
 function planoInfinito(){
     if(cont === 0){
       plane1.translateY(900)
