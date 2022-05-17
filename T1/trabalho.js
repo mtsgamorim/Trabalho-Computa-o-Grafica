@@ -62,17 +62,80 @@ function keyboardUpdate() {
 
 let velocidade = -0.2;
 let animationOn = true;
+let enemySpeed = getRandomArbitrary(0.1, 0.5);
+
+function getRandomArbitrary(min, max) {
+  return Math.random() * (max - min) + min;
+}
+  // criação inimigo
+  var geometryEnemy = new THREE.BoxGeometry(4, 4, 4);
+  var materialEnemy = new THREE.MeshBasicMaterial();
+  var enemy = new THREE.Mesh(geometryEnemy, materialEnemy);
+  var enemy2 = new THREE.Mesh(geometryEnemy, materialEnemy);
+  var enemy3 = new THREE.Mesh(geometryEnemy, materialEnemy);
+  //criação inimigo
+  function enemySpawn() {
+    
+    let posicaoX = getRandomArbitrary(-32, 32);
+    console.log(posicaoX);
+    console.log(aviao.position.z)
+    let posicaoZ = cameraHolder.position.z - 24;
+    enemy.position.set(posicaoX, 30, posicaoZ);
+    scene.add(enemy);
+    
+
+  }
+  function enemySpawn2() {
+    
+    let posicaoX = getRandomArbitrary(-32, 32);
+    console.log(posicaoX);
+    console.log(aviao.position.z)
+    let posicaoZ = cameraHolder.position.z - 24;
+    enemy2.position.set(posicaoX, 30, posicaoZ);
+    scene.add(enemy2);
+    
+    
+    
+  }
+  function enemySpawn3() {
+    
+    let posicaoX = getRandomArbitrary(-32, 32);
+    console.log(posicaoX);
+    console.log(aviao.position.z)
+    let posicaoZ = cameraHolder.position.z - 24;
+    enemy3.position.set(posicaoX, 30, posicaoZ);
+    scene.add(enemy3);
+  }
+ 
+
 //
 let auxiliarPosCamera = 1;
+let auxiliarEnemy1 = 1;
+let auxiliarEnemy2 = 1;
+let auxiliarEnemy3 = 1;
 function andarCamera() {
   if(animationOn){
     cameraHolder.translateZ(velocidade);
     aviao.translateY(-velocidade);
     
     if(cameraHolder.position.z < (300 * -auxiliarPosCamera)){
-      
       planoInfinito();
       auxiliarPosCamera++;
+    }
+    if(cameraHolder.position.z < (40 * -auxiliarEnemy1)){
+      enemySpawn();
+      
+      auxiliarEnemy1++;
+    }
+    if(cameraHolder.position.z < (70 * -auxiliarEnemy2)){
+      enemySpawn2();
+      
+      auxiliarEnemy2++;
+    }
+    if(cameraHolder.position.z < (100 * -auxiliarEnemy3)){
+      enemySpawn3();
+      
+      auxiliarEnemy3++;
     }
   }
 }
@@ -101,6 +164,9 @@ render();
 function render()
 {
   andarCamera();
+  enemy.translateZ(getRandomArbitrary(0.5, 1.5))
+  enemy2.translateZ(getRandomArbitrary(0.5, 1.5))
+  enemy3.translateZ(getRandomArbitrary(0.5, 1.5))
   requestAnimationFrame(render);
   keyboardUpdate();
   renderer.render(scene, camera) // Render scene
