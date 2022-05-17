@@ -63,16 +63,20 @@ function keyboardUpdate() {
 let velocidade = -0.2;
 let animationOn = true;
 //
-
+let auxiliarPosCamera = 1;
 function andarCamera() {
   if(animationOn){
     cameraHolder.translateZ(velocidade);
     aviao.translateY(-velocidade);
-    //plane.translateY(0.2)
     
+    if(cameraHolder.position.z < (300 * -auxiliarPosCamera)){
+      
+      planoInfinito();
+      auxiliarPosCamera++;
+    }
   }
 }
-setInterval(planoInfinito, 25200);
+
 function planoInfinito(){
     if(cont === 0){
       plane1.translateY(900)
