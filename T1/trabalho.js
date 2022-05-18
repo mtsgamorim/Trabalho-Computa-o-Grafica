@@ -52,10 +52,10 @@ var sphereGeometry = new THREE.SphereGeometry( 1, 32, 1);
 var sphereMaterial = new THREE.MeshNormalMaterial();
 let qntdTiro = 0;
 let tiros = [];
-for(let i = 0; i < 10; i++){
+for(let i = 0; i < 20; i++){
   tiros[i] = new THREE.Mesh(sphereGeometry, sphereMaterial);
 }
- var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+ 
 
 function keyboardUpdate() {
 
@@ -74,12 +74,24 @@ function keyboardUpdate() {
     
     tiros[qntdTiro].position.set(aviao.position.x , aviao.position.y , aviao.position.z )
     scene.add(tiros[qntdTiro]);
-    if(qntdTiro === 9){
+    if(qntdTiro === 19){
       qntdTiro = 0;
     }
     qntdTiro++;
     
   } 
+
+  if (keyboard.down("ctrl")) {
+    
+    tiros[qntdTiro].position.set(aviao.position.x , aviao.position.y , aviao.position.z )
+    scene.add(tiros[qntdTiro]);
+    if(qntdTiro === 19){
+      qntdTiro = 0;
+    }
+    qntdTiro++;
+    
+  } 
+
 
 }
 
@@ -134,7 +146,7 @@ function andarCamera() {
   if(animationOn){
     cameraHolder.translateZ(velocidade);
     aviao.translateY(-velocidade);
-    for(let i = 0; i < 10; i++){
+    for(let i = 0; i < 20; i++){
       tiros[i].translateZ(-veloc);
       if(tiros[i].position.z < cameraHolder.position.z -50){
         scene.remove(tiros[i]);
