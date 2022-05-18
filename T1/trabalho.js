@@ -136,6 +136,9 @@ function andarCamera() {
     aviao.translateY(-velocidade);
     for(let i = 0; i < 10; i++){
       tiros[i].translateZ(-veloc);
+      if(tiros[i].position.z < cameraHolder.position.z -50){
+        scene.remove(tiros[i]);
+      }
     }
    
     
