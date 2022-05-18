@@ -15,7 +15,7 @@ var scene = new THREE.Scene();    // Create main scene
 var renderer = initRenderer();    // View function in util/utils
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
-var camera = initCamera(new THREE.Vector3(0, 90, 40)); // Init camera in this position
+var camera = initCamera(new THREE.Vector3(0, 140, 40)); // Init camera in this position
 let cont = 0;
 initDefaultBasicLight(scene);
 
@@ -27,9 +27,9 @@ var axesHelper = new THREE.AxesHelper( 12 );
 scene.add( axesHelper );
 
 // create the ground plane
-let plane1 = createGroundPlaneWired(250, 300, 10, 10, "rgb(0,0,0)");
-let plane2 = createGroundPlaneWired(250, 300, 10, 10, "rgb(250,250,250)");
-let plane3 = createGroundPlaneWired(250, 300, 10, 10, "rgb(80,70,100)");
+let plane1 = createGroundPlaneWired(400, 300, 10, 10, "rgb(0,128,0)");
+let plane2 = createGroundPlaneWired(400, 300, 10, 10, "rgb(0,128,0)");
+let plane3 = createGroundPlaneWired(400, 300, 10, 10, "rgb(0,128,0)");
 scene.add(plane1);
 scene.add(plane2);
 scene.add(plane3);
@@ -53,16 +53,16 @@ function keyboardUpdate() {
   var moveDistance = speed * clock.getDelta();
 
   // Keyboard.pressed - execute while is pressed
-  if ( keyboard.pressed("A") && aviao.position.x > -55 )  aviao.translateX( -moveDistance );
-  if ( keyboard.pressed("D") && aviao.position.x < 55)  aviao.translateX(  moveDistance );
-  if ( keyboard.pressed("W") && aviao.position.z > cameraHolder.position.z - 28 )  aviao.translateY(  moveDistance );
-  if ( keyboard.pressed("S") && aviao.position.z < cameraHolder.position.z + 32)  aviao.translateY( -moveDistance );
+  if ( keyboard.pressed("A") && aviao.position.x > -90 )  aviao.translateX( -moveDistance );
+  if ( keyboard.pressed("D") && aviao.position.x < 90)  aviao.translateX(  moveDistance );
+  if ( keyboard.pressed("W") && aviao.position.z > cameraHolder.position.z - 40 )  aviao.translateY(  moveDistance );
+  if ( keyboard.pressed("S") && aviao.position.z < cameraHolder.position.z + 50)  aviao.translateY( -moveDistance );
 
 }
 
 let velocidade = -0.2;
 let animationOn = true;
-let enemySpeed = getRandomArbitrary(0.1, 0.5);
+
 
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
@@ -77,7 +77,7 @@ function getRandomArbitrary(min, max) {
   function enemySpawn() {
     
     let posicaoX = getRandomArbitrary(-52, 52);
-    let posicaoZ = cameraHolder.position.z - 24;
+    let posicaoZ = cameraHolder.position.z - 45;
     enemy.position.set(posicaoX, 30, posicaoZ);
     scene.add(enemy);
     
@@ -86,7 +86,7 @@ function getRandomArbitrary(min, max) {
   function enemySpawn2() {
     
     let posicaoX = getRandomArbitrary(-52, 52);
-    let posicaoZ = cameraHolder.position.z - 24;
+    let posicaoZ = cameraHolder.position.z - 45;
     enemy2.position.set(posicaoX, 30, posicaoZ);
     scene.add(enemy2);
     
@@ -96,7 +96,7 @@ function getRandomArbitrary(min, max) {
   function enemySpawn3() {
     
     let posicaoX = getRandomArbitrary(-52, 52);
-    let posicaoZ = cameraHolder.position.z - 24;
+    let posicaoZ = cameraHolder.position.z - 45;
     enemy3.position.set(posicaoX, 30, posicaoZ);
     scene.add(enemy3);
   }
@@ -160,9 +160,9 @@ function render()
   andarCamera();
   console.log(`Posiçao aviao em y = ${aviao.position.y}`)
   console.log(`Posição da camera = ${cameraHolder.position.z} `)
-  enemy.translateZ(getRandomArbitrary(0.5, 1.5))
-  enemy2.translateZ(getRandomArbitrary(0.5, 1.5))
-  enemy3.translateZ(getRandomArbitrary(0.5, 1.5))
+  enemy.translateZ(getRandomArbitrary(0.4, 2))
+  enemy2.translateZ(getRandomArbitrary(0.4, 2))
+  enemy3.translateZ(getRandomArbitrary(0.4, 2))
   requestAnimationFrame(render);
   keyboardUpdate();
   renderer.render(scene, camera) // Render scene
