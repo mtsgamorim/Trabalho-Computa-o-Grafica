@@ -50,6 +50,11 @@ scene.add(aviao);
 let veloc = 2;
 var sphereGeometry = new THREE.SphereGeometry( 1, 32, 1);
 var sphereMaterial = new THREE.MeshNormalMaterial();
+let qntdTiro = 0;
+let tiros = [];
+for(let i = 0; i < 10; i++){
+  tiros[i] = new THREE.Mesh(sphereGeometry, sphereMaterial);
+}
  var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 
 function keyboardUpdate() {
@@ -67,9 +72,13 @@ function keyboardUpdate() {
 
   if (keyboard.down("space")) {
     
-    sphere.position.set(aviao.position.x , aviao.position.y , aviao.position.z )
-    scene.add(sphere);
-    //sphere.translateZ(-veloc);
+    tiros[qntdTiro].position.set(aviao.position.x , aviao.position.y , aviao.position.z )
+    scene.add(tiros[qntdTiro]);
+    if(qntdTiro === 9){
+      qntdTiro = 0;
+    }
+    qntdTiro++;
+    
   } 
 
 }
@@ -83,7 +92,7 @@ function getRandomArbitrary(min, max) {
 }
   // criação inimigo
   var geometryEnemy = new THREE.BoxGeometry(4, 4, 4);
-  var materialEnemy = new THREE.MeshBasicMaterial();
+  var materialEnemy = new THREE.MeshLambertMaterial({color:"rgb(200,0,0)"})
   var enemy = new THREE.Mesh(geometryEnemy, materialEnemy);
   var enemy2 = new THREE.Mesh(geometryEnemy, materialEnemy);
   var enemy3 = new THREE.Mesh(geometryEnemy, materialEnemy);
@@ -125,7 +134,10 @@ function andarCamera() {
   if(animationOn){
     cameraHolder.translateZ(velocidade);
     aviao.translateY(-velocidade);
-    sphere.translateZ(-veloc);
+    for(let i = 0; i < 10; i++){
+      tiros[i].translateZ(-veloc);
+    }
+   
     
     if(cameraHolder.position.z < (300 * -auxiliarPosCamera)){
       planoInfinito();
@@ -181,7 +193,6 @@ function render()
   requestAnimationFrame(render);
   keyboardUpdate();
   renderer.render(scene, camera) // Render scene
-  
 }
 
 
