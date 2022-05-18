@@ -45,6 +45,13 @@ cameraHolder.translateY( 0 );
 
 let aviao = createAviao()
 scene.add(aviao);
+
+
+let veloc = 2;
+var sphereGeometry = new THREE.SphereGeometry( 1, 32, 1);
+var sphereMaterial = new THREE.MeshNormalMaterial();
+ var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
 function keyboardUpdate() {
 
   keyboard.update();
@@ -53,10 +60,17 @@ function keyboardUpdate() {
   var moveDistance = speed * clock.getDelta();
 
   // Keyboard.pressed - execute while is pressed
-  if ( keyboard.pressed("A") && aviao.position.x > -90 )  aviao.translateX( -moveDistance );
+  if ( keyboard.pressed("A") && aviao.position.x > -90)  aviao.translateX( -moveDistance );
   if ( keyboard.pressed("D") && aviao.position.x < 90)  aviao.translateX(  moveDistance );
-  if ( keyboard.pressed("W") && aviao.position.z > cameraHolder.position.z - 40 )  aviao.translateY(  moveDistance );
+  if ( keyboard.pressed("W") && aviao.position.z > cameraHolder.position.z - 40)  aviao.translateY(  moveDistance );
   if ( keyboard.pressed("S") && aviao.position.z < cameraHolder.position.z + 50)  aviao.translateY( -moveDistance );
+
+  if (keyboard.down("space")) {
+    
+    sphere.position.set(aviao.position.x , aviao.position.y , aviao.position.z )
+    scene.add(sphere);
+    //sphere.translateZ(-veloc);
+  } 
 
 }
 
@@ -69,7 +83,7 @@ function getRandomArbitrary(min, max) {
 }
   // criação inimigo
   var geometryEnemy = new THREE.BoxGeometry(4, 4, 4);
-  var materialEnemy = new THREE.MeshLambertMaterial({color:"rgb(200,0,0)"});
+  var materialEnemy = new THREE.MeshBasicMaterial();
   var enemy = new THREE.Mesh(geometryEnemy, materialEnemy);
   var enemy2 = new THREE.Mesh(geometryEnemy, materialEnemy);
   var enemy3 = new THREE.Mesh(geometryEnemy, materialEnemy);
@@ -111,6 +125,7 @@ function andarCamera() {
   if(animationOn){
     cameraHolder.translateZ(velocidade);
     aviao.translateY(-velocidade);
+    sphere.translateZ(-veloc);
     
     if(cameraHolder.position.z < (300 * -auxiliarPosCamera)){
       planoInfinito();
@@ -168,4 +183,5 @@ function render()
   renderer.render(scene, camera) // Render scene
   
 }
+
 
