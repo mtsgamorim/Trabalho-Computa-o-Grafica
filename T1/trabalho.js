@@ -27,9 +27,9 @@ var axesHelper = new THREE.AxesHelper( 12 );
 scene.add( axesHelper );
 
 // create the ground plane
-let plane1 = createGroundPlaneWired(250, 300, 10, 10, "rgb(0,0,0)");
-let plane2 = createGroundPlaneWired(250, 300, 10, 10, "rgb(250,250,250)");
-let plane3 = createGroundPlaneWired(250, 300, 10, 10, "rgb(80,70,100)");
+let plane1 = createGroundPlaneWired(200, 300, 10, 10, "rgb(0,0,0)");
+let plane2 = createGroundPlaneWired(200, 300, 10, 10, "rgb(250,250,250)");
+let plane3 = createGroundPlaneWired(200, 300, 10, 10, "rgb(80,70,100)");
 scene.add(plane1);
 scene.add(plane2);
 scene.add(plane3);
@@ -45,6 +45,13 @@ cameraHolder.translateY( 0 );
 
 let aviao = createAviao()
 scene.add(aviao);
+
+
+let veloc = 2;
+var sphereGeometry = new THREE.SphereGeometry( 1, 32, 1);
+var sphereMaterial = new THREE.MeshNormalMaterial();
+ var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
 function keyboardUpdate() {
 
   keyboard.update();
@@ -53,10 +60,17 @@ function keyboardUpdate() {
   var moveDistance = speed * clock.getDelta();
 
   // Keyboard.pressed - execute while is pressed
-  if ( keyboard.pressed("A") && aviao.position.x > -55 )  aviao.translateX( -moveDistance );
-  if ( keyboard.pressed("D") && aviao.position.x < 55)  aviao.translateX(  moveDistance );
-  if ( keyboard.pressed("W") && aviao.position.z > cameraHolder.position.z - 28 )  aviao.translateY(  moveDistance );
-  if ( keyboard.pressed("S") && aviao.position.z < cameraHolder.position.z + 32)  aviao.translateY( -moveDistance );
+  if ( keyboard.pressed("A") )  aviao.translateX( -moveDistance );
+  if ( keyboard.pressed("D") )  aviao.translateX(  moveDistance );
+  if ( keyboard.pressed("W") )  aviao.translateY(  moveDistance );
+  if ( keyboard.pressed("S") )  aviao.translateY( -moveDistance );
+
+  if (keyboard.down("space")) {
+    
+    sphere.position.set(aviao.position.x , aviao.position.y , aviao.position.z )
+    scene.add(sphere);
+    //sphere.translateZ(-veloc);
+  } 
 
 }
 
@@ -69,14 +83,16 @@ function getRandomArbitrary(min, max) {
 }
   // criação inimigo
   var geometryEnemy = new THREE.BoxGeometry(4, 4, 4);
-  var materialEnemy = new THREE.MeshLambertMaterial({color:"rgb(200,0,0)"});
+  var materialEnemy = new THREE.MeshBasicMaterial();
   var enemy = new THREE.Mesh(geometryEnemy, materialEnemy);
   var enemy2 = new THREE.Mesh(geometryEnemy, materialEnemy);
   var enemy3 = new THREE.Mesh(geometryEnemy, materialEnemy);
   //criação inimigo
   function enemySpawn() {
     
-    let posicaoX = getRandomArbitrary(-52, 52);
+    let posicaoX = getRandomArbitrary(-32, 32);
+    console.log(posicaoX);
+    console.log(aviao.position.z)
     let posicaoZ = cameraHolder.position.z - 24;
     enemy.position.set(posicaoX, 30, posicaoZ);
     scene.add(enemy);
@@ -85,7 +101,9 @@ function getRandomArbitrary(min, max) {
   }
   function enemySpawn2() {
     
-    let posicaoX = getRandomArbitrary(-52, 52);
+    let posicaoX = getRandomArbitrary(-32, 32);
+    console.log(posicaoX);
+    console.log(aviao.position.z)
     let posicaoZ = cameraHolder.position.z - 24;
     enemy2.position.set(posicaoX, 30, posicaoZ);
     scene.add(enemy2);
@@ -95,7 +113,9 @@ function getRandomArbitrary(min, max) {
   }
   function enemySpawn3() {
     
-    let posicaoX = getRandomArbitrary(-52, 52);
+    let posicaoX = getRandomArbitrary(-32, 32);
+    console.log(posicaoX);
+    console.log(aviao.position.z)
     let posicaoZ = cameraHolder.position.z - 24;
     enemy3.position.set(posicaoX, 30, posicaoZ);
     scene.add(enemy3);
@@ -111,6 +131,7 @@ function andarCamera() {
   if(animationOn){
     cameraHolder.translateZ(velocidade);
     aviao.translateY(-velocidade);
+    sphere.translateZ(-veloc);
     
     if(cameraHolder.position.z < (300 * -auxiliarPosCamera)){
       planoInfinito();
@@ -158,8 +179,6 @@ render();
 function render()
 {
   andarCamera();
-  console.log(`Posiçao aviao em y = ${aviao.position.y}`)
-  console.log(`Posição da camera = ${cameraHolder.position.z} `)
   enemy.translateZ(getRandomArbitrary(0.5, 1.5))
   enemy2.translateZ(getRandomArbitrary(0.5, 1.5))
   enemy3.translateZ(getRandomArbitrary(0.5, 1.5))
@@ -168,4 +187,5 @@ function render()
   renderer.render(scene, camera) // Render scene
   
 }
+
 
