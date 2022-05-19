@@ -43,8 +43,12 @@ scene.add(cameraHolder);
 cameraHolder.translateY( 0 );
 // position the cube
 
-let aviao = createAviao()
+let aviao = createAviao();
 scene.add(aviao);
+
+//criando a BB do aviao
+let aviaoBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+aviaoBB.setFromObject(aviao);
 
 
 let veloc = 2;
@@ -52,8 +56,11 @@ var sphereGeometry = new THREE.SphereGeometry( 1, 32, 1);
 var sphereMaterial = new THREE.MeshNormalMaterial();
 let qntdTiro = 0;
 let tiros = [];
+let tirosBB = [];
 for(let i = 0; i < 20; i++){
-  tiros[i] = new THREE.Mesh(sphereGeometry, sphereMaterial);
+  tiros[i] = new THREE.Mesh(sphereGeometry, sphereMaterial);  
+  //BB
+  tirosBB[i] = new THREE.Sphere(tiros[i].position, 1)
 }
  
 
@@ -118,6 +125,15 @@ function getRandomArbitrary(min, max) {
     
 
   }
+
+  //criando BBs para os inimigos
+    let enemyBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+    enemyBB.setFromObject(enemy);
+    let enemy2BB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+    enemy2BB.setFromObject(enemy2);
+    let enemy3BB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+    enemy3BB.setFromObject(enemy3);
+
   function enemySpawn2() {
     
     let posicaoX = getRandomArbitrary(-52, 52);
@@ -142,17 +158,25 @@ let auxiliarPosCamera = 1;
 let auxiliarEnemy1 = 1;
 let auxiliarEnemy2 = 1;
 let auxiliarEnemy3 = 1;
+
 function andarCamera() {
   if(animationOn){
     cameraHolder.translateZ(velocidade);
     aviao.translateY(-velocidade);
     for(let i = 0; i < 20; i++){
       tiros[i].translateZ(-veloc);
+      //BB 
+      tirosBB[i].center.set(tiros[i].position.x, tiros[i].position.y, tiros[i].position.z )
+
       if(tiros[i].position.z < cameraHolder.position.z -50){
         scene.remove(tiros[i]);
       }
     }
-   
+
+    aviaoBB.copy( aviao.geometry.boundingBox).applyMatrix4(aviao.matrixWorld);
+    enemyBB.copy( enemy.geometry.boundingBox).applyMatrix4(enemy.matrixWorld);
+
+   checkCollision();
     
     if(cameraHolder.position.z < (300 * -auxiliarPosCamera)){
       planoInfinito();
@@ -191,6 +215,46 @@ function planoInfinito(){
     }
 }
  
+
+function checkCollision() {
+  
+  //colisao entre o aviao e os inimigos
+  if(aviaoBB.intersectsBox(enemyBB)) {
+    animationEndGame();
+  } 
+  if(aviaoBB.intersectsBox(enemy2BB)) {
+    animationEndGame();
+  } 
+  if(aviaoBB.intersectsBox(enemy3BB)) {
+    animationEndGame();
+  } 
+
+  for(let i = 0; i < 20; i++){
+    if (enemyBB.intersectsSphere(tirosBB[i])){
+      animation1();
+    }
+    if (enemy2BB.intersectsSphere(tirosBB[i])){
+      animation1();
+  
+    }
+    if (enemy3BB.intersectsSphere(tirosBB[i])){
+      animation1();
+    }
+  }
+  
+}
+
+
+function animationEndGame(){
+// Nao conseguindo reestartar o jogo
+  alert("Game over");
+  keyboardUpdate() = false;
+
+}
+
+function animation1(){
+ scene.remove(enemy);
+}
 
 
 // Listen window size changes
