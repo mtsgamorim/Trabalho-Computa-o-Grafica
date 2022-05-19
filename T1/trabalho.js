@@ -175,6 +175,8 @@ function andarCamera() {
 
     aviaoBB.copy( aviao.geometry.boundingBox).applyMatrix4(aviao.matrixWorld);
     enemyBB.copy( enemy.geometry.boundingBox).applyMatrix4(enemy.matrixWorld);
+    enemy2BB.copy( enemy2.geometry.boundingBox).applyMatrix4(enemy2.matrixWorld);
+    enemy3BB.copy( enemy3.geometry.boundingBox).applyMatrix4(enemy3.matrixWorld);
 
    checkCollision();
     
@@ -234,11 +236,11 @@ function checkCollision() {
       animation1();
     }
     if (enemy2BB.intersectsSphere(tirosBB[i])){
-      animation1();
+      animation2();
   
     }
     if (enemy3BB.intersectsSphere(tirosBB[i])){
-      animation1();
+      animation3();
     }
   }
   
@@ -254,8 +256,18 @@ function animationEndGame(){
 
 function animation1(){
  scene.remove(enemy);
+ scene.remove(enemyBB);
 }
 
+function animation2(){
+  scene.remove(enemy2);
+  scene.remove(enemy2BB);
+ }
+
+ function animation3(){
+  scene.remove(enemy3);
+  scene.remove(enemy3BB);
+ }
 
 // Listen window size changes
 window.addEventListener( 'resize', function(){onWindowResize(camera, renderer)}, false );
@@ -266,9 +278,9 @@ function render()
   andarCamera();
   console.log(`Posiçao aviao em y = ${aviao.position.y}`)
   console.log(`Posição da camera = ${cameraHolder.position.z} `)
-  enemy.translateZ(getRandomArbitrary(0.4, 2))
-  enemy2.translateZ(getRandomArbitrary(0.4, 2))
-  enemy3.translateZ(getRandomArbitrary(0.4, 2))
+  enemy.translateZ(getRandomArbitrary(0.1, 0.2))
+  enemy2.translateZ(getRandomArbitrary(0.1, 0.2))
+  enemy3.translateZ(getRandomArbitrary(0.1, 0.2))
   requestAnimationFrame(render);
   keyboardUpdate();
   renderer.render(scene, camera) // Render scene
