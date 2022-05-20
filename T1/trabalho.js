@@ -9,6 +9,9 @@ import {initRenderer,
         createGroundPlaneXZ} from "../libs/util/util.js";
 import createAviao from './criarAviao.js';
 import KeyboardState from '../libs/util/KeyboardState.js';
+import { FogExp2, SplineCurve } from '../build/three.module.js';
+
+
 
 
 var scene = new THREE.Scene();    // Create main scene
@@ -53,7 +56,7 @@ aviaoBB.setFromObject(aviao);
 
 let veloc = 2;
 var sphereGeometry = new THREE.SphereGeometry( 1, 32, 1);
-var sphereMaterial = new THREE.MeshNormalMaterial();
+var sphereMaterial = new THREE.MeshNormalMaterial();     //TODO: MUDAR MATERIAL
 let qntdTiro = 0;
 let tiros = [];
 let tirosBB = [];
@@ -112,27 +115,44 @@ function getRandomArbitrary(min, max) {
   // criação inimigo
   var geometryEnemy = new THREE.BoxGeometry(4, 4, 4);
   var materialEnemy = new THREE.MeshLambertMaterial({color:"rgb(200,0,0)"})
-  var enemy = new THREE.Mesh(geometryEnemy, materialEnemy);
-  var enemy2 = new THREE.Mesh(geometryEnemy, materialEnemy);
-  var enemy3 = new THREE.Mesh(geometryEnemy, materialEnemy);
+  //var enemy = new THREE.Mesh(geometryEnemy, materialEnemy);
+  let enemys = [];
+  let enemysBB = [];
+  let contEnemy = 0;
+  for(let i = 0; i < 20; i++){
+    enemys[i] = new THREE.Mesh(geometryEnemy, materialEnemy);
+  }
+
+  for(let i = 0; i < 20; i++){
+    enemysBB[i] = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+    enemysBB[i].setFromObject(enemys[i]);
+    
+  }
+  //var enemy2 = new THREE.Mesh(geometryEnemy, materialEnemy);
+  //var enemy3 = new THREE.Mesh(geometryEnemy, materialEnemy);
   //criação inimigo
   function enemySpawn() {
     
     let posicaoX = getRandomArbitrary(-52, 52);
     let posicaoZ = cameraHolder.position.z - 45;
-    enemy.position.set(posicaoX, 30, posicaoZ);
-    scene.add(enemy);
+    enemys[contEnemy].position.set(posicaoX, 30, posicaoZ);
+    scene.add(enemys[contEnemy]);
+    if(contEnemy === 19){
+      contEnemy = 0;
+    }else{
+      contEnemy++;
+    }
     
 
   }
 
   //criando BBs para os inimigos
-    let enemyBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
-    enemyBB.setFromObject(enemy);
-    let enemy2BB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
-    enemy2BB.setFromObject(enemy2);
-    let enemy3BB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
-    enemy3BB.setFromObject(enemy3);
+    //let enemyBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+    //enemyBB.setFromObject(enemy);
+    //let enemy2BB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+    //enemy2BB.setFromObject(enemy2);
+    //let enemy3BB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+    //enemy3BB.setFromObject(enemy3);
 
   function enemySpawn2() {
     
@@ -174,31 +194,35 @@ function andarCamera() {
     }
 
     aviaoBB.copy( aviao.geometry.boundingBox).applyMatrix4(aviao.matrixWorld);
-    enemyBB.copy( enemy.geometry.boundingBox).applyMatrix4(enemy.matrixWorld);
-    enemy2BB.copy( enemy2.geometry.boundingBox).applyMatrix4(enemy2.matrixWorld);
-    enemy3BB.copy( enemy3.geometry.boundingBox).applyMatrix4(enemy3.matrixWorld);
+    //enemyBB.copy( enemy.geometry.boundingBox).applyMatrix4(enemy.matrixWorld);
+    //enemy2BB.copy( enemy2.geometry.boundingBox).applyMatrix4(enemy2.matrixWorld);
+    //enemy3BB.copy( enemy3.geometry.boundingBox).applyMatrix4(enemy3.matrixWorld);
 
+    for (let i = 0; i < 20; i++){
+      enemysBB[i].copy( enemys[i].geometry.boundingBox).applyMatrix4(enemys[i].matrixWorld);
+    }
    checkCollision();
     
     if(cameraHolder.position.z < (300 * -auxiliarPosCamera)){
       planoInfinito();
       auxiliarPosCamera++;
     }
-    if(cameraHolder.position.z < (40 * -auxiliarEnemy1)){
+    if(cameraHolder.position.z < (10 * -auxiliarEnemy1)){
       enemySpawn();
-      
       auxiliarEnemy1++;
-    }
-    if(cameraHolder.position.z < (70 * -auxiliarEnemy2)){
-      enemySpawn2();
       
-      auxiliarEnemy2++;
-    }
-    if(cameraHolder.position.z < (100 * -auxiliarEnemy3)){
-      enemySpawn3();
       
-      auxiliarEnemy3++;
     }
+    // if(cameraHolder.position.z < (70 * -auxiliarEnemy2)){
+    //   enemySpawn2();
+      
+    //   auxiliarEnemy2++;
+    // }
+    // if(cameraHolder.position.z < (100 * -auxiliarEnemy3)){
+    //   enemySpawn3();
+      
+    //   auxiliarEnemy3++;
+    // }
   }
 }
 
@@ -221,27 +245,34 @@ function planoInfinito(){
 function checkCollision() {
   
   //colisao entre o aviao e os inimigos
-  if(aviaoBB.intersectsBox(enemyBB)) {
-    animationEndGame();
+  for (let i = 0; i < 20; i++){
+    if(aviaoBB.intersectsBox(enemysBB[i])) {
+      animationEndGame();
+    }
   } 
-  if(aviaoBB.intersectsBox(enemy2BB)) {
-    animationEndGame();
-  } 
-  if(aviaoBB.intersectsBox(enemy3BB)) {
-    animationEndGame();
-  } 
+  //if(aviaoBB.intersectsBox(enemy2BB)) {
+     //animationEndGame();
+  //} 
+  //if(aviaoBB.intersectsBox(enemy3BB)) {
+  //  animationEndGame();
+  //} 
 
   for(let i = 0; i < 20; i++){
-    if (enemyBB.intersectsSphere(tirosBB[i])){
-      animation1();
+    for (let j = 0; j < 20; j++){
+      if (enemysBB[i].intersectsSphere(tirosBB[j])){
+       scene.remove(enemys[i]);
+        scene.remove(enemysBB[i]);
+        //enemys.splice(i, 1);
+        //enemysBB.splice(i, 1);
+      }
     }
-    if (enemy2BB.intersectsSphere(tirosBB[i])){
-      animation2();
+    // if (enemy2BB.intersectsSphere(tirosBB[i])){
+    //   animation2();
   
-    }
-    if (enemy3BB.intersectsSphere(tirosBB[i])){
-      animation3();
-    }
+    // }
+    // if (enemy3BB.intersectsSphere(tirosBB[i])){
+    //   animation3();
+    // }
   }
   
 }
@@ -276,11 +307,13 @@ render();
 function render()
 {
   andarCamera();
-  console.log(`Posiçao aviao em y = ${aviao.position.y}`)
-  console.log(`Posição da camera = ${cameraHolder.position.z} `)
-  enemy.translateZ(getRandomArbitrary(0.1, 0.2))
-  enemy2.translateZ(getRandomArbitrary(0.1, 0.2))
-  enemy3.translateZ(getRandomArbitrary(0.1, 0.2))
+  
+  for(let i = 0; i < 20; i++){
+    enemys[i].translateZ(getRandomArbitrary(0.2, 1))
+  }
+  
+  //enemy2.translateZ(getRandomArbitrary(0.1, 0.2))
+  //enemy3.translateZ(getRandomArbitrary(0.1, 0.2))
   requestAnimationFrame(render);
   keyboardUpdate();
   renderer.render(scene, camera) // Render scene
