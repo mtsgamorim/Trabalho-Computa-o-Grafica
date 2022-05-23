@@ -39,12 +39,12 @@ scene.add(plane3);
 plane2.translateY(300);
 plane3.translateY(600);
 
-// create a cube
+// create a cube for camera
 var cameraHolder = new THREE.Object3D();
 cameraHolder.add(camera);
 scene.add(cameraHolder);
 cameraHolder.translateY( 0 );
-// position the cube
+
 
 let aviao = createAviao();
 scene.add(aviao);
@@ -56,7 +56,7 @@ aviaoBB.setFromObject(aviao);
 
 let veloc = 2;
 var sphereGeometry = new THREE.SphereGeometry( 1, 32, 1);
-var sphereMaterial = new THREE.MeshNormalMaterial();     //TODO: MUDAR MATERIAL
+var sphereMaterial = new THREE.MeshLambertMaterial({color:"rgb(50,0,80)"})
 let qntdTiro = 0;
 let tiros = [];
 let tirosBB = [];
@@ -132,7 +132,7 @@ function getRandomArbitrary(min, max) {
   //criação inimigo
   function enemySpawn() {
     
-    let posicaoX = getRandomArbitrary(-52, 52);
+    let posicaoX = getRandomArbitrary(-90, 90);
     let posicaoZ = cameraHolder.position.z - 45;
     enemys[contEnemy].position.set(posicaoX, 30, posicaoZ);
     scene.add(enemys[contEnemy]);
