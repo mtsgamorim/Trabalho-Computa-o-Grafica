@@ -211,21 +211,24 @@ function checkCollision() {
     if(enemys[i] !== null) {
       for (let j = 0; j < 20; j++){
         if (enemysBB[i].intersectsSphere(tirosBB[j])){
-        scene.remove(enemys[i]);
-        scene.remove(enemysBB[i]);
-        enemys[i] = null;
+        enemys[i].rotateZ(70);
+        enemys[i].rotateY(40);
+        setInterval(() => removeInimigo(i), 200);
         }
       }
     }
     } 
   }
 
+function removeInimigo(i) {
+  scene.remove(enemys[i]);
+  scene.remove(enemysBB[i]);
+  enemys[i] = null;
+}
 
 function animationEndGame(){
-// Nao conseguindo reestartar o jogo
-  alert("Game over");
+  alert("Game Over");
   keyboardUpdate() = false;
-
 }
 
 // Listen window size changes
@@ -235,14 +238,12 @@ render();
 function render()
 {
   andarCamera();
-  
   for(let i = 0; i < enemys.length; i++){
     if(enemys[i] !== null){
       enemys[i].translateZ(getRandomArbitrary(0.2, 1))
     }
   }
   checkCollision();
-
   requestAnimationFrame(render);
   keyboardUpdate();
   renderer.render(scene, camera) // Render scene
