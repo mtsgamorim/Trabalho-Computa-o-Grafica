@@ -65,7 +65,7 @@ for(let i = 0; i < 20; i++){
   //BB
   tirosBB[i] = new THREE.Sphere(tiros[i].position, 1)
 }
- 
+
 
 function keyboardUpdate() {
 
@@ -119,31 +119,19 @@ function getRandomArbitrary(min, max) {
   let enemys = [];
   let enemysBB = [];
   let contEnemy = 0;
-  for(let i = 0; i < 20; i++){
-    enemys[i] = new THREE.Mesh(geometryEnemy, materialEnemy);
-  }
-
-  for(let i = 0; i < 20; i++){
-    enemysBB[i] = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
-    enemysBB[i].setFromObject(enemys[i]);
-    
-  }
   
-  //criação inimigo
-  function enemySpawn() {
-    
+  function createEnemy(){
+    enemys.push(new THREE.Mesh(geometryEnemy, materialEnemy));
+    enemysBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
+    enemysBB[contEnemy].setFromObject(enemys[contEnemy]);
     let posicaoX = getRandomArbitrary(-90, 90);
     let posicaoZ = cameraHolder.position.z - 45;
     enemys[contEnemy].position.set(posicaoX, 30, posicaoZ);
     scene.add(enemys[contEnemy]);
-    if(contEnemy === 19){
-      contEnemy = 0;
-    }else{
-      contEnemy++;
-    }
-    
-
+    contEnemy++;
   }
+  //criação inimigo
+
 
 //
 let auxiliarPosCamera = 1;
@@ -165,20 +153,28 @@ function andarCamera() {
 
     aviaoBB.copy( aviao.geometry.boundingBox).applyMatrix4(aviao.matrixWorld);
 
-    for (let i = 0; i < 20; i++){
+    for (let i = 0; i < enemys.length; i++){
+      if(enemys[i] !== null){
       enemysBB[i].copy( enemys[i].geometry.boundingBox).applyMatrix4(enemys[i].matrixWorld);
+      }
     }
-   checkCollision();
+   
     
     if(cameraHolder.position.z < (300 * -auxiliarPosCamera)){
       planoInfinito();
       auxiliarPosCamera++;
     }
     if(cameraHolder.position.z < (10 * -auxiliarEnemy1)){
-      enemySpawn();
+      createEnemy();
       auxiliarEnemy1++;
-      
-      
+    }
+    for(let i = 0; i < enemys.length; i++){
+      if(enemys[i] !== null){
+        if(enemys[i].position.z > cameraHolder.position.z + 60){
+          scene.remove(enemys[i]);
+          enemys[i] = null;
+        }
+      }
     }
 
   }
@@ -203,24 +199,26 @@ function planoInfinito(){
 function checkCollision() {
   
   //colisao entre o aviao e os inimigos
-  for (let i = 0; i < 20; i++){
-    if(aviaoBB.intersectsBox(enemysBB[i])) {
-      animationEndGame();
+  for (let i = 0; i < enemys.length; i++){
+    if(enemys[i] !== null){
+      if(aviaoBB.intersectsBox(enemysBB[i])) {
+        animationEndGame();
+      }
     }
   } 
 
-  for(let i = 0; i < 20; i++){
-    for (let j = 0; j < 20; j++){
-      if (enemysBB[i].intersectsSphere(tirosBB[j])){
-       scene.remove(enemys[i]);
+  for(let i = 0; i < enemys.length; i++){
+    if(enemys[i] !== null) {
+      for (let j = 0; j < 20; j++){
+        if (enemysBB[i].intersectsSphere(tirosBB[j])){
+        scene.remove(enemys[i]);
         scene.remove(enemysBB[i]);
-
+        enemys[i] = null;
+        }
       }
     }
-
+    } 
   }
-  
-}
 
 
 function animationEndGame(){
@@ -238,9 +236,12 @@ function render()
 {
   andarCamera();
   
-  for(let i = 0; i < 20; i++){
-    enemys[i].translateZ(getRandomArbitrary(0.2, 1))
+  for(let i = 0; i < enemys.length; i++){
+    if(enemys[i] !== null){
+      enemys[i].translateZ(getRandomArbitrary(0.2, 1))
+    }
   }
+  checkCollision();
 
   requestAnimationFrame(render);
   keyboardUpdate();
