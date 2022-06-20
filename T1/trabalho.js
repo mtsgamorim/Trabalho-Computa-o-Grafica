@@ -75,10 +75,10 @@ function keyboardUpdate() {
   var moveDistance = speed * clock.getDelta();
 
   // Keyboard.pressed - execute while is pressed
-  if ( keyboard.pressed("A") && aviao.position.x > -90)  aviao.translateX( -moveDistance );
-  if ( keyboard.pressed("D") && aviao.position.x < 90)  aviao.translateX(  moveDistance );
-  if ( keyboard.pressed("W") && aviao.position.z > cameraHolder.position.z - 40)  aviao.translateY(  moveDistance );
-  if ( keyboard.pressed("S") && aviao.position.z < cameraHolder.position.z + 50)  aviao.translateY( -moveDistance );
+  if ( keyboard.pressed("left") && aviao.position.x > -90)  aviao.translateX( -moveDistance );
+  if ( keyboard.pressed("right") && aviao.position.x < 90)  aviao.translateX(  moveDistance );
+  if ( keyboard.pressed("up") && aviao.position.z > cameraHolder.position.z - 40)  aviao.translateY(  moveDistance );
+  if ( keyboard.pressed("down") && aviao.position.z < cameraHolder.position.z + 50)  aviao.translateY( -moveDistance );
 
   if (keyboard.down("space")) {
     
@@ -143,7 +143,7 @@ function andarCamera() {
     aviao.translateY(-velocidade);
     for(let i = 0; i < 20; i++){
       tiros[i].translateZ(-veloc);
-      //BB 
+      
       tirosBB[i].center.set(tiros[i].position.x, tiros[i].position.y, tiros[i].position.z )
 
       if(tiros[i].position.z < cameraHolder.position.z -50){
@@ -224,6 +224,8 @@ function removeInimigo(i) {
   scene.remove(enemys[i]);
   scene.remove(enemysBB[i]);
   enemys[i] = null;
+  //enemys.splice(i, 1);
+  //enemysBB.splice(i, 1);
 }
 
 function animationEndGame(){
