@@ -22,7 +22,6 @@ camera.up.set(0, 1, 0);
 let cont = 0;
 let auxAnimation = true;
 let gameover = false;
-let fim = false;
 initDefaultBasicLight(scene);
 
 // Enable mouse rotation, pan, zoom etc.
@@ -255,10 +254,10 @@ function animationEndGame() {
 
 function aviaoMorte() {
   scene.remove(aviao);
-  if (fim === false) {
+  if (animationOn === true) {
     alert("Fim de jogo");
   }
-  fim = true;
+  animationOn = false;
 }
 
 function limpavetor() {
