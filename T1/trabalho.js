@@ -18,8 +18,10 @@ var scene = new THREE.Scene();    // Create main scene
 var renderer = initRenderer();    // View function in util/utils
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
-var camera = initCamera(new THREE.Vector3(0, 140, 40)); // Init camera in this position
+var camera = initCamera(new THREE.Vector3(0, 80, 120)); // Init camera in this position
+camera.up.set( 0, 1, 0);
 let cont = 0;
+let auxAnimation;
 initDefaultBasicLight(scene);
 
 // Enable mouse rotation, pan, zoom etc.
@@ -30,9 +32,9 @@ var axesHelper = new THREE.AxesHelper( 12 );
 scene.add( axesHelper );
 
 // create the ground plane
-let plane1 = createGroundPlaneWired(400, 300, 10, 10, "rgb(0,128,0)");
-let plane2 = createGroundPlaneWired(400, 300, 10, 10, "rgb(0,128,0)");
-let plane3 = createGroundPlaneWired(400, 300, 10, 10, "rgb(0,128,0)");
+let plane1 = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,128,0)");
+let plane2 = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,128,0)");
+let plane3 = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,128,0)");
 scene.add(plane1);
 scene.add(plane2);
 scene.add(plane3);
@@ -75,10 +77,10 @@ function keyboardUpdate() {
   var moveDistance = speed * clock.getDelta();
 
   // Keyboard.pressed - execute while is pressed
-  if ( keyboard.pressed("left") && aviao.position.x > -90)  aviao.translateX( -moveDistance );
-  if ( keyboard.pressed("right") && aviao.position.x < 90)  aviao.translateX(  moveDistance );
-  if ( keyboard.pressed("up") && aviao.position.z > cameraHolder.position.z - 40)  aviao.translateY(  moveDistance );
-  if ( keyboard.pressed("down") && aviao.position.z < cameraHolder.position.z + 50)  aviao.translateY( -moveDistance );
+  if ( keyboard.pressed("left") && aviao.position.x > -80)  aviao.translateX( -moveDistance );
+  if ( keyboard.pressed("right") && aviao.position.x < 80)  aviao.translateX(  moveDistance );
+  if ( keyboard.pressed("up") && aviao.position.z > cameraHolder.position.z - 90)  aviao.translateY(  moveDistance );
+  if ( keyboard.pressed("down") && aviao.position.z < cameraHolder.position.z + 70)  aviao.translateY( -moveDistance );
 
   if (keyboard.down("space")) {
     
@@ -113,7 +115,7 @@ function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
 }
   // criação inimigo
-  var geometryEnemy = new THREE.BoxGeometry(4, 4, 4);
+  var geometryEnemy = new THREE.BoxGeometry(5, 5, 5);
   var materialEnemy = new THREE.MeshLambertMaterial({color:"rgb(200,0,0)"})
   //var enemy = new THREE.Mesh(geometryEnemy, materialEnemy);
   let enemys = [];
@@ -125,10 +127,12 @@ function getRandomArbitrary(min, max) {
     enemysBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
     enemysBB[contEnemy].setFromObject(enemys[contEnemy]);
     let posicaoX = getRandomArbitrary(-90, 90);
-    let posicaoZ = cameraHolder.position.z - 45;
+    let posicaoZ = cameraHolder.position.z - 140;
     enemys[contEnemy].position.set(posicaoX, 30, posicaoZ);
     scene.add(enemys[contEnemy]);
     contEnemy++;
+    console.log(enemys);
+    console.log(enemysBB);
   }
   //criação inimigo
 
@@ -146,7 +150,7 @@ function andarCamera() {
       
       tirosBB[i].center.set(tiros[i].position.x, tiros[i].position.y, tiros[i].position.z )
 
-      if(tiros[i].position.z < cameraHolder.position.z -50){
+      if(tiros[i].position.z < cameraHolder.position.z -140){
         scene.remove(tiros[i]);
       }
     }
@@ -169,10 +173,11 @@ function andarCamera() {
       auxiliarEnemy1++;
     }
     for(let i = 0; i < enemys.length; i++){
-      if(enemys[i] !== null){
-        if(enemys[i].position.z > cameraHolder.position.z + 60){
+      if(enemys[i] !== null ){
+        if(enemys[i].position.z > cameraHolder.position.z + 90){
           scene.remove(enemys[i]);
           enemys[i] = null;
+          enemysBB[i] = null;
         }
       }
     }
@@ -200,7 +205,7 @@ function checkCollision() {
   
   //colisao entre o aviao e os inimigos
   for (let i = 0; i < enemys.length; i++){
-    if(enemys[i] !== null){
+    if(enemys[i] !== null ){
       if(aviaoBB.intersectsBox(enemysBB[i])) {
         animationEndGame();
       }
@@ -208,12 +213,15 @@ function checkCollision() {
   } 
 
   for(let i = 0; i < enemys.length; i++){
-    if(enemys[i] !== null) {
+    if(enemys[i] !== null ) {
       for (let j = 0; j < 20; j++){
-        if (enemysBB[i].intersectsSphere(tirosBB[j])){
+        if (enemysBB[i].intersectsSphere(tirosBB[j]) && auxAnimation !== i){
         enemys[i].rotateZ(70);
         enemys[i].rotateY(40);
-        setInterval(() => removeInimigo(i), 200);
+        auxAnimation = i;
+        setTimeout(() => removeInimigo(i), 25);
+        //removeInimigo(i);
+        break;
         }
       }
     }
@@ -223,14 +231,30 @@ function checkCollision() {
 function removeInimigo(i) {
   scene.remove(enemys[i]);
   scene.remove(enemysBB[i]);
+  console.log(`removendo o indice ${i}`);
   enemys[i] = null;
-  //enemys.splice(i, 1);
-  //enemysBB.splice(i, 1);
+  enemysBB[i] = null;
+  limpavetor();
+  auxAnimation = -1;
 }
 
 function animationEndGame(){
   alert("Game Over");
   keyboardUpdate() = false;
+}
+
+function limpavetor(){
+  for(let i = 0; i < enemys.length; i++){
+    if(enemys[i] === null){
+      enemys.splice(i, 1);
+      enemysBB.splice(i, 1);
+      console.log("entrei!");
+      console.log(i);
+      console.log(enemys);
+      console.log(enemysBB);
+      contEnemy--;
+    }
+  }
 }
 
 // Listen window size changes
@@ -241,7 +265,7 @@ function render()
 {
   andarCamera();
   for(let i = 0; i < enemys.length; i++){
-    if(enemys[i] !== null){
+    if(enemys[i] !== null ){
       enemys[i].translateZ(getRandomArbitrary(0.2, 1))
     }
   }
@@ -249,6 +273,7 @@ function render()
   requestAnimationFrame(render);
   keyboardUpdate();
   renderer.render(scene, camera) // Render scene
+  limpavetor();
 }
 
 
