@@ -93,6 +93,7 @@ cameraHolder.translateY(0);
 
 let aviao = createAviao();
 aviao.castShadow = true;
+aviao.receiveShadow = true;
 scene.add(aviao);
 
 //criando a BB do aviao
@@ -225,6 +226,7 @@ function createEnemy() {
 
   enemys[enemys.length - 1].position.set(posicaoX, 30, posicaoZ);
   enemys[enemys.length - 1].castShadow = true;
+  enemys[enemys.length - 1].receiveShadow = true;
   scene.add(enemys[enemys.length - 1]);
 }
 
@@ -239,6 +241,7 @@ function createGroundEnemy() {
 
   groundEnemys[groundEnemys.length - 1].position.set(posicaoX, 4, posicaoZ);
   groundEnemys[groundEnemys.length - 1].castShadow = true;
+  groundEnemys[groundEnemys.length - 1].receiveShadow = true;
   scene.add(groundEnemys[groundEnemys.length - 1]);
 }
 
