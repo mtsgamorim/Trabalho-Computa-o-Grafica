@@ -114,6 +114,30 @@ for (let i = 0; i < 20; i++) {
   tirosBB[i] = new THREE.Sphere(tiros[i].position, 1);
 }
 
+let velocidade = -0.2;
+let animationOn = true;
+
+// criação inimigo
+var geometryEnemy = new THREE.BoxGeometry(5, 5, 5);
+var materialEnemy = new THREE.MeshLambertMaterial({ color: "rgb(200,0,0)" });
+//var enemy = new THREE.Mesh(geometryEnemy, materialEnemy);
+let enemys = [];
+let enemysBB = [];
+
+let auxiliarPosCamera = 1;
+let auxiliarEnemy1 = 1;
+
+// Listen window size changes
+window.addEventListener(
+  "resize",
+  function () {
+    onWindowResize(camera, renderer);
+  },
+  false
+);
+
+render();
+
 function keyboardUpdate(gameover) {
   if (gameover === false) {
     keyboard.update();
@@ -165,18 +189,23 @@ function keyboardUpdate(gameover) {
   }
 }
 
-let velocidade = -0.2;
-let animationOn = true;
-
 function getRandomArbitrary(min, max) {
   return Math.random() * (max - min) + min;
 }
-// criação inimigo
-var geometryEnemy = new THREE.BoxGeometry(5, 5, 5);
-var materialEnemy = new THREE.MeshLambertMaterial({ color: "rgb(200,0,0)" });
-//var enemy = new THREE.Mesh(geometryEnemy, materialEnemy);
-let enemys = [];
-let enemysBB = [];
+
+function planoInfinito() {
+  if (cont === 0) {
+    plane1.translateY(900);
+  } else if (cont === 1) {
+    plane2.translateY(900);
+  } else if (cont === 2) {
+    plane3.translateY(900);
+  }
+  cont++;
+  if (cont === 3) {
+    cont = 0;
+  }
+}
 
 function createEnemy() {
   enemys.push(new THREE.Mesh(geometryEnemy, materialEnemy));
@@ -189,13 +218,8 @@ function createEnemy() {
   enemys[enemys.length - 1].castShadow = true;
   scene.add(enemys[enemys.length - 1]);
 }
-//criação inimigo
 
-//
-let auxiliarPosCamera = 1;
-let auxiliarEnemy1 = 1;
-
-function andarCamera() {
+function jogo() {
   if (animationOn) {
     plane1.translateY(velocidade);
     plane2.translateY(velocidade);
@@ -252,47 +276,6 @@ function andarCamera() {
   }
 }
 
-function planoInfinito() {
-  if (cont === 0) {
-    plane1.translateY(900);
-  } else if (cont === 1) {
-    plane2.translateY(900);
-  } else if (cont === 2) {
-    plane3.translateY(900);
-  }
-  cont++;
-  if (cont === 3) {
-    cont = 0;
-  }
-}
-
-function checkCollision() {
-  //colisao entre o aviao e os inimigos
-  for (let i = 0; i < enemys.length; i++) {
-    if (enemys[i] !== null) {
-      if (aviaoBB.intersectsBox(enemysBB[i])) {
-        animationEndGame();
-      }
-    }
-  }
-
-  for (let i = 0; i < enemys.length; i++) {
-    if (enemys[i] !== null) {
-      for (let j = 0; j < 20; j++) {
-        if (enemysBB[i].intersectsSphere(tirosBB[j])) {
-          enemys[i].rotateZ(70);
-          enemys[i].rotateY(40);
-          if (auxAnimation === true) {
-            setTimeout(() => removeInimigo(i), 200);
-            auxAnimation = false;
-            break;
-          }
-        }
-      }
-    }
-  }
-}
-
 function removeInimigo(i) {
   scene.remove(enemys[i]);
   scene.remove(enemysBB[i]);
@@ -327,18 +310,35 @@ function limpavetor() {
   }
 }
 
-// Listen window size changes
-window.addEventListener(
-  "resize",
-  function () {
-    onWindowResize(camera, renderer);
-  },
-  false
-);
+function checkCollision() {
+  //colisao entre o aviao e os inimigos
+  for (let i = 0; i < enemys.length; i++) {
+    if (enemys[i] !== null) {
+      if (aviaoBB.intersectsBox(enemysBB[i])) {
+        animationEndGame();
+      }
+    }
+  }
 
-render();
+  for (let i = 0; i < enemys.length; i++) {
+    if (enemys[i] !== null) {
+      for (let j = 0; j < 20; j++) {
+        if (enemysBB[i].intersectsSphere(tirosBB[j])) {
+          enemys[i].rotateZ(70);
+          enemys[i].rotateY(40);
+          if (auxAnimation === true) {
+            setTimeout(() => removeInimigo(i), 200);
+            auxAnimation = false;
+            break;
+          }
+        }
+      }
+    }
+  }
+}
+
 function render() {
-  andarCamera();
+  jogo();
   for (let i = 0; i < enemys.length; i++) {
     if (enemys[i] !== null) {
       enemys[i].translateZ(getRandomArbitrary(0.2, 1));
