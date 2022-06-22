@@ -76,12 +76,15 @@ let plane2 = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,128,0)");
 plane2.receiveShadow = true;
 let plane3 = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,128,0)");
 plane3.receiveShadow = true;
+let planeaux = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,0,0)");
 
 scene.add(plane1);
 scene.add(plane2);
 scene.add(plane3);
+scene.add(planeaux);
 plane2.translateY(300);
 plane3.translateY(600);
+planeaux.translateY(-300);
 
 // create a cube for camera
 var cameraHolder = new THREE.Object3D();
@@ -194,13 +197,11 @@ let auxiliarEnemy1 = 1;
 
 function andarCamera() {
   if (animationOn) {
-    cameraHolder.translateZ(velocidade);
+    plane1.translateY(velocidade);
+    plane2.translateY(velocidade);
+    plane3.translateY(velocidade);
+    planeaux.translateY(velocidade);
     //spotLight.translateZ(-velocidade);
-    lightPosition.z += velocidade;
-    updateLightPosition();
-    console.log(lightPosition.z);
-    console.log(`Posicao da camera${cameraHolder.position.z}`);
-    aviao.translateY(-velocidade);
     for (let i = 0; i < 20; i++) {
       tiros[i].translateZ(-veloc);
 
@@ -225,13 +226,19 @@ function andarCamera() {
       }
     }
 
-    if (cameraHolder.position.z < 300 * -auxiliarPosCamera) {
+    if (
+      plane1.position.z > 300 ||
+      plane2.position.z > 300 ||
+      plane3.position.z > 300
+    ) {
       planoInfinito();
       auxiliarPosCamera++;
     }
-    if (cameraHolder.position.z < 10 * -auxiliarEnemy1) {
+    if (planeaux.position.z > 300 + 10 * auxiliarEnemy1) {
+      console.log(planeaux.position.z);
       createEnemy();
       auxiliarEnemy1++;
+      console.log(auxiliarEnemy1);
     }
     for (let i = 0; i < enemys.length; i++) {
       if (enemys[i] !== null) {
@@ -342,8 +349,4 @@ function render() {
   keyboardUpdate(gameover);
   renderer.render(scene, camera); // Render scene
   limpavetor();
-}
-
-function updateLightPosition() {
-  dirLight.position.copy(lightPosition);
 }
