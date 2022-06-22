@@ -31,17 +31,14 @@ camera.up.set(0, 1, 0);
 let cont = 0;
 let auxAnimation = true;
 let gameover = false;
-
+let auxiliarPosCamera = 0;
+let hp = 5;
+//LUZ AMBIENTE
 var ambientLight = new THREE.AmbientLight("rgb(60,60,60)");
 scene.add(ambientLight);
 
 var lightPosition = new THREE.Vector3(0, 80, 120);
 
-// Sphere to represent the light
-//var lightSphere = createLightSphere(scene, 0.05, 10, 10, lightPosition);
-
-//---------------------------------------------------------
-// Create and set the spotlight
 var dirLight = new THREE.DirectionalLight("rgb(255,255,255)");
 dirLight.position.copy(lightPosition);
 dirLight.castShadow = true;
@@ -108,6 +105,8 @@ var sphereMaterial = new THREE.MeshLambertMaterial({ color: "rgb(50,0,80)" });
 let qntdTiro = 0;
 let tiros = [];
 let tirosBB = [];
+let enemyTiros = [];
+let enemyTirosBB = [];
 for (let i = 0; i < 20; i++) {
   tiros[i] = new THREE.Mesh(sphereGeometry, sphereMaterial);
   //BB
@@ -119,12 +118,18 @@ let animationOn = true;
 
 // criação inimigo
 var geometryEnemy = new THREE.BoxGeometry(5, 5, 5);
+var groundGeometryEnemy = new THREE.BoxGeometry(8, 8, 8);
 var materialEnemy = new THREE.MeshLambertMaterial({ color: "rgb(200,0,0)" });
+var groundMaterialEnemy = new THREE.MeshLambertMaterial({
+  color: "rgb(0,0,200)",
+});
 //var enemy = new THREE.Mesh(geometryEnemy, materialEnemy);
 let enemys = [];
 let enemysBB = [];
 
-let auxiliarPosCamera = 1;
+let groundEnemys = [];
+let groundEnemysBB = [];
+
 let auxiliarEnemy1 = 1;
 
 // Listen window size changes
@@ -186,6 +191,10 @@ function keyboardUpdate(gameover) {
       }
       qntdTiro++;
     }
+
+    if (keyboard.pressed("G")) {
+      hp = -1;
+    }
   }
 }
 
@@ -217,6 +226,20 @@ function createEnemy() {
   enemys[enemys.length - 1].position.set(posicaoX, 30, posicaoZ);
   enemys[enemys.length - 1].castShadow = true;
   scene.add(enemys[enemys.length - 1]);
+}
+
+function createGroundEnemy() {
+  groundEnemys.push(new THREE.Mesh(groundGeometryEnemy, groundMaterialEnemy));
+  groundEnemysBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
+  groundEnemysBB[groundEnemys.length - 1].setFromObject(
+    enemys[enemys.length - 1]
+  );
+  let posicaoX = getRandomArbitrary(-90, 90);
+  let posicaoZ = cameraHolder.position.z - 140;
+
+  groundEnemys[groundEnemys.length - 1].position.set(posicaoX, 4, posicaoZ);
+  groundEnemys[groundEnemys.length - 1].castShadow = true;
+  scene.add(groundEnemys[groundEnemys.length - 1]);
 }
 
 function jogo() {
@@ -261,6 +284,7 @@ function jogo() {
     if (planeaux.position.z > 300 + 10 * auxiliarEnemy1) {
       console.log(planeaux.position.z);
       createEnemy();
+      createGroundEnemy();
       auxiliarEnemy1++;
       console.log(auxiliarEnemy1);
     }
@@ -270,6 +294,16 @@ function jogo() {
           scene.remove(enemys[i]);
           enemys[i] = null;
           enemysBB[i] = null;
+        }
+      }
+    }
+
+    for (let i = 0; i < groundEnemys.length; i++) {
+      if (groundEnemys[i] !== null) {
+        if (groundEnemys[i].position.z > cameraHolder.position.z + 90) {
+          scene.remove(groundEnemys[i]);
+          groundEnemys[i] = null;
+          groundEnemysBB[i] = null;
         }
       }
     }
@@ -308,6 +342,12 @@ function limpavetor() {
       enemysBB.splice(i, 1);
     }
   }
+  for (let i = 0; i < groundEnemys.length; i++) {
+    if (groundEnemys[i] === null) {
+      groundEnemys.splice(i, 1);
+      groundEnemysBB.splice(i, 1);
+    }
+  }
 }
 
 function checkCollision() {
@@ -315,7 +355,16 @@ function checkCollision() {
   for (let i = 0; i < enemys.length; i++) {
     if (enemys[i] !== null) {
       if (aviaoBB.intersectsBox(enemysBB[i])) {
-        animationEndGame();
+        if (hp === -1) {
+          break;
+        }
+        hp--;
+        scene.remove(enemys[i]);
+        enemys[i] = null;
+        enemysBB[i] = null;
+        if (hp === 0) {
+          animationEndGame();
+        }
       }
     }
   }
@@ -342,6 +391,11 @@ function render() {
   for (let i = 0; i < enemys.length; i++) {
     if (enemys[i] !== null) {
       enemys[i].translateZ(getRandomArbitrary(0.2, 1));
+    }
+  }
+  for (let i = 0; i < groundEnemys.length; i++) {
+    if (groundEnemys[i] !== null) {
+      groundEnemys[i].translateZ(getRandomArbitrary(0.2, 1));
     }
   }
   checkCollision();
