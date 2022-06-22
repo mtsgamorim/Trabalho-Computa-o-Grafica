@@ -35,7 +35,7 @@ let gameover = false;
 var ambientLight = new THREE.AmbientLight("rgb(60,60,60)");
 scene.add(ambientLight);
 
-var lightPosition = new THREE.Vector3(0, 80, 120);
+var lightPosition = new THREE.Vector3(0, 100, 100);
 
 // Sphere to represent the light
 //var lightSphere = createLightSphere(scene, 0.05, 10, 10, lightPosition);
@@ -57,10 +57,10 @@ dirLight.shadow.camera.top = 200;
 dirLight.shadow.bias = -0.0005;
 
 // No effect on Basic and PCFSoft
-dirLight.shadow.radius = 4;
+dirLight.shadow.radius = 0.1;
 
 // Just for VSM - to be added in threejs.r132
-dirLight.shadow.blurSamples = 1;
+dirLight.shadow.blurSamples = 2;
 
 // Enable mouse rotation, pan, zoom etc.
 var trackballControls = new TrackballControls(camera, renderer.domElement);
@@ -228,6 +228,7 @@ function jogo() {
     //spotLight.translateZ(-velocidade);
     for (let i = 0; i < 20; i++) {
       tiros[i].translateZ(-veloc);
+      tiros[i].castShadow = true;
 
       tirosBB[i].center.set(
         tiros[i].position.x,
