@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { TrackballControls } from "../build/jsm/controls/TrackballControls.js";
+import { ShadowMapViewer } from '../build/jsm/utils/ShadowMapViewer.js';
 import {
   initRenderer,
   initCamera,
@@ -7,6 +8,8 @@ import {
   InfoBox,
   onWindowResize,
   createGroundPlaneWired,
+  createLightSphere,
+  degreesToRadians,
   createGroundPlaneXZ,
 } from "../libs/util/util.js";
 import createAviao from "./criarAviao.js";
@@ -14,7 +17,13 @@ import KeyboardState from "../libs/util/KeyboardState.js";
 import { FogExp2, SplineCurve } from "../build/three.module.js";
 
 var scene = new THREE.Scene(); // Create main scene
-var renderer = initRenderer(); // View function in util/utils
+
+let renderer = new THREE.WebGLRenderer();
+  document.getElementById("webgl-output").appendChild( renderer.domElement );  
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type  = THREE.VSMShadowMap; // default
+
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
 var camera = initCamera(new THREE.Vector3(0, 80, 120)); // Init camera in this position
@@ -22,7 +31,38 @@ camera.up.set(0, 1, 0);
 let cont = 0;
 let auxAnimation = true;
 let gameover = false;
-initDefaultBasicLight(scene);
+
+var ambientLight = new THREE.AmbientLight("rgb(60,60,60)");
+scene.add( ambientLight );
+
+var lightPosition = new THREE.Vector3(0, 80, 120);
+
+// Sphere to represent the light
+//var lightSphere = createLightSphere(scene, 0.05, 10, 10, lightPosition);
+
+//---------------------------------------------------------
+// Create and set the spotlight
+var dirLight = new THREE.DirectionalLight("rgb(255,255,255)");
+  dirLight.position.copy(lightPosition);
+  dirLight.castShadow = true;
+  // Shadow Parameters
+  dirLight.shadow.mapSize.width = 700;
+  dirLight.shadow.mapSize.height = 300;
+  dirLight.shadow.camera.near = .1;
+  dirLight.shadow.camera.far = 600;
+  dirLight.shadow.camera.left = -360;
+  dirLight.shadow.camera.right = 360;
+  dirLight.shadow.camera.bottom = -200;
+  dirLight.shadow.camera.top = 200;
+  dirLight.shadow.bias = -0.0005;  
+
+  // No effect on Basic and PCFSoft
+  dirLight.shadow.radius = 4;
+
+  // Just for VSM - to be added in threejs.r132
+  dirLight.shadow.blurSamples = 1;
+
+
 
 // Enable mouse rotation, pan, zoom etc.
 var trackballControls = new TrackballControls(camera, renderer.domElement);
@@ -33,8 +73,12 @@ scene.add(axesHelper);
 
 // create the ground plane
 let plane1 = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,128,0)");
+    plane1.receiveShadow = true;
 let plane2 = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,128,0)");
+    plane2.receiveShadow = true;
 let plane3 = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,128,0)");
+    plane3.receiveShadow = true;
+
 scene.add(plane1);
 scene.add(plane2);
 scene.add(plane3);
@@ -44,10 +88,13 @@ plane3.translateY(600);
 // create a cube for camera
 var cameraHolder = new THREE.Object3D();
 cameraHolder.add(camera);
+//cameraHolder.add(dirLight);
 scene.add(cameraHolder);
+scene.add(dirLight);
 cameraHolder.translateY(0);
 
 let aviao = createAviao();
+    aviao.castShadow = true;
 scene.add(aviao);
 
 //criando a BB do aviao
@@ -149,6 +196,7 @@ let auxiliarEnemy1 = 1;
 function andarCamera() {
   if (animationOn) {
     cameraHolder.translateZ(velocidade);
+    //spotLight.translateZ(-velocidade);
     aviao.translateY(-velocidade);
     for (let i = 0; i < 20; i++) {
       tiros[i].translateZ(-veloc);
@@ -270,13 +318,7 @@ function limpavetor() {
 }
 
 // Listen window size changes
-window.addEventListener(
-  "resize",
-  function () {
-    onWindowResize(camera, renderer);
-  },
-  false
-);
+window.addEventListener('resize', function(){onWindowResize(camera, renderer)}, false);
 
 render();
 function render() {

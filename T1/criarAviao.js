@@ -15,7 +15,7 @@ import {
 
 export default function createAviao() {
   var geometry = new THREE.ConeGeometry(5, 10, 32);
-  var material = new THREE.MeshLambertMaterial({ color: 0xffff00 });
+  var material = new THREE.MeshPhongMaterial({ color: 0xffff00 });
   var cone = new THREE.Mesh(geometry, material);
 
   cone.position.set(0, 30, 0);

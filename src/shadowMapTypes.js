@@ -49,10 +49,10 @@ var dirLight = new THREE.DirectionalLight("rgb(255,255,255)");
   dirLight.shadow.mapSize.width = 256;
   dirLight.shadow.mapSize.height = 256;
   dirLight.shadow.camera.near = .1;
-  dirLight.shadow.camera.far = 6;
+  dirLight.shadow.camera.far = 10;
   dirLight.shadow.camera.left = -2.5;
   dirLight.shadow.camera.right = 2.5;
-  dirLight.shadow.camera.bottom = -2.5;
+  dirLight.shadow.camera.bottom = -8.5;
   dirLight.shadow.camera.top = 2.5;
   dirLight.shadow.bias = -0.0005;  
 
