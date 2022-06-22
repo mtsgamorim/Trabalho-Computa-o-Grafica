@@ -14,6 +14,7 @@ import {
 } from "../libs/util/util.js";
 import createAviao from "./criarAviao.js";
 import KeyboardState from "../libs/util/KeyboardState.js";
+import { CSG } from "../libs/other/CSGMesh.js";
 import { FogExp2, SplineCurve } from "../build/three.module.js";
 
 var scene = new THREE.Scene(); // Create main scene
