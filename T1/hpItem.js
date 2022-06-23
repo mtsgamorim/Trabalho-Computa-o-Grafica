@@ -1,15 +1,14 @@
-
 import * as THREE from "three";
 import Stats from "../build/jsm/libs/stats.module.js";
 import GUI from "../libs/util/dat.gui.module.js";
-import KeyboardState from '../libs/util/KeyboardState.js';
+import KeyboardState from "../libs/util/KeyboardState.js";
 import { TrackballControls } from "../build/jsm/controls/TrackballControls.js";
 import {
   initRenderer,
   initCamera,
   initDefaultBasicLight,
   createGroundPlaneXZ,
-  createLightSphere,    
+  createLightSphere,
   onWindowResize,
 } from "../libs/util/util.js";
 
@@ -31,43 +30,41 @@ window.addEventListener(
   },
   false
 );
-let light = initDefaultBasicLight(scene, true, new THREE.Vector3(2.5, 0.7, 4.5), 28, 1024);
+let light = initDefaultBasicLight(
+  scene,
+  true,
+  new THREE.Vector3(2.5, 0.7, 4.5),
+  28,
+  1024
+);
 
 let lightPosition = light.position;
 let lightSphere = createLightSphere(scene, 0.1, 10, 10, lightPosition);
-  lightSphere.visible = false;
+lightSphere.visible = false;
 
 var groundPlane = createGroundPlaneXZ(20, 20); // width and height (x, y)
-  groundPlane.position.set(0.0, -2.0, 0.0)
-   scene.add(groundPlane);
+groundPlane.position.set(0.0, -2.0, 0.0);
+scene.add(groundPlane);
 
 var trackballControls = new TrackballControls(camera, renderer.domElement);
- 
 
 // CRIAÇAO DO OBJETO COMEÇA AQUI
 
 let materialObjetoCura = new THREE.MeshPhongMaterial({
-    color: "red",
-    shininess: "150"
+  color: "red",
+  shininess: "150",
 });
 
-let cilindro = new THREE.Mesh(
-    new THREE.CylinderGeometry(2.5, 2.5, 0.4, 32)
-);
+let cilindro = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.5, 0.4, 32));
 
-let cruz1 = new THREE.Mesh(
-    new THREE.BoxGeometry(2.5, 0.4, 0.5)
-);
+let cruz1 = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.4, 0.5));
 
+let cruz2 = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.4, 0.5));
 
-let cruz2 = new THREE.Mesh(
-    new THREE.BoxGeometry(2.5, 0.4, 0.5)
-);
-
-cilindro.position.set(0,0,0);
-cruz1.position.set(0,0,0);
+cilindro.position.set(0, 0, 0);
+cruz1.position.set(0, 0, 0);
 cruz2.rotateY(1.57);
-cruz2.position.set(0,0,0);
+cruz2.position.set(0, 0, 0);
 
 cruz1.matrixAutoUpdate = false;
 cruz1.updateMatrix();
@@ -84,14 +81,13 @@ let objetoFinal = cilindroCSG.subtract(cruzCompleta);
 
 let objetoCura = CSG.toMesh(objetoFinal, new THREE.Matrix4());
 objetoCura.material = materialObjetoCura;
-objetoCura.position.set(0,2,0);
+objetoCura.position.set(0, 2, 0);
 scene.add(objetoCura);
 
 // CRIAÇAO DO OBJETO TERMINA AQUI
 
 buildInterface();
 render();
-
 
 function updateObject(mesh) {
   mesh.matrixAutoUpdate = false;
@@ -117,50 +113,40 @@ function buildInterface() {
     });
 }
 
-
-function keyboardUpdate()
-{
+function keyboardUpdate() {
   keyboard.update();
-  if ( keyboard.pressed("D") )
-  {
+  if (keyboard.pressed("D")) {
     lightPosition.x += 0.05;
     updateLightPosition();
   }
-  if ( keyboard.pressed("A") )
-  {
+  if (keyboard.pressed("A")) {
     lightPosition.x -= 0.05;
     updateLightPosition();
   }
-  if ( keyboard.pressed("W") )
-  {
+  if (keyboard.pressed("W")) {
     lightPosition.y += 0.05;
     updateLightPosition();
   }
-  if ( keyboard.pressed("S") )
-  {
+  if (keyboard.pressed("S")) {
     lightPosition.y -= 0.05;
     updateLightPosition();
   }
-  if ( keyboard.pressed("E") )
-  {
+  if (keyboard.pressed("E")) {
     lightPosition.z -= 0.05;
     updateLightPosition();
   }
-  if ( keyboard.pressed("Q") )
-  {
+  if (keyboard.pressed("Q")) {
     lightPosition.z += 0.05;
     updateLightPosition();
   }
 }
 
 // Update light position of the current light
-function updateLightPosition()
-{
+function updateLightPosition() {
   light.position.copy(lightPosition);
   lightSphere.position.copy(lightPosition);
-  console.log(light.position)
+  console.log(light.position);
 }
-
 
 function render() {
   stats.update(); // Update FPS

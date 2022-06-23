@@ -34,6 +34,9 @@ let auxAnimation = true;
 let gameover = false;
 let auxiliarPosCamera = 0;
 let hp = 5;
+let objetoCura;
+criaIconeVida();
+
 //LUZ AMBIENTE
 var ambientLight = new THREE.AmbientLight("rgb(60,60,60)");
 scene.add(ambientLight);
@@ -391,6 +394,43 @@ function checkCollision() {
   }
 }
 
+function criaIconeVida() {
+  let materialObjetoCura = new THREE.MeshPhongMaterial({
+    color: "red",
+    shininess: "150",
+  });
+
+  let cilindro = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.5, 0.4, 32));
+
+  let cruz1 = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.4, 0.5));
+
+  let cruz2 = new THREE.Mesh(new THREE.BoxGeometry(2.5, 0.4, 0.5));
+
+  cilindro.position.set(0, 0, 0);
+  cruz1.position.set(0, 0, 0);
+  cruz2.rotateY(1.57);
+  cruz2.position.set(0, 0, 0);
+
+  cruz1.matrixAutoUpdate = false;
+  cruz1.updateMatrix();
+
+  cruz2.matrixAutoUpdate = false;
+  cruz2.updateMatrix();
+
+  let cilindroCSG = CSG.fromMesh(cilindro);
+  let cruz1CSG = CSG.fromMesh(cruz1);
+  let cruz2CSG = CSG.fromMesh(cruz2);
+
+  let cruzCompleta = cruz1CSG.union(cruz2CSG);
+  let objetoFinal = cilindroCSG.subtract(cruzCompleta);
+
+  objetoCura = CSG.toMesh(objetoFinal, new THREE.Matrix4());
+  objetoCura.material = materialObjetoCura;
+  objetoCura.position.set(0, 80, 30);
+  objetoCura.rotateX(0.8);
+  scene.add(objetoCura);
+}
+
 function render() {
   jogo();
   for (let i = 0; i < enemys.length; i++) {
@@ -403,6 +443,7 @@ function render() {
       groundEnemys[i].translateZ(getRandomArbitrary(0.2, 1));
     }
   }
+  objetoCura.translateZ(0.1);
   checkCollision();
   requestAnimationFrame(render);
   keyboardUpdate(gameover);
