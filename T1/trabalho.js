@@ -429,6 +429,9 @@ function criaIconeVida() {
   objetoCura.position.set(0, 80, 30);
   objetoCura.rotateX(0.8);
   scene.add(objetoCura);
+  objetoCura.castShadow = true;
+  let objetoCuraBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
+  objetoCuraBB.setFromObject(objetoCura);
 }
 
 function render() {
