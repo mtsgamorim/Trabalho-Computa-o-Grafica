@@ -16,6 +16,7 @@ import createAviao from "./criarAviao.js";
 import KeyboardState from "../libs/util/KeyboardState.js";
 import { CSG } from "../libs/other/CSGMesh.js";
 import { FogExp2, SplineCurve } from "../build/three.module.js";
+import { GLTFLoader } from "../build/jsm/loaders/GLTFLoader.js";
 
 var scene = new THREE.Scene(); // Create main scene
 
@@ -96,9 +97,29 @@ scene.add(dirLight);
 cameraHolder.translateY(0);
 
 let aviao = createAviao();
-aviao.castShadow = true;
-aviao.receiveShadow = true;
 scene.add(aviao);
+var loader = new GLTFLoader();
+
+loader.load(
+  "./assets/aviao.glb",
+  function (gltf) {
+    var objAviao = gltf.scene;
+    objAviao.name = "objAviao";
+    objAviao.visible = true;
+    objAviao.castShadow = true;
+    objAviao.rotateZ(-1.55);
+    objAviao.rotateX(1.5);
+    objAviao.traverse(function (child) {
+      if (child) {
+        child.castShadow = true;
+      }
+    });
+
+    aviao.add(objAviao);
+  },
+  null,
+  null
+);
 
 //criando a BB do aviao
 let aviaoBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());

@@ -14,8 +14,12 @@ import {
 } from "../libs/util/util.js";
 
 export default function createAviao() {
-  var geometry = new THREE.ConeGeometry(5, 10, 32);
-  var material = new THREE.MeshPhongMaterial({ color: 0xffff00 });
+  var geometry = new THREE.ConeGeometry(3, 8, 32);
+  var edges = new THREE.EdgesGeometry(geometry);
+  var material = new THREE.MeshLambertMaterial({
+    color: 0x0000ff,
+    visible: false,
+  });
   var cone = new THREE.Mesh(geometry, material);
 
   cone.position.set(0, 30, 0);
