@@ -42,7 +42,7 @@ criaIconeVida();
 var ambientLight = new THREE.AmbientLight("rgb(60,60,60)");
 scene.add(ambientLight);
 
-var lightPosition = new THREE.Vector3(0, 100, 100);
+var lightPosition = new THREE.Vector3(0, 90, 130);
 
 var dirLight = new THREE.DirectionalLight("rgb(255,255,255)");
 dirLight.position.copy(lightPosition);
@@ -56,13 +56,13 @@ dirLight.shadow.camera.left = -360;
 dirLight.shadow.camera.right = 360;
 dirLight.shadow.camera.bottom = -200;
 dirLight.shadow.camera.top = 200;
-dirLight.shadow.bias = -0.0005;
+dirLight.shadow.bias = -0.0500;
 
 // No effect on Basic and PCFSoft
-dirLight.shadow.radius = 0.1;
+dirLight.shadow.radius = 0.2;
 
 // Just for VSM - to be added in threejs.r132
-dirLight.shadow.blurSamples = 2;
+dirLight.shadow.blurSamples = 1;
 
 // Enable mouse rotation, pan, zoom etc.
 var trackballControls = new TrackballControls(camera, renderer.domElement);
@@ -107,11 +107,13 @@ loader.load(
     objAviao.name = "objAviao";
     objAviao.visible = true;
     objAviao.castShadow = true;
+    objAviao.receiveShadow = true;
     objAviao.rotateZ(-1.55);
     objAviao.rotateX(1.5);
     objAviao.traverse(function (child) {
       if (child) {
         child.castShadow = true;
+        child.receiveShadow = true
       }
     });
 
@@ -126,18 +128,34 @@ let aviaoBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
 aviaoBB.setFromObject(aviao);
 
 let veloc = 2;
+let veloc2 = 1;
+
 var sphereGeometry = new THREE.SphereGeometry(1, 32, 1);
 var sphereMaterial = new THREE.MeshLambertMaterial({ color: "rgb(50,0,80)" });
+var sphereMaterial2 = new THREE.MeshLambertMaterial({ color: "rgb(255, 255, 255)" });
+
 let qntdTiro = 0;
+let qntdTiro2 = 0;
 let tiros = [];
 let tirosBB = [];
+let misseis = [];
+let misseisBB = [];
 let enemyTiros = [];
 let enemyTirosBB = [];
+
 for (let i = 0; i < 20; i++) {
   tiros[i] = new THREE.Mesh(sphereGeometry, sphereMaterial);
   //BB
   tirosBB[i] = new THREE.Sphere(tiros[i].position, 1);
 }
+
+for (let i = 0; i < 20; i++) {
+  misseis[i] = new THREE.Mesh(sphereGeometry, sphereMaterial2);
+  //BB
+  misseisBB[i] = new THREE.Sphere(misseis[i].position, 1);
+}
+
+
 
 let velocidade = -0.2;
 let animationOn = true;
@@ -193,16 +211,16 @@ function keyboardUpdate(gameover) {
       aviao.translateY(-moveDistance);
 
     if (keyboard.down("space")) {
-      tiros[qntdTiro].position.set(
+      misseis[qntdTiro2].position.set(
         aviao.position.x,
         aviao.position.y,
         aviao.position.z
       );
-      scene.add(tiros[qntdTiro]);
-      if (qntdTiro === 19) {
-        qntdTiro = 0;
+      scene.add(misseis[qntdTiro2]);
+      if (qntdTiro2 === 19) {
+        qntdTiro2 = 0;
       }
-      qntdTiro++;
+      qntdTiro2++;
     }
 
     if (keyboard.down("ctrl")) {
@@ -289,6 +307,22 @@ function jogo() {
 
       if (tiros[i].position.z < cameraHolder.position.z - 140) {
         scene.remove(tiros[i]);
+      }
+    }
+
+    for (let j = 0; j < 20; j++) {
+      misseis[j].translateZ(-veloc2);
+      misseis[j].translateY(-veloc2);
+      misseis[j].castShadow = true;
+
+      misseisBB[j].center.set(
+        misseis[j].position.x,
+        misseis[j].position.y,
+        misseis[j].position.z
+      );
+
+      if (misseis[j].position.z < cameraHolder.position.z - 140) {
+        scene.remove(misseis[j]);
       }
     }
 
