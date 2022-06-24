@@ -363,6 +363,7 @@ function jogo() {
 
       if (misseis[j].position.z < cameraHolder.position.z - 140) {
         scene.remove(misseis[j]);
+        
       }
     }
 
