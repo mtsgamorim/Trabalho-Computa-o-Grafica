@@ -308,6 +308,7 @@ function createGroundEnemy() {
       objEnemy.traverse(function (child) {
         if (child) {
           child.castShadow = true;
+          child.receiveShadow = true;
         }
       });
       groundEnemys[groundEnemys.length - 1].add(objEnemy);
@@ -361,7 +362,7 @@ function jogo() {
         misseis[j].position.z
       );
 
-      if (misseis[j].position.z < cameraHolder.position.z - 140) {
+      if (misseis[j].position.y < cameraHolder.position.y - 90) {
         scene.remove(misseis[j]);
         
       }
