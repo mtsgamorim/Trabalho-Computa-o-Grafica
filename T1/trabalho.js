@@ -100,6 +100,7 @@ let aviao = createAviao();
 scene.add(aviao);
 var loader = new GLTFLoader();
 
+
 loader.load(
   "./assets/aviao.glb",
   function (gltf) {
@@ -145,9 +146,11 @@ let animationOn = true;
 // criação inimigo
 var geometryEnemy = new THREE.BoxGeometry(5, 5, 5);
 var groundGeometryEnemy = new THREE.BoxGeometry(8, 8, 8);
-var materialEnemy = new THREE.MeshLambertMaterial({ color: "rgb(200,0,0)" });
+var materialEnemy = new THREE.MeshLambertMaterial({ color: "rgb(200,0,0)",
+visible: false });
 var groundMaterialEnemy = new THREE.MeshLambertMaterial({
   color: "rgb(0,0,200)",
+  visible: false
 });
 //var enemy = new THREE.Mesh(geometryEnemy, materialEnemy);
 let enemys = [];
@@ -244,6 +247,24 @@ function planoInfinito() {
 
 function createEnemy() {
   enemys.push(new THREE.Mesh(geometryEnemy, materialEnemy));
+  loader.load(
+    "./assets/aviao2.glb",
+    function (gltf) {
+      var objEnemy = gltf.scene;
+      objEnemy.name = "Inimigo1";
+      objEnemy.visible = true;
+      objEnemy.castShadow = true;
+      objEnemy.scale.set(0.7,0.7,0.7);
+      objEnemy.traverse(function (child) {
+        if (child) {
+          child.castShadow = true;
+        }
+      });
+      enemys[enemys.length - 1].add(objEnemy);
+    },
+    null,
+    null
+  );
   enemysBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
   enemysBB[enemysBB.length - 1].setFromObject(enemys[enemys.length - 1]);
   let posicaoX = getRandomArbitrary(-90, 90);
@@ -257,6 +278,25 @@ function createEnemy() {
 
 function createGroundEnemy() {
   groundEnemys.push(new THREE.Mesh(groundGeometryEnemy, groundMaterialEnemy));
+  loader.load(
+    "./assets/toonTank.glb",
+    function (gltf) {
+      var objEnemy = gltf.scene;
+      objEnemy.name = "Inimigo1";
+      objEnemy.visible = true;
+      objEnemy.castShadow = true;
+      objEnemy.translateY(-4)
+      objEnemy.scale.set(3,3,3);
+      objEnemy.traverse(function (child) {
+        if (child) {
+          child.castShadow = true;
+        }
+      });
+      groundEnemys[groundEnemys.length - 1].add(objEnemy);
+    },
+    null,
+    null
+  );
   groundEnemysBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
   groundEnemysBB[groundEnemys.length - 1].setFromObject(
     enemys[enemys.length - 1]
@@ -311,11 +351,10 @@ function jogo() {
       auxiliarPosCamera++;
     }
     if (planeaux.position.z > 300 + 10 * auxiliarEnemy1) {
-      console.log(planeaux.position.z);
+      //console.log(planeaux.position.z);
       createEnemy();
       createGroundEnemy();
       auxiliarEnemy1++;
-      console.log(auxiliarEnemy1);
     }
     for (let i = 0; i < enemys.length; i++) {
       if (enemys[i] !== null) {
@@ -387,7 +426,12 @@ function checkCollision() {
         if (hp === -1) {
           break;
         }
-        hp--;
+        if(hp === 1){
+          hp--;
+        }else{
+          hp = hp - 2;
+        }
+        
         scene.remove(enemys[i]);
         enemys[i] = null;
         enemysBB[i] = null;
@@ -416,9 +460,8 @@ function checkCollision() {
 }
 
 function criaIconeVida() {
-  let materialObjetoCura = new THREE.MeshPhongMaterial({
+  let materialObjetoCura = new THREE.MeshLambertMaterial({
     color: "red",
-    shininess: "150",
   });
 
   let cilindro = new THREE.Mesh(new THREE.CylinderGeometry(2.5, 2.5, 0.4, 32));

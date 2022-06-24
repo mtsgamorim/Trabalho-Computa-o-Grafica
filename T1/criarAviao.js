@@ -15,7 +15,6 @@ import {
 
 export default function createAviao() {
   var geometry = new THREE.ConeGeometry(3, 8, 32);
-  var edges = new THREE.EdgesGeometry(geometry);
   var material = new THREE.MeshLambertMaterial({
     color: 0x0000ff,
     visible: false,
