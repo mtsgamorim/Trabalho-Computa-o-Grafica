@@ -366,7 +366,7 @@ function jogo() {
     }
 
     for (let j = 0; j < 20; j++) {
-      misseis[j].translateZ(-veloc2);
+      misseis[j].translateZ(-veloc);
       misseis[j].translateY(-veloc2);
       misseis[j].castShadow = true;
 
@@ -408,7 +408,7 @@ function jogo() {
     }
     for (let i = 0; i < enemys.length; i++) {
       if (enemys[i] !== null) {
-        if (enemys[i].position.z > cameraHolder.position.z + 90) {
+        if (enemys[i].position.z > cameraHolder.position.z + 120) {
           scene.remove(enemys[i]);
           enemys[i] = null;
           enemysBB[i] = null;
@@ -418,7 +418,7 @@ function jogo() {
 
     for (let i = 0; i < groundEnemys.length; i++) {
       if (groundEnemys[i] !== null) {
-        if (groundEnemys[i].position.z > cameraHolder.position.z + 90) {
+        if (groundEnemys[i].position.z > cameraHolder.position.z + 120) {
           scene.remove(groundEnemys[i]);
           groundEnemys[i] = null;
           groundEnemysBB[i] = null;
