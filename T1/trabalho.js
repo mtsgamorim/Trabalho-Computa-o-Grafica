@@ -38,6 +38,20 @@ let hp = 5;
 let objetoCura;
 criaIconeVida();
 
+// Use this to show information onscreen
+var controls = new InfoBox();
+  controls.add("TRABALHO CG - GRUPO 13");
+  controls.addParagraph();
+  controls.add("Use keyboard to interact:");
+  controls.add("* UP button to translate forward");
+  controls.add("* DOWN button to translate back");
+  controls.add("* LEFT button to translate on left direction");
+  controls.add("* RIGHT button to translate on right direction");
+  controls.addParagraph();
+  controls.add("* SPACE button to simple shot.");
+  controls.add("* CTRL button to ground bomb.");
+  controls.show();
+
 //LUZ AMBIENTE
 var ambientLight = new THREE.AmbientLight("rgb(60,60,60)");
 scene.add(ambientLight);
