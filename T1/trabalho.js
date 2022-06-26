@@ -872,7 +872,7 @@ function limpavetor() {
   }
   for (let i = 0; i < objetoCura.length; i++) {
     if (objetoCura[i] === null) {
-      objetoCuraBB.splice(i, 1);
+      objetoCura.splice(i, 1);
       //objetoCuraBB.splice(i, 1);
     }
   }
