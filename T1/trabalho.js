@@ -664,7 +664,6 @@ function jogo() {
       }
     }
 
-
     for (let i = 0; i < enemysDiagonal.length; i++) {
       if (enemysDiagonal[i] !== null) {
         enemysDiagonalBB[i]
@@ -731,7 +730,7 @@ function jogo() {
     for (let i = 0; i < enemysReto2.length; i++) {
       if (enemysReto2[i] !== null) {
         if (enemysReto2[i].position.x < cameraHolder.position.x - 180) {
-          scene.remove(enemysReto[i]);
+          scene.remove(enemysReto2[i]);
           enemysReto2[i] = null;
           enemysReto2BB[i] = null;
         }
@@ -1067,7 +1066,7 @@ function checkCollision() {
           enemysReto[i].rotateZ(70);
           enemysReto[i].rotateY(40);
           if (auxAnimation === true) {
-            setTimeout(() => removeInimigoReto2(i), 200);
+            setTimeout(() => removeInimigoReto(i), 200);
             auxAnimation = false;
             break;
           }
@@ -1153,7 +1152,7 @@ function checkCollision() {
           hp++;
           removeObjetoCura(i);
         }
-      
+
         //scene.remove(objetoCura[i]);
         //objetoCura[i] = null;
         //objetoCuraBB[i] = null;
@@ -1203,7 +1202,9 @@ function createObjetoCura() {
   scene.add(objetoCura[objetoCura.length - 1]);
   objetoCura[objetoCura.length - 1].castShadow = true;
   //objetoCuraBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
-  objetoCuraBB.push(new THREE.Sphere(objetoCura[objetoCura.length - 1].position, 2.5));
+  objetoCuraBB.push(
+    new THREE.Sphere(objetoCura[objetoCura.length - 1].position, 2.5)
+  );
 
   //objetoCuraBB[objetoCuraBB.length - 1].setFromObject(objetoCura[objetoCura.length - 1]);
 }
