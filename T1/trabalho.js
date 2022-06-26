@@ -19,14 +19,12 @@ import { FogExp2, SplineCurve } from "../build/three.module.js";
 import { GLTFLoader } from "../build/jsm/loaders/GLTFLoader.js";
 
 var scene = new THREE.Scene(); // Create main scene
-let scene2 = new THREE.Scene(); // Create main scene
 
-let renderer = new THREE.WebGLRenderer({ alpha : true });
+let renderer = new THREE.WebGLRenderer();
 document.getElementById("webgl-output").appendChild(renderer.domElement);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.VSMShadowMap; // default
-renderer.autoClear = false;
 
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
@@ -219,7 +217,6 @@ window.addEventListener(
 );
 
 render();
-
 //criando auxiliares para os tiros
 let shoot = true;
 let shootM = true;
@@ -1138,41 +1135,6 @@ function criaIconeVida() {
   objetoCuraBB.setFromObject(objetoCura);
 }
 
-var lookAtVec = new THREE.Vector3(0.0, 3.0, 0.0);
-var camPosition = new THREE.Vector3(0.0, 3.0, 2.0);
-var upVec = new THREE.Vector3(0.0, 1.0, 0.0);
-var vcWidth = 200;
-var vcHeidth = 100;
-var virtualCamera = new THREE.PerspectiveCamera(
-  45,
-  vcWidth / vcHeidth,
-  1.0,
-  20.0
-);
-virtualCamera.position.copy(camPosition);
-virtualCamera.up.copy(upVec);
-virtualCamera.lookAt(lookAtVec);
-
-function controlledRender() {
-  var width = window.innerWidth;
-  var height = window.innerHeight;
-
-  // Set main viewport
-  renderer.setViewport(0, 0, width, height); // Reset viewport
-  renderer.setScissorTest(false); // Disable scissor to paint the entire window
-  renderer.clear(); // Clean the window
-
-  renderer.render(scene, camera);
-  // Set virtual camera viewport
-  var offset = 30;
-  renderer.setViewport(offset, height - vcHeidth - offset, vcWidth, vcHeidth); // Set virtual camera viewport
-  renderer.setScissor(offset, height - vcHeidth - offset, vcWidth, vcHeidth); // Set scissor with the same size as the viewport
-  renderer.setScissorTest(true); // Enable scissor to paint only the scissor are (i.e., the small viewport)
-  renderer.setClearColor(0x000000, 0); // Use a darker clear color in the small viewport
-
-  renderer.render(scene2, virtualCamera); // Render scene of the virtual camera
-}
-
 function render() {
   jogo();
   for (let i = 0; i < enemys.length; i++) {
@@ -1220,5 +1182,4 @@ function render() {
   keyboardUpdate(gameover);
   renderer.render(scene, camera); // Render scene
   limpavetor();
-  controlledRender();
 }
