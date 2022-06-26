@@ -537,6 +537,14 @@ function jogo() {
       }
     }
 
+    for (let i = 0; i < enemysReto.length; i++) {
+      if (enemysReto[i] !== null) {
+        enemysRetoBB[i]
+          .copy(enemysReto[i].geometry.boundingBox)
+          .applyMatrix4(enemysReto[i].matrixWorld);
+      }
+    }
+
     for (let i = 0; i < groundEnemys.length; i++) {
       if (groundEnemys[i] !== null) {
         groundEnemysBB[i]
@@ -576,7 +584,7 @@ function jogo() {
         if (enemysReto[i].position.x > cameraHolder.position.x + 180) {
           scene.remove(enemysReto[i]);
           enemysReto[i] = null;
-          //enemysBB[i] = null;
+          enemysRetoBB[i] = null;
         }
       }
     }
@@ -608,6 +616,15 @@ function removeInimigo(i) {
   scene.remove(enemysBB[i]);
   enemys[i] = null;
   enemysBB[i] = null;
+  limpavetor();
+  auxAnimation = true;
+}
+
+function removeInimigoReto(i) {
+  scene.remove(enemysReto[i]);
+  scene.remove(enemysRetoBB[i]);
+  enemysReto[i] = null;
+  enemysRetoBB[i] = null;
   limpavetor();
   auxAnimation = true;
 }
@@ -659,6 +676,7 @@ function limpavetor() {
   for (let i = 0; i < enemysReto.length; i++) {
     if (enemysReto[i] === null) {
       enemysReto.splice(i, 1);
+      enemysRetoBB.splice(i, 1);
     }
   }
   for (let i = 0; i < enemysDiagonal.length; i++) {
@@ -691,6 +709,29 @@ function checkCollision() {
       }
     }
   }
+
+  for (let i = 0; i < enemysReto.length; i++) {
+    if (enemysReto[i] !== null) {
+      if (aviaoBB.intersectsBox(enemysRetoBB[i])) {
+        if (hp === -1) {
+          break;
+        }
+        if (hp === 1) {
+          hp--;
+        } else {
+          hp = hp - 2;
+        }
+    
+        scene.remove(enemysReto[i]);
+        enemysReto[i] = null;
+        enemysRetoBB[i] = null;
+        if (hp === 0) {
+          animationEndGame();
+        }
+      }
+    }
+  }
+
   //colisao tiros inimigos e aviao
   for (let i = 0; i < enemyTiros.length; i++) {
     if (enemyTiros[i] !== null) {
@@ -711,7 +752,7 @@ function checkCollision() {
     }
   }
 
-  //colisao tiros aviao com inimigos aereos
+  //colisao tiros aviao com inimigos aereos verticais
   for (let i = 0; i < enemys.length; i++) {
     if (enemys[i] !== null) {
       for (let j = 0; j < 20; j++) {
@@ -720,6 +761,23 @@ function checkCollision() {
           enemys[i].rotateY(40);
           if (auxAnimation === true) {
             setTimeout(() => removeInimigo(i), 200);
+            auxAnimation = false;
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  //colisao tiros aviao com inimigos aereos horizontais
+  for (let i = 0; i < enemysReto.length; i++) {
+    if (enemysReto[i] !== null) {
+      for (let j = 0; j < 20; j++) {
+        if (enemysRetoBB[i].intersectsSphere(tirosBB[j])) {
+          enemysReto[i].rotateZ(70);
+          enemysReto[i].rotateY(40);
+          if (auxAnimation === true) {
+            setTimeout(() => removeInimigoReto(i), 200);
             auxAnimation = false;
             break;
           }
