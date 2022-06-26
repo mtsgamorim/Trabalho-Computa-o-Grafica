@@ -26,6 +26,14 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.VSMShadowMap; // default
 
+//Camera virtual para a viewport
+var camPosition = new THREE.Vector3( 0, -200, 30 );
+var vcWidth = 400; 
+var vcHeidth = 300; 
+var virtualCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 300); 
+virtualCamera.position.copy(camPosition);
+scene.add(virtualCamera);
+
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
 var camera = initCamera(new THREE.Vector3(0, 80, 120)); // Init camera in this position
@@ -1209,6 +1217,24 @@ function createObjetoCura() {
   //objetoCuraBB[objetoCuraBB.length - 1].setFromObject(objetoCura[objetoCura.length - 1]);
 }
 
+function controlledRender()
+{
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+
+  // Set main viewport
+  renderer.setViewport(0, 0, width, height); // Reset viewport    
+  renderer.setScissorTest(false); // Disable scissor to paint the entire window
+  renderer.render(scene, camera);   
+
+  // Set virtual camera viewport 
+  var offset = -90; 
+  renderer.setViewport(offset, height-vcHeidth-offset, vcWidth, vcHeidth);  // Set virtual camera viewport  
+  renderer.setScissor(offset, height-vcHeidth-offset, vcWidth, vcHeidth); // Set scissor with the same size as the viewport
+  renderer.setScissorTest(true); // Enable scissor to paint only the scissor are (i.e., the small viewport)
+  renderer.render(scene, virtualCamera);  // Render scene of the virtual camera
+}
+
 function render() {
   jogo();
   for (let i = 0; i < enemys.length; i++) {
@@ -1257,6 +1283,7 @@ function render() {
   }, 120000);
   checkCollision();
   requestAnimationFrame(render);
+  controlledRender();
   keyboardUpdate(gameover);
   renderer.render(scene, camera); // Render scene
   limpavetor();
