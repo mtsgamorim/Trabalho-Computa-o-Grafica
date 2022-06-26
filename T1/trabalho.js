@@ -252,11 +252,9 @@ function keyboardUpdate(gameover) {
           qntdTiro2++;
         }, 1000 / cadencia);
       }
-
     }
 
     if (keyboard.pressed("ctrl")) {
-
       if (shoot) {
         shoot = false;
         setTimeout(function () {
@@ -334,6 +332,46 @@ function createEnemy() {
       tiroInimigo(enemys[enemys.length - 1], enemyTiros[enemyTiros.length - 1]),
     600
   );
+}
+
+function createEnemyReto() {
+  enemysReto.push(new THREE.Mesh(geometryEnemy, materialEnemy));
+  loader.load(
+    "./assets/aviao2.glb",
+    function (gltf) {
+      var objEnemy = gltf.scene;
+      objEnemy.name = "Inimigo1";
+      objEnemy.visible = true;
+      objEnemy.castShadow = true;
+      objEnemy.scale.set(0.7, 0.7, 0.7);
+      objEnemy.rotateY(1.5);
+      objEnemy.traverse(function (child) {
+        if (child) {
+          child.castShadow = true;
+        }
+      });
+      enemysReto[enemysReto.length - 1].add(objEnemy);
+    },
+    null,
+    null
+  );
+  enemysRetoBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
+  enemysRetoBB[enemysRetoBB.length - 1].setFromObject(
+    enemysReto[enemysReto.length - 1]
+  );
+  let posicaoX = -110;
+  let posicaoZ = getRandomArbitrary(-140, 90);
+
+  enemysReto[enemysReto.length - 1].position.set(posicaoX, 30, posicaoZ);
+  enemysReto[enemysReto.length - 1].castShadow = true;
+  enemysReto[enemysReto.length - 1].receiveShadow = true;
+  scene.add(enemysReto[enemysReto.length - 1]);
+  // enemyTiros.push(new THREE.Mesh(sphereGeometry, sphereMaterial));
+  // setTimeout(
+  //   () =>
+  //     tiroInimigo(enemys[enemys.length - 1], enemyTiros[enemyTiros.length - 1]),
+  //   600
+  // );
 }
 
 function tiroInimigo(inimigo, tiroInimigo) {
@@ -455,7 +493,8 @@ function jogo() {
     }
     if (planeaux.position.z > 300 + 10 * auxiliarEnemy1) {
       //console.log(planeaux.position.z);
-      createEnemy();
+      //createEnemy();
+      createEnemyReto();
       //createGroundEnemy();
       auxiliarEnemy1++;
     }
@@ -465,6 +504,16 @@ function jogo() {
           scene.remove(enemys[i]);
           enemys[i] = null;
           enemysBB[i] = null;
+        }
+      }
+    }
+
+    for (let i = 0; i < enemysReto.length; i++) {
+      if (enemysReto[i] !== null) {
+        if (enemysReto[i].position.x > cameraHolder.position.x + 180) {
+          scene.remove(enemysReto[i]);
+          enemysReto[i] = null;
+          //enemysBB[i] = null;
         }
       }
     }
@@ -522,6 +571,11 @@ function limpavetor() {
   for (let i = 0; i < enemyTiros.length; i++) {
     if (enemyTiros[i] === null) {
       enemyTiros.splice(i, 1);
+    }
+  }
+  for (let i = 0; i < enemysReto.length; i++) {
+    if (enemysReto[i] === null) {
+      enemysReto.splice(i, 1);
     }
   }
 }
@@ -616,6 +670,11 @@ function render() {
   for (let i = 0; i < groundEnemys.length; i++) {
     if (groundEnemys[i] !== null) {
       groundEnemys[i].translateZ(getRandomArbitrary(0.2, 1));
+    }
+  }
+  for (let i = 0; i < enemysReto.length; i++) {
+    if (enemysReto[i] !== null) {
+      enemysReto[i].translateX(getRandomArbitrary(0.2, 1));
     }
   }
 
