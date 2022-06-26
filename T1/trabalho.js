@@ -40,17 +40,17 @@ criaIconeVida();
 
 // Use this to show information onscreen
 var controls = new InfoBox();
-  controls.add("TRABALHO CG - GRUPO 13");
-  controls.addParagraph();
-  controls.add("Use keyboard to interact:");
-  controls.add("* UP button to translate forward");
-  controls.add("* DOWN button to translate back");
-  controls.add("* LEFT button to translate on left direction");
-  controls.add("* RIGHT button to translate on right direction");
-  controls.addParagraph();
-  controls.add("* SPACE button to simple shot.");
-  controls.add("* CTRL button to ground bomb.");
-  controls.show();
+controls.add("TRABALHO CG - GRUPO 13");
+controls.addParagraph();
+controls.add("Use keyboard to interact:");
+controls.add("* UP button to translate forward");
+controls.add("* DOWN button to translate back");
+controls.add("* LEFT button to translate on left direction");
+controls.add("* RIGHT button to translate on right direction");
+controls.addParagraph();
+controls.add("* SPACE button to simple shot.");
+controls.add("* CTRL button to ground bomb.");
+controls.show();
 
 //LUZ AMBIENTE
 var ambientLight = new THREE.AmbientLight("rgb(60,60,60)");
@@ -70,7 +70,7 @@ dirLight.shadow.camera.left = -360;
 dirLight.shadow.camera.right = 360;
 dirLight.shadow.camera.bottom = -200;
 dirLight.shadow.camera.top = 200;
-dirLight.shadow.bias = -0.0500;
+dirLight.shadow.bias = -0.05;
 
 // No effect on Basic and PCFSoft
 dirLight.shadow.radius = 0.2;
@@ -114,7 +114,6 @@ let aviao = createAviao();
 scene.add(aviao);
 var loader = new GLTFLoader();
 
-
 loader.load(
   "./assets/aviao.glb",
   function (gltf) {
@@ -128,7 +127,7 @@ loader.load(
     objAviao.traverse(function (child) {
       if (child) {
         child.castShadow = true;
-        child.receiveShadow = true
+        child.receiveShadow = true;
       }
     });
 
@@ -147,7 +146,9 @@ let veloc2 = 1;
 
 var sphereGeometry = new THREE.SphereGeometry(1, 32, 1);
 var sphereMaterial = new THREE.MeshLambertMaterial({ color: "rgb(50,0,80)" });
-var sphereMaterial2 = new THREE.MeshLambertMaterial({ color: "rgb(255, 255, 255)" });
+var sphereMaterial2 = new THREE.MeshLambertMaterial({
+  color: "rgb(255, 255, 255)",
+});
 
 let qntdTiro = 0;
 let qntdTiro2 = 0;
@@ -160,7 +161,6 @@ let enemyTirosBB = [];
 
 for (let i = 0; i < 20; i++) {
   tiros[i] = new THREE.Mesh(sphereGeometry, sphereMaterial);
-  //BB
   tirosBB[i] = new THREE.Sphere(tiros[i].position, 1);
 }
 
@@ -170,19 +170,19 @@ for (let i = 0; i < 20; i++) {
   misseisBB[i] = new THREE.Sphere(misseis[i].position, 1);
 }
 
-
-
 let velocidade = -0.2;
 let animationOn = true;
 
 // criação inimigo
 var geometryEnemy = new THREE.BoxGeometry(5, 5, 5);
 var groundGeometryEnemy = new THREE.BoxGeometry(8, 8, 8);
-var materialEnemy = new THREE.MeshLambertMaterial({ color: "rgb(200,0,0)",
-visible: false });
+var materialEnemy = new THREE.MeshLambertMaterial({
+  color: "rgb(200,0,0)",
+  visible: false,
+});
 var groundMaterialEnemy = new THREE.MeshLambertMaterial({
   color: "rgb(0,0,200)",
-  visible: false
+  visible: false,
 });
 //var enemy = new THREE.Mesh(geometryEnemy, materialEnemy);
 let enemys = [];
@@ -286,7 +286,7 @@ function createEnemy() {
       objEnemy.name = "Inimigo1";
       objEnemy.visible = true;
       objEnemy.castShadow = true;
-      objEnemy.scale.set(0.7,0.7,0.7);
+      objEnemy.scale.set(0.7, 0.7, 0.7);
       objEnemy.traverse(function (child) {
         if (child) {
           child.castShadow = true;
@@ -306,6 +306,21 @@ function createEnemy() {
   enemys[enemys.length - 1].castShadow = true;
   enemys[enemys.length - 1].receiveShadow = true;
   scene.add(enemys[enemys.length - 1]);
+  enemyTiros.push(new THREE.Mesh(sphereGeometry, sphereMaterial));
+  setTimeout(
+    () =>
+      tiroInimigo(enemys[enemys.length - 1], enemyTiros[enemyTiros.length - 1]),
+    600
+  );
+}
+
+function tiroInimigo(inimigo, tiroInimigo) {
+  tiroInimigo.position.set(
+    inimigo.position.x,
+    inimigo.position.y,
+    inimigo.position.z
+  );
+  scene.add(tiroInimigo);
 }
 
 function createGroundEnemy() {
@@ -317,8 +332,8 @@ function createGroundEnemy() {
       objEnemy.name = "Inimigo1";
       objEnemy.visible = true;
       objEnemy.castShadow = true;
-      objEnemy.translateY(-4)
-      objEnemy.scale.set(3,3,3);
+      objEnemy.translateY(-4);
+      objEnemy.scale.set(3, 3, 3);
       objEnemy.traverse(function (child) {
         if (child) {
           child.castShadow = true;
@@ -365,6 +380,23 @@ function jogo() {
       }
     }
 
+    for (let i = 0; i < enemyTiros.length; i++) {
+      if (enemyTiros[i] !== null) {
+        enemyTiros[i].translateZ(veloc);
+        enemyTiros[i].castShadow = true;
+
+        // tirosBB[i].center.set(
+        //   tiros[i].position.x,
+        //   tiros[i].position.y,
+        //   tiros[i].position.z
+        // );
+        if (enemyTiros[i].position.z > cameraHolder.position.z + 140) {
+          scene.remove(enemyTiros[i]);
+          enemyTiros[i] = null;
+        }
+      }
+    }
+
     for (let j = 0; j < 20; j++) {
       misseis[j].translateZ(-veloc);
       misseis[j].translateY(-veloc2);
@@ -378,7 +410,6 @@ function jogo() {
 
       if (misseis[j].position.y < cameraHolder.position.y - 90) {
         scene.remove(misseis[j]);
-        
       }
     }
 
@@ -403,7 +434,7 @@ function jogo() {
     if (planeaux.position.z > 300 + 10 * auxiliarEnemy1) {
       //console.log(planeaux.position.z);
       createEnemy();
-      createGroundEnemy();
+      //createGroundEnemy();
       auxiliarEnemy1++;
     }
     for (let i = 0; i < enemys.length; i++) {
@@ -466,6 +497,11 @@ function limpavetor() {
       groundEnemysBB.splice(i, 1);
     }
   }
+  for (let i = 0; i < enemyTiros.length; i++) {
+    if (enemyTiros[i] === null) {
+      enemyTiros.splice(i, 1);
+    }
+  }
 }
 
 function checkCollision() {
@@ -476,12 +512,12 @@ function checkCollision() {
         if (hp === -1) {
           break;
         }
-        if(hp === 1){
+        if (hp === 1) {
           hp--;
-        }else{
+        } else {
           hp = hp - 2;
         }
-        
+
         scene.remove(enemys[i]);
         enemys[i] = null;
         enemysBB[i] = null;
