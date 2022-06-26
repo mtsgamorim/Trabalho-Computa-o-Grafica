@@ -50,6 +50,7 @@ var controls = new InfoBox();
   controls.addParagraph();
   controls.add("* SPACE button to simple shot.");
   controls.add("* CTRL button to ground bomb.");
+  controls.add("* G button to 'God Mode'.");
   controls.show();
 
 //LUZ AMBIENTE
@@ -560,6 +561,16 @@ function render() {
       groundEnemys[i].translateZ(getRandomArbitrary(0.2, 1));
     }
   }
+
+  setTimeout(function(){ 
+    
+    aviaoMorte();
+    gameover = true;
+    keyboardUpdate(gameover);
+
+}, 120000);
+
+
   objetoCura.translateZ(0.1);
   checkCollision();
   requestAnimationFrame(render);
