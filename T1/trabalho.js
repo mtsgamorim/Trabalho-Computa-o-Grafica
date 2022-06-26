@@ -27,10 +27,15 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.VSMShadowMap; // default
 
 //Camera virtual para a viewport
-var camPosition = new THREE.Vector3( 0, -200, 30 );
-var vcWidth = 400; 
-var vcHeidth = 300; 
-var virtualCamera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 300); 
+var camPosition = new THREE.Vector3(0, -200, 30);
+var vcWidth = 400;
+var vcHeidth = 300;
+var virtualCamera = new THREE.PerspectiveCamera(
+  60,
+  window.innerWidth / window.innerHeight,
+  1,
+  300
+);
 virtualCamera.position.copy(camPosition);
 scene.add(virtualCamera);
 
@@ -1205,8 +1210,8 @@ function criaIconeVida() {
 
 function createObjetoCura() {
   objetoCura.push(criaIconeVida());
-  objetoCura[objetoCura.length - 1].position.set(0, 80, 30);
-  objetoCura[objetoCura.length - 1].rotateX(1.5);
+  objetoCura[objetoCura.length - 1].position.set(0, 30, -150);
+  objetoCura[objetoCura.length - 1].rotateX(1.57);
   scene.add(objetoCura[objetoCura.length - 1]);
   objetoCura[objetoCura.length - 1].castShadow = true;
   //objetoCuraBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
@@ -1217,22 +1222,21 @@ function createObjetoCura() {
   //objetoCuraBB[objetoCuraBB.length - 1].setFromObject(objetoCura[objetoCura.length - 1]);
 }
 
-function controlledRender()
-{
+function controlledRender() {
   var width = window.innerWidth;
   var height = window.innerHeight;
 
   // Set main viewport
-  renderer.setViewport(0, 0, width, height); // Reset viewport    
+  renderer.setViewport(0, 0, width, height); // Reset viewport
   renderer.setScissorTest(false); // Disable scissor to paint the entire window
-  renderer.render(scene, camera);   
+  renderer.render(scene, camera);
 
-  // Set virtual camera viewport 
-  var offset = -90; 
-  renderer.setViewport(offset, height-vcHeidth-offset, vcWidth, vcHeidth);  // Set virtual camera viewport  
-  renderer.setScissor(offset, height-vcHeidth-offset, vcWidth, vcHeidth); // Set scissor with the same size as the viewport
+  // Set virtual camera viewport
+  var offset = -90;
+  renderer.setViewport(offset, height - vcHeidth - offset, vcWidth, vcHeidth); // Set virtual camera viewport
+  renderer.setScissor(offset, height - vcHeidth - offset, vcWidth, vcHeidth); // Set scissor with the same size as the viewport
   renderer.setScissorTest(true); // Enable scissor to paint only the scissor are (i.e., the small viewport)
-  renderer.render(scene, virtualCamera);  // Render scene of the virtual camera
+  renderer.render(scene, virtualCamera); // Render scene of the virtual camera
 }
 
 function render() {
@@ -1272,7 +1276,8 @@ function render() {
 
   for (let i = 0; i < objetoCura.length; i++) {
     if (objetoCura[i] !== null) {
-      objetoCura[i].translateZ(0.3);
+      objetoCura[i].translateY(0.5);
+      console.log(objetoCura);
     }
   }
 
@@ -1283,7 +1288,7 @@ function render() {
   }, 120000);
   checkCollision();
   requestAnimationFrame(render);
-  controlledRender();
+  // controlledRender();
   keyboardUpdate(gameover);
   renderer.render(scene, camera); // Render scene
   limpavetor();
