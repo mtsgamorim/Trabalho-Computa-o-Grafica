@@ -331,6 +331,7 @@ function createEnemy() {
       tiroInimigo(enemys[enemys.length - 1], enemyTiros[enemyTiros.length - 1]),
     600
   );
+  enemyTirosBB.push(new THREE.Sphere(enemyTiros[enemyTiros.length - 1].position, 1));
 }
 
 function tiroInimigo(inimigo, tiroInimigo) {
@@ -404,11 +405,12 @@ function jogo() {
         enemyTiros[i].translateZ(veloc);
         enemyTiros[i].castShadow = true;
 
-        // tirosBB[i].center.set(
-        //   tiros[i].position.x,
-        //   tiros[i].position.y,
-        //   tiros[i].position.z
-        // );
+        enemyTirosBB[i].center.set(
+          enemyTiros[i].position.x,
+          enemyTiros[i].position.y,
+          enemyTiros[i].position.z
+        );
+
         if (enemyTiros[i].position.z > cameraHolder.position.z + 140) {
           scene.remove(enemyTiros[i]);
           enemyTiros[i] = null;
@@ -519,6 +521,7 @@ function limpavetor() {
   for (let i = 0; i < enemyTiros.length; i++) {
     if (enemyTiros[i] === null) {
       enemyTiros.splice(i, 1);
+      enemyTirosBB.splice(i, 1);
     }
   }
 }
@@ -546,6 +549,26 @@ function checkCollision() {
       }
     }
   }
+  
+  for (let i = 0; i < enemyTiros.length; i++) {
+    if (enemyTiros[i] !== null) {
+      if (aviaoBB.intersectsSphere(enemyTirosBB[i])) {
+        if (hp === -1) {
+          break;
+        } else {
+          hp--;
+        }
+
+        scene.remove(enemyTiros[i]);
+        enemyTiros[i] = null;
+        enemyTirosBB[i] = null;
+        if (hp === 0) {
+          animationEndGame();
+        }
+      }
+    }
+  }
+
 
   for (let i = 0; i < enemys.length; i++) {
     if (enemys[i] !== null) {
