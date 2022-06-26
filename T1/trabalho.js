@@ -204,6 +204,10 @@ window.addEventListener(
 );
 
 render();
+//criando auxiliares para os tiros
+let shoot = true;
+let shootM = true;
+let cadencia = 4;
 
 function keyboardUpdate(gameover) {
   if (gameover === false) {
@@ -228,30 +232,44 @@ function keyboardUpdate(gameover) {
     )
       aviao.translateY(-moveDistance);
 
-    if (keyboard.down("space")) {
-      misseis[qntdTiro2].position.set(
-        aviao.position.x,
-        aviao.position.y,
-        aviao.position.z
-      );
-      scene.add(misseis[qntdTiro2]);
-      if (qntdTiro2 === 19) {
-        qntdTiro2 = 0;
+    if (keyboard.pressed("space")) {
+      if (shootM) {
+        shootM = false;
+        setTimeout(function () {
+          shootM = true;
+          misseis[qntdTiro2].position.set(
+            aviao.position.x,
+            aviao.position.y,
+            aviao.position.z
+          );
+          scene.add(misseis[qntdTiro2]);
+          if (qntdTiro2 === 19) {
+            qntdTiro2 = 0;
+          }
+          qntdTiro2++;
+        }, 1000 / cadencia);
       }
-      qntdTiro2++;
+
     }
 
-    if (keyboard.down("ctrl")) {
-      tiros[qntdTiro].position.set(
-        aviao.position.x,
-        aviao.position.y,
-        aviao.position.z
-      );
-      scene.add(tiros[qntdTiro]);
-      if (qntdTiro === 19) {
-        qntdTiro = 0;
+    if (keyboard.pressed("ctrl")) {
+
+      if (shoot) {
+        shoot = false;
+        setTimeout(function () {
+          shoot = true;
+          tiros[qntdTiro].position.set(
+            aviao.position.x,
+            aviao.position.y,
+            aviao.position.z
+          );
+          scene.add(tiros[qntdTiro]);
+          if (qntdTiro === 19) {
+            qntdTiro = 0;
+          }
+          qntdTiro++;
+        }, 1000 / cadencia);
       }
-      qntdTiro++;
     }
 
     if (keyboard.pressed("G")) {
