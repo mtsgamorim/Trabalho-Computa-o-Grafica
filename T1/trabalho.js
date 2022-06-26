@@ -176,7 +176,7 @@ let animationOn = true;
 
 // criação inimigo
 var geometryEnemy = new THREE.BoxGeometry(5, 5, 5);
-var groundGeometryEnemy = new THREE.BoxGeometry(8, 8, 8);
+var groundGeometryEnemy = new THREE.BoxGeometry(5, 5, 5);
 var materialEnemy = new THREE.MeshLambertMaterial({
   color: "rgb(200,0,0)",
   visible: false,
@@ -188,6 +188,9 @@ var groundMaterialEnemy = new THREE.MeshLambertMaterial({
 //var enemy = new THREE.Mesh(geometryEnemy, materialEnemy);
 let enemys = [];
 let enemysBB = [];
+
+let enemysReto = [];
+let enemysRetoBB = [];
 
 let groundEnemys = [];
 let groundEnemysBB = [];
