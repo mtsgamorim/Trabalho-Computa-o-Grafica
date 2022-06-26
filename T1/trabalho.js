@@ -370,8 +370,7 @@ function createGroundEnemy() {
     null
   );
   groundEnemysBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
-  groundEnemysBB[groundEnemys.length - 1].setFromObject(
-    groundEnemys[groundEnemys.length - 1]
+  groundEnemysBB[groundEnemysBB.length - 1].setFromObject(groundEnemys[groundEnemys.length - 1]
   );
   let posicaoX = getRandomArbitrary(-90, 90);
   let posicaoZ = cameraHolder.position.z - 140;
@@ -445,6 +444,14 @@ function jogo() {
         enemysBB[i]
           .copy(enemys[i].geometry.boundingBox)
           .applyMatrix4(enemys[i].matrixWorld);
+      }
+    }
+
+    for (let i = 0; i < groundEnemys.length; i++) {
+      if (groundEnemys[i] !== null) {
+        groundEnemysBB[i]
+          .copy(groundEnemys[i].geometry.boundingBox)
+          .applyMatrix4(groundEnemys[i].matrixWorld);
       }
     }
 
