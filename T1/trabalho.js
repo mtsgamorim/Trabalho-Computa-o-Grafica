@@ -146,10 +146,11 @@ let veloc = 2;
 let veloc2 = 1;
 
 var sphereGeometry = new THREE.SphereGeometry(1, 32, 1);
-var sphereMaterial = new THREE.MeshLambertMaterial({ color: "rgb(50,0,80)" });
+var sphereMaterial = new THREE.MeshLambertMaterial({ color: "rgb(0,0,0)" });
 var sphereMaterial2 = new THREE.MeshLambertMaterial({
   color: "rgb(255, 255, 255)",
 });
+var sphereMaterial3 = new THREE.MeshLambertMaterial({ color: "rgb(255,0,0)" });
 
 let qntdTiro = 0;
 let qntdTiro2 = 0;
@@ -326,11 +327,14 @@ function createEnemy() {
   enemys[enemys.length - 1].castShadow = true;
   enemys[enemys.length - 1].receiveShadow = true;
   scene.add(enemys[enemys.length - 1]);
-  enemyTiros.push(new THREE.Mesh(sphereGeometry, sphereMaterial));
+  enemyTiros.push(new THREE.Mesh(sphereGeometry, sphereMaterial3));
   setTimeout(
     () =>
       tiroInimigo(enemys[enemys.length - 1], enemyTiros[enemyTiros.length - 1]),
     600
+  );
+  enemyTirosBB.push(
+    new THREE.Sphere(enemyTiros[enemyTiros.length - 1].position, 1)
   );
 }
 
@@ -406,8 +410,8 @@ function createGroundEnemy() {
     null
   );
   groundEnemysBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
-  groundEnemysBB[groundEnemys.length - 1].setFromObject(
-    enemys[enemys.length - 1]
+  groundEnemysBB[groundEnemysBB.length - 1].setFromObject(
+    groundEnemys[groundEnemys.length - 1]
   );
   let posicaoX = getRandomArbitrary(-90, 90);
   let posicaoZ = cameraHolder.position.z - 140;
@@ -445,11 +449,12 @@ function jogo() {
         enemyTiros[i].translateZ(veloc);
         enemyTiros[i].castShadow = true;
 
-        // tirosBB[i].center.set(
-        //   tiros[i].position.x,
-        //   tiros[i].position.y,
-        //   tiros[i].position.z
-        // );
+        enemyTirosBB[i].center.set(
+          enemyTiros[i].position.x,
+          enemyTiros[i].position.y,
+          enemyTiros[i].position.z
+        );
+
         if (enemyTiros[i].position.z > cameraHolder.position.z + 140) {
           scene.remove(enemyTiros[i]);
           enemyTiros[i] = null;
@@ -480,6 +485,14 @@ function jogo() {
         enemysBB[i]
           .copy(enemys[i].geometry.boundingBox)
           .applyMatrix4(enemys[i].matrixWorld);
+      }
+    }
+
+    for (let i = 0; i < groundEnemys.length; i++) {
+      if (groundEnemys[i] !== null) {
+        groundEnemysBB[i]
+          .copy(groundEnemys[i].geometry.boundingBox)
+          .applyMatrix4(groundEnemys[i].matrixWorld);
       }
     }
 
@@ -539,6 +552,15 @@ function removeInimigo(i) {
   auxAnimation = true;
 }
 
+function removeInimigoChao(i) {
+  scene.remove(groundEnemys[i]);
+  scene.remove(groundEnemysBB[i]);
+  groundEnemys[i] = null;
+  groundEnemysBB[i] = null;
+  limpavetor();
+  auxAnimation = true;
+}
+
 function animationEndGame() {
   gameover = true;
   keyboardUpdate(gameover);
@@ -571,6 +593,7 @@ function limpavetor() {
   for (let i = 0; i < enemyTiros.length; i++) {
     if (enemyTiros[i] === null) {
       enemyTiros.splice(i, 1);
+      enemyTirosBB.splice(i, 1);
     }
   }
   for (let i = 0; i < enemysReto.length; i++) {
@@ -603,7 +626,27 @@ function checkCollision() {
       }
     }
   }
+  //colisao tiros inimigos e aviao
+  for (let i = 0; i < enemyTiros.length; i++) {
+    if (enemyTiros[i] !== null) {
+      if (aviaoBB.intersectsSphere(enemyTirosBB[i])) {
+        if (hp === -1) {
+          break;
+        } else {
+          hp--;
+        }
 
+        scene.remove(enemyTiros[i]);
+        enemyTiros[i] = null;
+        enemyTirosBB[i] = null;
+        if (hp === 0) {
+          animationEndGame();
+        }
+      }
+    }
+  }
+
+  //colisao tiros aviao com inimigos aereos
   for (let i = 0; i < enemys.length; i++) {
     if (enemys[i] !== null) {
       for (let j = 0; j < 20; j++) {
@@ -612,6 +655,23 @@ function checkCollision() {
           enemys[i].rotateY(40);
           if (auxAnimation === true) {
             setTimeout(() => removeInimigo(i), 200);
+            auxAnimation = false;
+            break;
+          }
+        }
+      }
+    }
+  }
+
+  //colisao misseis aviao com inimigos terrestres
+  for (let i = 0; i < groundEnemys.length; i++) {
+    if (groundEnemys[i] !== null) {
+      for (let j = 0; j < 20; j++) {
+        if (groundEnemysBB[i].intersectsSphere(misseisBB[j])) {
+          groundEnemys[i].rotateZ(70);
+          groundEnemys[i].rotateY(40);
+          if (auxAnimation === true) {
+            setTimeout(() => removeInimigoChao(i), 200);
             auxAnimation = false;
             break;
           }
