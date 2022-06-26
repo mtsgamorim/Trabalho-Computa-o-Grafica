@@ -19,12 +19,14 @@ import { FogExp2, SplineCurve } from "../build/three.module.js";
 import { GLTFLoader } from "../build/jsm/loaders/GLTFLoader.js";
 
 var scene = new THREE.Scene(); // Create main scene
+let scene2 = new THREE.Scene(); // Create main scene
 
-let renderer = new THREE.WebGLRenderer();
+let renderer = new THREE.WebGLRenderer({ alpha : true });
 document.getElementById("webgl-output").appendChild(renderer.domElement);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.VSMShadowMap; // default
+renderer.autoClear = false;
 
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
@@ -217,6 +219,7 @@ window.addEventListener(
 );
 
 render();
+
 //criando auxiliares para os tiros
 let shoot = true;
 let shootM = true;
@@ -638,6 +641,15 @@ function jogo() {
       }
     }
 
+    for (let i = 0; i < enemysReto2.length; i++) {
+      if (enemysReto2[i] !== null) {
+        enemysReto2BB[i]
+          .copy(enemysReto2[i].geometry.boundingBox)
+          .applyMatrix4(enemysReto2[i].matrixWorld);
+      }
+    }
+
+
     for (let i = 0; i < enemysDiagonal.length; i++) {
       if (enemysDiagonal[i] !== null) {
         enemysDiagonalBB[i]
@@ -760,6 +772,15 @@ function removeInimigoReto(i) {
   auxAnimation = true;
 }
 
+function removeInimigoReto2(i) {
+  scene.remove(enemysReto2[i]);
+  scene.remove(enemysReto2BB[i]);
+  enemysReto2[i] = null;
+  enemysReto2BB[i] = null;
+  limpavetor();
+  auxAnimation = true;
+}
+
 function removeInimigoDiagonal(i) {
   scene.remove(enemysDiagonal[i]);
   scene.remove(enemysDiagonalBB[i]);
@@ -832,7 +853,7 @@ function limpavetor() {
   for (let i = 0; i < enemysReto2.length; i++) {
     if (enemysReto2[i] === null) {
       enemysReto2.splice(i, 1);
-      //enemysReto2BB.splice(i, 1);
+      enemysReto2BB.splice(i, 1);
     }
   }
   for (let i = 0; i < enemysDiagonal.length; i++) {
@@ -888,6 +909,27 @@ function checkCollision() {
         scene.remove(enemysReto[i]);
         enemysReto[i] = null;
         enemysRetoBB[i] = null;
+        if (hp === 0) {
+          animationEndGame();
+        }
+      }
+    }
+  }
+  for (let i = 0; i < enemysReto2.length; i++) {
+    if (enemysReto2[i] !== null) {
+      if (aviaoBB.intersectsBox(enemysReto2BB[i])) {
+        if (hp === -1) {
+          break;
+        }
+        if (hp === 1) {
+          hp--;
+        } else {
+          hp = hp - 2;
+        }
+
+        scene.remove(enemysReto2[i]);
+        enemysReto2[i] = null;
+        enemysReto2BB[i] = null;
         if (hp === 0) {
           animationEndGame();
         }
@@ -983,7 +1025,22 @@ function checkCollision() {
           enemysReto[i].rotateZ(70);
           enemysReto[i].rotateY(40);
           if (auxAnimation === true) {
-            setTimeout(() => removeInimigoReto(i), 200);
+            setTimeout(() => removeInimigoReto2(i), 200);
+            auxAnimation = false;
+            break;
+          }
+        }
+      }
+    }
+  }
+  for (let i = 0; i < enemysReto2.length; i++) {
+    if (enemysReto2[i] !== null) {
+      for (let j = 0; j < 20; j++) {
+        if (enemysReto2BB[i].intersectsSphere(tirosBB[j])) {
+          enemysReto2[i].rotateZ(70);
+          enemysReto2[i].rotateY(40);
+          if (auxAnimation === true) {
+            setTimeout(() => removeInimigoReto2(i), 200);
             auxAnimation = false;
             break;
           }
@@ -1081,6 +1138,41 @@ function criaIconeVida() {
   objetoCuraBB.setFromObject(objetoCura);
 }
 
+var lookAtVec = new THREE.Vector3(0.0, 3.0, 0.0);
+var camPosition = new THREE.Vector3(0.0, 3.0, 2.0);
+var upVec = new THREE.Vector3(0.0, 1.0, 0.0);
+var vcWidth = 200;
+var vcHeidth = 100;
+var virtualCamera = new THREE.PerspectiveCamera(
+  45,
+  vcWidth / vcHeidth,
+  1.0,
+  20.0
+);
+virtualCamera.position.copy(camPosition);
+virtualCamera.up.copy(upVec);
+virtualCamera.lookAt(lookAtVec);
+
+function controlledRender() {
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+
+  // Set main viewport
+  renderer.setViewport(0, 0, width, height); // Reset viewport
+  renderer.setScissorTest(false); // Disable scissor to paint the entire window
+  renderer.clear(); // Clean the window
+
+  renderer.render(scene, camera);
+  // Set virtual camera viewport
+  var offset = 30;
+  renderer.setViewport(offset, height - vcHeidth - offset, vcWidth, vcHeidth); // Set virtual camera viewport
+  renderer.setScissor(offset, height - vcHeidth - offset, vcWidth, vcHeidth); // Set scissor with the same size as the viewport
+  renderer.setScissorTest(true); // Enable scissor to paint only the scissor are (i.e., the small viewport)
+  renderer.setClearColor(0x000000, 0); // Use a darker clear color in the small viewport
+
+  renderer.render(scene2, virtualCamera); // Render scene of the virtual camera
+}
+
 function render() {
   jogo();
   for (let i = 0; i < enemys.length; i++) {
@@ -1128,4 +1220,5 @@ function render() {
   keyboardUpdate(gameover);
   renderer.render(scene, camera); // Render scene
   limpavetor();
+  controlledRender();
 }
