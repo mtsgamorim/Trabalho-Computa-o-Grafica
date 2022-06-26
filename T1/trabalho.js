@@ -146,10 +146,11 @@ let veloc = 2;
 let veloc2 = 1;
 
 var sphereGeometry = new THREE.SphereGeometry(1, 32, 1);
-var sphereMaterial = new THREE.MeshLambertMaterial({ color: "rgb(50,0,80)" });
+var sphereMaterial = new THREE.MeshLambertMaterial({ color: "rgb(0,0,0)" });
 var sphereMaterial2 = new THREE.MeshLambertMaterial({
   color: "rgb(255, 255, 255)",
 });
+var sphereMaterial3 = new THREE.MeshLambertMaterial({ color: "rgb(255,0,0)" });
 
 let qntdTiro = 0;
 let qntdTiro2 = 0;
@@ -328,7 +329,7 @@ function createEnemy() {
   enemys[enemys.length - 1].castShadow = true;
   enemys[enemys.length - 1].receiveShadow = true;
   scene.add(enemys[enemys.length - 1]);
-  enemyTiros.push(new THREE.Mesh(sphereGeometry, sphereMaterial));
+  enemyTiros.push(new THREE.Mesh(sphereGeometry, sphereMaterial3));
   setTimeout(
     () =>
       tiroInimigo(enemys[enemys.length - 1], enemyTiros[enemyTiros.length - 1]),
