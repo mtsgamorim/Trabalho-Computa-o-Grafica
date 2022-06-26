@@ -1204,7 +1204,7 @@ function criaIconeVida() {
   let objetoFinal = cilindroCSG.subtract(cruzCompleta);
 
   let objetoCurar = CSG.toMesh(objetoFinal, new THREE.Matrix4());
-  objetoCura.material = materialObjetoCura;
+  objetoCurar.material = materialObjetoCura;
   return objetoCurar;
 }
 
@@ -1277,7 +1277,6 @@ function render() {
   for (let i = 0; i < objetoCura.length; i++) {
     if (objetoCura[i] !== null) {
       objetoCura[i].translateY(0.5);
-      console.log(objetoCura);
     }
   }
 
