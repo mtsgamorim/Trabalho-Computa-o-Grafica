@@ -38,17 +38,6 @@ let hp = 5;
 let objetoCura = [];
 let objetoCuraBB = [];
 
-function createObjetoCura() {
-  objetoCura.push(criaIconeVida());
-  objetoCura[objetoCura.length - 1].position.set(0, 80, 30);
-  objetoCura[objetoCura.length - 1].rotateX(0.8);
-  scene.add(objetoCura[objetoCura.length - 1]);
-  objetoCura[objetoCura.length - 1].castShadow = true;
-  // objetoCuraBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
-  // objetoCuraBB.setFromObject(objetoCura[objetoCura.length - 1]);
-}
-criaIconeVida();
-
 // Use this to show information onscreen
 var controls = new InfoBox();
 controls.add("TRABALHO CG - GRUPO 13");
@@ -631,6 +620,24 @@ function jogo() {
       }
     }
 
+    for (let i = 0; i < objetoCura.length; i++) {
+      if (objetoCura[i] !== null) {
+        //objetoCura[i].translateZ(veloc);
+        objetoCura[i].castShadow = true;
+
+        objetoCuraBB[i].center.set(
+          objetoCura[i].position.x,
+          objetoCura[i].position.y,
+          objetoCura[i].position.z
+        );
+
+        if (objetoCura[i].position.z > cameraHolder.position.z + 140) {
+          scene.remove(objetoCura[i]);
+          objetoCura[i] = null;
+        }
+      }
+    }
+
     aviaoBB.copy(aviao.geometry.boundingBox).applyMatrix4(aviao.matrixWorld);
 
     for (let i = 0; i < enemys.length; i++) {
@@ -693,7 +700,7 @@ function jogo() {
     if (planeaux.position.z > 300 + 10 * auxiliarEnemy1) {
       //console.log(planeaux.position.z);
       //createEnemy();
-      //createEnemyReto();
+      createEnemyReto();
       //createEnemyReto2();
       //createEnemyDiagonal();
       //createEnemyDiagonal2();
@@ -736,8 +743,8 @@ function jogo() {
         if (objetoCura[i].position.z > cameraHolder.position.z + 120) {
           scene.remove(objetoCura[i]);
           objetoCura[i] = null;
-          console.log(objetoCura);
-          //objetoCuraBB[i] = null;
+          //console.log(objetoCura);
+          objetoCuraBB[i] = null;
         }
       }
     }
@@ -828,6 +835,15 @@ function removeInimigoChao(i) {
   auxAnimation = true;
 }
 
+function removeObjetoCura(i) {
+  scene.remove(objetoCura[i]);
+  scene.remove(objetoCuraBB[i]);
+  objetoCura[i] = null;
+  objetoCuraBB[i] = null;
+  limpavetor();
+  auxAnimation = true;
+}
+
 function animationEndGame() {
   gameover = true;
   keyboardUpdate(gameover);
@@ -891,7 +907,7 @@ function limpavetor() {
   for (let i = 0; i < objetoCura.length; i++) {
     if (objetoCura[i] === null) {
       objetoCura.splice(i, 1);
-      //objetoCuraBB.splice(i, 1);
+      objetoCuraBB.splice(i, 1);
     }
   }
 }
@@ -1123,6 +1139,27 @@ function checkCollision() {
       }
     }
   }
+  //colisao com o objeto cura aviao
+  for (let i = 0; i < objetoCura.length; i++) {
+    if (objetoCura[i] !== null) {
+      if (aviaoBB.intersectsSphere(objetoCuraBB[i])) {
+        if (hp === -1) {
+          break;
+        }
+        if (hp === 5) {
+          removeObjetoCura(i);
+          break;
+        } else {
+          hp++;
+          removeObjetoCura(i);
+        }
+      
+        //scene.remove(objetoCura[i]);
+        //objetoCura[i] = null;
+        //objetoCuraBB[i] = null;
+      }
+    }
+  }
 }
 
 function criaIconeVida() {
@@ -1157,6 +1194,18 @@ function criaIconeVida() {
   let objetoCurar = CSG.toMesh(objetoFinal, new THREE.Matrix4());
   objetoCura.material = materialObjetoCura;
   return objetoCurar;
+}
+
+function createObjetoCura() {
+  objetoCura.push(criaIconeVida());
+  objetoCura[objetoCura.length - 1].position.set(0, 80, 30);
+  objetoCura[objetoCura.length - 1].rotateX(1.5);
+  scene.add(objetoCura[objetoCura.length - 1]);
+  objetoCura[objetoCura.length - 1].castShadow = true;
+  //objetoCuraBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
+  objetoCuraBB.push(new THREE.Sphere(objetoCura[objetoCura.length - 1].position, 2.5));
+
+  //objetoCuraBB[objetoCuraBB.length - 1].setFromObject(objetoCura[objetoCura.length - 1]);
 }
 
 function render() {
