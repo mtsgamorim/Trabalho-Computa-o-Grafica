@@ -370,7 +370,7 @@ function createGroundEnemy() {
   );
   groundEnemysBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
   groundEnemysBB[groundEnemys.length - 1].setFromObject(
-    enemys[enemys.length - 1]
+    groundEnemys[groundEnemys.length - 1]
   );
   let posicaoX = getRandomArbitrary(-90, 90);
   let posicaoZ = cameraHolder.position.z - 140;
@@ -458,7 +458,7 @@ function jogo() {
     if (planeaux.position.z > 300 + 10 * auxiliarEnemy1) {
       //console.log(planeaux.position.z);
       createEnemy();
-      //createGroundEnemy();
+      createGroundEnemy();
       auxiliarEnemy1++;
     }
     for (let i = 0; i < enemys.length; i++) {
@@ -488,6 +488,15 @@ function removeInimigo(i) {
   scene.remove(enemysBB[i]);
   enemys[i] = null;
   enemysBB[i] = null;
+  limpavetor();
+  auxAnimation = true;
+}
+
+function removeInimigoChao(i) {
+  scene.remove(groundEnemys[i]);
+  scene.remove(groundEnemysBB[i]);
+  groundEnemys[i] = null;
+  groundEnemysBB[i] = null;
   limpavetor();
   auxAnimation = true;
 }
@@ -552,7 +561,7 @@ function checkCollision() {
       }
     }
   }
-  
+  //colisao tiros inimigos e aviao
   for (let i = 0; i < enemyTiros.length; i++) {
     if (enemyTiros[i] !== null) {
       if (aviaoBB.intersectsSphere(enemyTirosBB[i])) {
@@ -572,7 +581,7 @@ function checkCollision() {
     }
   }
 
-
+//colisao tiros aviao com inimigos aereos
   for (let i = 0; i < enemys.length; i++) {
     if (enemys[i] !== null) {
       for (let j = 0; j < 20; j++) {
@@ -588,6 +597,23 @@ function checkCollision() {
       }
     }
   }
+
+//colisao misseis aviao com inimigos terrestres
+for (let i = 0; i < groundEnemys.length; i++) {
+  if (groundEnemys[i] !== null) {
+    for (let j = 0; j < 20; j++) {
+      if (groundEnemysBB[i].intersectsSphere(misseisBB[j])) {
+        groundEnemys[i].rotateZ(70);
+        groundEnemys[i].rotateY(40);
+        if (auxAnimation === true) {
+          setTimeout(() => removeInimigoChao(i), 200);
+          auxAnimation = false;
+          break;
+        }
+      }
+    }
+  }
+}
 }
 
 function criaIconeVida() {
