@@ -193,6 +193,9 @@ let enemysBB = [];
 let enemysReto = [];
 let enemysRetoBB = [];
 
+let enemysReto2 = [];
+let enemysReto2BB = [];
+
 let enemysDiagonal = [];
 let enemysDiagonalBB = [];
 
@@ -376,6 +379,46 @@ function createEnemyReto() {
   enemysReto[enemysReto.length - 1].castShadow = true;
   enemysReto[enemysReto.length - 1].receiveShadow = true;
   scene.add(enemysReto[enemysReto.length - 1]);
+  // enemyTiros.push(new THREE.Mesh(sphereGeometry, sphereMaterial));
+  // setTimeout(
+  //   () =>
+  //     tiroInimigo(enemys[enemys.length - 1], enemyTiros[enemyTiros.length - 1]),
+  //   600
+  // );
+}
+
+function createEnemyReto2() {
+  enemysReto2.push(new THREE.Mesh(geometryEnemy, materialEnemy));
+  loader.load(
+    "./assets/aviao2.glb",
+    function (gltf) {
+      var objEnemy = gltf.scene;
+      objEnemy.name = "Inimigo1";
+      objEnemy.visible = true;
+      objEnemy.castShadow = true;
+      objEnemy.scale.set(0.7, 0.7, 0.7);
+      objEnemy.rotateY(-1.5);
+      objEnemy.traverse(function (child) {
+        if (child) {
+          child.castShadow = true;
+        }
+      });
+      enemysReto2[enemysReto2.length - 1].add(objEnemy);
+    },
+    null,
+    null
+  );
+  enemysReto2BB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
+  enemysReto2BB[enemysReto2BB.length - 1].setFromObject(
+    enemysReto2[enemysReto2.length - 1]
+  );
+  let posicaoX = +190;
+  let posicaoZ = getRandomArbitrary(-140, 90);
+
+  enemysReto2[enemysReto2.length - 1].position.set(posicaoX, 30, posicaoZ);
+  enemysReto2[enemysReto2.length - 1].castShadow = true;
+  enemysReto2[enemysReto2.length - 1].receiveShadow = true;
+  scene.add(enemysReto2[enemysReto2.length - 1]);
   // enemyTiros.push(new THREE.Mesh(sphereGeometry, sphereMaterial));
   // setTimeout(
   //   () =>
@@ -623,8 +666,9 @@ function jogo() {
       //console.log(planeaux.position.z);
       //createEnemy();
       //createEnemyReto();
+      createEnemyReto2();
       //createEnemyDiagonal();
-      createEnemyDiagonal2();
+      //createEnemyDiagonal2();
       //createGroundEnemy();
       auxiliarEnemy1++;
     }
@@ -644,6 +688,16 @@ function jogo() {
           scene.remove(enemysReto[i]);
           enemysReto[i] = null;
           enemysRetoBB[i] = null;
+        }
+      }
+    }
+
+    for (let i = 0; i < enemysReto2.length; i++) {
+      if (enemysReto2[i] !== null) {
+        if (enemysReto2[i].position.x < cameraHolder.position.x - 180) {
+          scene.remove(enemysReto[i]);
+          enemysReto2[i] = null;
+          enemysReto2BB[i] = null;
         }
       }
     }
@@ -757,6 +811,13 @@ function limpavetor() {
       enemysRetoBB.splice(i, 1);
     }
   }
+
+  for (let i = 0; i < enemysReto2.length; i++) {
+    if (enemysReto2[i] === null) {
+      enemysReto2.splice(i, 1);
+      //enemysReto2BB.splice(i, 1);
+    }
+  }
   for (let i = 0; i < enemysDiagonal.length; i++) {
     if (enemysDiagonal[i] === null) {
       enemysDiagonal.splice(i, 1);
@@ -827,7 +888,7 @@ function checkCollision() {
         } else {
           hp = hp - 2;
         }
-    
+
         scene.remove(enemysDiagonal[i]);
         enemysDiagonal[i] = null;
         enemysDiagonalBB[i] = null;
@@ -981,6 +1042,11 @@ function render() {
   for (let i = 0; i < enemysReto.length; i++) {
     if (enemysReto[i] !== null) {
       enemysReto[i].translateX(getRandomArbitrary(0.2, 1));
+    }
+  }
+  for (let i = 0; i < enemysReto2.length; i++) {
+    if (enemysReto2[i] !== null) {
+      enemysReto2[i].translateX(-0.5);
     }
   }
   for (let i = 0; i < enemysDiagonal.length; i++) {
