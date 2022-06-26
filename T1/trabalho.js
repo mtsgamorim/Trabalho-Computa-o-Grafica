@@ -540,6 +540,7 @@ function tiroInimigo(inimigo, tiroInimigo) {
     inimigo.position.z
   );
   scene.add(tiroInimigo);
+  tiroInimigo.lookAt(aviao.position);
 }
 
 function createGroundEnemy() {
@@ -711,8 +712,8 @@ function jogo() {
     }
     if (planeaux.position.z > 300 + 10 * auxiliarEnemy1) {
       //console.log(planeaux.position.z);
-      //createEnemy();
-      createEnemyReto();
+      createEnemy();
+      //createEnemyReto();
       //createEnemyReto2();
       //createEnemyDiagonal();
       //createEnemyDiagonal2();
