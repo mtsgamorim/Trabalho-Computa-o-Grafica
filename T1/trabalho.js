@@ -40,7 +40,6 @@ criaIconeVida();
 
 // Use this to show information onscreen
 var controls = new InfoBox();
-<<<<<<< HEAD
 controls.add("TRABALHO CG - GRUPO 13");
 controls.addParagraph();
 controls.add("Use keyboard to interact:");
@@ -51,21 +50,8 @@ controls.add("* RIGHT button to translate on right direction");
 controls.addParagraph();
 controls.add("* SPACE button to simple shot.");
 controls.add("* CTRL button to ground bomb.");
+controls.add("* G button to 'God Mode'.");
 controls.show();
-=======
-  controls.add("TRABALHO CG - GRUPO 13");
-  controls.addParagraph();
-  controls.add("Use keyboard to interact:");
-  controls.add("* UP button to translate forward");
-  controls.add("* DOWN button to translate back");
-  controls.add("* LEFT button to translate on left direction");
-  controls.add("* RIGHT button to translate on right direction");
-  controls.addParagraph();
-  controls.add("* SPACE button to simple shot.");
-  controls.add("* CTRL button to ground bomb.");
-  controls.add("* G button to 'God Mode'.");
-  controls.show();
->>>>>>> acdcccfc523be10b5d69a23c2b0394fc3f6dfcf2
 
 //LUZ AMBIENTE
 var ambientLight = new THREE.AmbientLight("rgb(60,60,60)");
@@ -612,14 +598,11 @@ function render() {
     }
   }
 
-  setTimeout(function(){ 
-    
+  setTimeout(function () {
     aviaoMorte();
     gameover = true;
     keyboardUpdate(gameover);
-
-}, 120000);
-
+  }, 120000);
 
   objetoCura.translateZ(0.1);
   checkCollision();
