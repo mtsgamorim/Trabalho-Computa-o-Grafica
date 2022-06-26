@@ -35,7 +35,18 @@ let auxAnimation = true;
 let gameover = false;
 let auxiliarPosCamera = 0;
 let hp = 5;
-let objetoCura;
+let objetoCura = [];
+let objetoCuraBB = [];
+
+function createObjetoCura() {
+  objetoCura.push(criaIconeVida());
+  objetoCura[objetoCura.length - 1].position.set(0, 80, 30);
+  objetoCura[objetoCura.length - 1].rotateX(0.8);
+  scene.add(objetoCura[objetoCura.length - 1]);
+  objetoCura[objetoCura.length - 1].castShadow = true;
+  // objetoCuraBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
+  // objetoCuraBB.setFromObject(objetoCura[objetoCura.length - 1]);
+}
 criaIconeVida();
 
 // Use this to show information onscreen
@@ -683,10 +694,11 @@ function jogo() {
       //console.log(planeaux.position.z);
       //createEnemy();
       //createEnemyReto();
-      createEnemyReto2();
+      //createEnemyReto2();
       //createEnemyDiagonal();
       //createEnemyDiagonal2();
       //createGroundEnemy();
+      createObjetoCura();
       auxiliarEnemy1++;
     }
     for (let i = 0; i < enemys.length; i++) {
@@ -715,6 +727,17 @@ function jogo() {
           scene.remove(enemysReto[i]);
           enemysReto2[i] = null;
           enemysReto2BB[i] = null;
+        }
+      }
+    }
+
+    for (let i = 0; i < objetoCura.length; i++) {
+      if (objetoCura[i] !== null) {
+        if (objetoCura[i].position.z > cameraHolder.position.z + 120) {
+          scene.remove(objetoCura[i]);
+          objetoCura[i] = null;
+          console.log(objetoCura);
+          //objetoCuraBB[i] = null;
         }
       }
     }
@@ -865,6 +888,12 @@ function limpavetor() {
       enemysDiagonal2BB.splice(i, 1);
     }
   }
+  for (let i = 0; i < objetoCura.length; i++) {
+    if (objetoCura[i] === null) {
+      objetoCura.splice(i, 1);
+      //objetoCuraBB.splice(i, 1);
+    }
+  }
 }
 
 function checkCollision() {
@@ -966,7 +995,7 @@ function checkCollision() {
         } else {
           hp = hp - 2;
         }
-    
+
         scene.remove(enemysDiagonal2[i]);
         enemysDiagonal2[i] = null;
         enemysDiagonal2BB[i] = null;
@@ -1125,14 +1154,9 @@ function criaIconeVida() {
   let cruzCompleta = cruz1CSG.union(cruz2CSG);
   let objetoFinal = cilindroCSG.subtract(cruzCompleta);
 
-  objetoCura = CSG.toMesh(objetoFinal, new THREE.Matrix4());
+  let objetoCurar = CSG.toMesh(objetoFinal, new THREE.Matrix4());
   objetoCura.material = materialObjetoCura;
-  objetoCura.position.set(0, 80, 30);
-  objetoCura.rotateX(0.8);
-  scene.add(objetoCura);
-  objetoCura.castShadow = true;
-  let objetoCuraBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
-  objetoCuraBB.setFromObject(objetoCura);
+  return objetoCurar;
 }
 
 function render() {
@@ -1170,13 +1194,17 @@ function render() {
     }
   }
 
+  for (let i = 0; i < objetoCura.length; i++) {
+    if (objetoCura[i] !== null) {
+      objetoCura[i].translateZ(0.3);
+    }
+  }
+
   setTimeout(function () {
     aviaoMorte();
     gameover = true;
     keyboardUpdate(gameover);
   }, 120000);
-
-  objetoCura.translateZ(0.1);
   checkCollision();
   requestAnimationFrame(render);
   keyboardUpdate(gameover);
