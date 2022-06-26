@@ -176,8 +176,8 @@ let velocidade = -0.2;
 let animationOn = true;
 
 // criação inimigo
-var geometryEnemy = new THREE.BoxGeometry(5, 5, 5);
-var groundGeometryEnemy = new THREE.BoxGeometry(5, 5, 5);
+var geometryEnemy = new THREE.BoxGeometry(6, 6, 6);
+var groundGeometryEnemy = new THREE.BoxGeometry(6, 6, 6);
 var materialEnemy = new THREE.MeshLambertMaterial({
   color: "rgb(200,0,0)",
   visible: false,
