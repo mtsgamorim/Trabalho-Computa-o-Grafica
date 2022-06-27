@@ -720,7 +720,6 @@ function jogo() {
       console.log(planeaux.position.z);
       createEnemy();
       createEnemyReto();
-      createEnemyReto2();
       createGroundEnemy();
       createGroundEnemy();
       auxiliarEnemy1++;
@@ -730,9 +729,10 @@ function jogo() {
       auxiliarCura++;
     }
     if (planeaux.position.z > 300 + 100 * auxiliarEnemy2) {
-      createGroundEnemy();
+      createEnemy();
       createGroundEnemy();
       createEnemyDiagonal2();
+      createEnemyReto2();
       auxiliarEnemy2++;
     }
     if (planeaux.position.z > 800 + 40 * auxiliarEnemy3) {
@@ -1239,7 +1239,8 @@ function criaIconeVida() {
 
 function createObjetoCura() {
   objetoCura.push(criaIconeVida());
-  objetoCura[objetoCura.length - 1].position.set(0, 30, -150);
+  let posicaoX = getRandomArbitrary(-50, 50);
+  objetoCura[objetoCura.length - 1].position.set(posicaoX, 30, -150);
   objetoCura[objetoCura.length - 1].rotateX(1.57);
   scene.add(objetoCura[objetoCura.length - 1]);
   objetoCura[objetoCura.length - 1].castShadow = true;
