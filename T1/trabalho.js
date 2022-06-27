@@ -222,9 +222,6 @@ let auxiliarEnemy1 = 1;
 let auxiliarCura = 1;
 let auxiliarEnemy2 = 1;
 let auxiliarEnemy3 = 1;
-let auxiliarEnemy4 = 1;
-let auxiliarEnemy5 = 1;
-let auxiliarEnemy6 = 1;
 
 // Listen window size changes
 window.addEventListener(
