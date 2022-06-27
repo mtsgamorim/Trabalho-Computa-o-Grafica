@@ -447,14 +447,14 @@ function createEnemyReto2() {
 function createEnemyDiagonal() {
   enemysDiagonal.push(new THREE.Mesh(geometryEnemy, materialEnemy));
   loader.load(
-    "./assets/aviao2.glb",
+    "./assets/aviao4.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
       objEnemy.visible = true;
       objEnemy.castShadow = true;
-      objEnemy.scale.set(0.7, 0.7, 0.7);
-      objEnemy.rotateY(1);
+      objEnemy.scale.set(0.5, 0.5, 0.5);
+      objEnemy.rotateY(-1.2);
       objEnemy.traverse(function (child) {
         if (child) {
           child.castShadow = true;
@@ -493,14 +493,14 @@ function createEnemyDiagonal() {
 function createEnemyDiagonal2() {
   enemysDiagonal2.push(new THREE.Mesh(geometryEnemy, materialEnemy));
   loader.load(
-    "./assets/aviao2.glb",
+    "./assets/aviao4.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
       objEnemy.visible = true;
       objEnemy.castShadow = true;
-      objEnemy.scale.set(0.7, 0.7, 0.7);
-      objEnemy.rotateY(-1);
+      objEnemy.scale.set(0.5, 0.5, 0.5);
+      objEnemy.rotateY(-1.7);
       objEnemy.traverse(function (child) {
         if (child) {
           child.castShadow = true;
