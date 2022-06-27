@@ -20,7 +20,7 @@ import { GLTFLoader } from "../build/jsm/loaders/GLTFLoader.js";
 
 var scene = new THREE.Scene(); // Create main scene
 
-let renderer = new THREE.WebGLRenderer({alpha: true});
+let renderer = new THREE.WebGLRenderer({ alpha: true });
 document.getElementById("webgl-output").appendChild(renderer.domElement);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
@@ -79,7 +79,7 @@ dirLight.castShadow = true;
 // Shadow Parameters
 dirLight.shadow.mapSize.width = 700;
 dirLight.shadow.mapSize.height = 300;
-dirLight.shadow.camera.near = .1;
+dirLight.shadow.camera.near = 0.1;
 dirLight.shadow.camera.far = 600;
 dirLight.shadow.camera.left = -360;
 dirLight.shadow.camera.right = 360;
@@ -367,14 +367,14 @@ function createEnemy() {
 function createEnemyReto() {
   enemysReto.push(new THREE.Mesh(geometryEnemy, materialEnemy));
   loader.load(
-    "./assets/aviao2.glb",
+    "./assets/aviao3.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
       objEnemy.visible = true;
       objEnemy.castShadow = true;
-      objEnemy.scale.set(0.7, 0.7, 0.7);
-      objEnemy.rotateY(1.5);
+      objEnemy.scale.set(6.5, 6.5, 6.5);
+      //objEnemy.rotateY();
       objEnemy.traverse(function (child) {
         if (child) {
           child.castShadow = true;
@@ -407,14 +407,14 @@ function createEnemyReto() {
 function createEnemyReto2() {
   enemysReto2.push(new THREE.Mesh(geometryEnemy, materialEnemy));
   loader.load(
-    "./assets/aviao2.glb",
+    "./assets/aviao3.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
       objEnemy.visible = true;
       objEnemy.castShadow = true;
-      objEnemy.scale.set(0.7, 0.7, 0.7);
-      objEnemy.rotateY(-1.5);
+      objEnemy.scale.set(6.5, 6.5, 6.5);
+      objEnemy.rotateY(-3.14);
       objEnemy.traverse(function (child) {
         if (child) {
           child.castShadow = true;
