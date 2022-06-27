@@ -20,11 +20,12 @@ import { GLTFLoader } from "../build/jsm/loaders/GLTFLoader.js";
 
 var scene = new THREE.Scene(); // Create main scene
 
-let renderer = new THREE.WebGLRenderer();
+let renderer = new THREE.WebGLRenderer({alpha: true});
 document.getElementById("webgl-output").appendChild(renderer.domElement);
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.VSMShadowMap; // default
+renderer.autoClear = false;
 
 //Camera virtual para a viewport
 var camPosition = new THREE.Vector3(0, -200, 30);
@@ -61,9 +62,9 @@ controls.add("* DOWN button to translate back");
 controls.add("* LEFT button to translate on left direction");
 controls.add("* RIGHT button to translate on right direction");
 controls.addParagraph();
-controls.add("* SPACE button to simple shot.");
-controls.add("* CTRL button to ground bomb.");
-controls.add("* G button to 'God Mode'.");
+controls.add("* SPACE button to ground bomb.");
+controls.add("* CTRL button to simple shot.");
+controls.add("* G button to 'God Mode'");
 controls.show();
 
 //LUZ AMBIENTE
@@ -78,7 +79,7 @@ dirLight.castShadow = true;
 // Shadow Parameters
 dirLight.shadow.mapSize.width = 700;
 dirLight.shadow.mapSize.height = 300;
-dirLight.shadow.camera.near = 0.1;
+dirLight.shadow.camera.near = .1;
 dirLight.shadow.camera.far = 600;
 dirLight.shadow.camera.left = -360;
 dirLight.shadow.camera.right = 360;
@@ -134,8 +135,8 @@ loader.load(
     var objAviao = gltf.scene;
     objAviao.name = "objAviao";
     objAviao.visible = true;
-    objAviao.castShadow = true;
-    objAviao.receiveShadow = true;
+    //objAviao.castShadow = true;
+    //objAviao.receiveShadow = true;
     objAviao.rotateZ(-1.55);
     objAviao.rotateX(1.5);
     objAviao.traverse(function (child) {
