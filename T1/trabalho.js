@@ -575,21 +575,23 @@ function createGroundEnemy() {
     groundEnemys[groundEnemys.length - 1]
   );
   let posicaoX = getRandomArbitrary(-90, 90);
-  let posicaoZ = cameraHolder.position.z - 220;
+  let posicaoZ = cameraHolder.position.z - 180;
 
   groundEnemys[groundEnemys.length - 1].position.set(posicaoX, 4, posicaoZ);
   groundEnemys[groundEnemys.length - 1].castShadow = true;
   groundEnemys[groundEnemys.length - 1].receiveShadow = true;
   scene.add(groundEnemys[groundEnemys.length - 1]);
   groundTiros.push(new THREE.Mesh(sphereGeometry, sphereMaterial3));
-  setTimeout(
-    () =>
-      tiroInimigoGround(groundEnemys[groundEnemys.length - 1], groundTiros[groundTiros.length - 1]),
-    1000
-  );
-  groundTirosBB.push(
-    new THREE.Sphere(groundTiros[groundTiros.length - 1].position, 1)
-  );
+  if (groundEnemys[groundEnemys.length - 1].position.z < -100) {
+    console.log("entreiii!");
+    groundTirosBB.push(
+      new THREE.Sphere(groundTiros[groundTiros.length - 1].position, 1)
+    );
+    tiroInimigoGround(
+      groundEnemys[groundEnemys.length - 1],
+      groundTiros[groundTiros.length - 1]
+    );
+  }
 }
 
 function tiroInimigoGround(inimigo, tiroInimigo) {
@@ -600,7 +602,6 @@ function tiroInimigoGround(inimigo, tiroInimigo) {
   );
   scene.add(tiroInimigo);
 }
-
 
 function jogo() {
   if (animationOn) {
@@ -644,15 +645,12 @@ function jogo() {
 
     for (let i = 0; i < groundTiros.length; i++) {
       if (groundTiros[i] !== null) {
-
         if (groundTiros[i].position.y > 28 && groundTiros[i].position.y <= 30) {
           groundTiros[i].lookAt(aviao.position);
         }
         if (groundTiros[i].position.y < 30) {
           groundTiros[i].translateY(0.3);
-
         } else if (groundTiros[i].position.y >= 30) {
-
           groundTiros[i].translateZ(veloc);
           groundTiros[i].castShadow = true;
 
@@ -668,8 +666,6 @@ function jogo() {
             groundTirosBB[i] = null;
           }
         }
-
-
       }
     }
 
@@ -765,12 +761,9 @@ function jogo() {
       planoInfinito();
       auxiliarPosCamera++;
     }
-    if (planeaux.position.z > 300 + 40 * auxiliarEnemy1) {
+    if (planeaux.position.z > 300 + 20 * auxiliarEnemy1) {
       //console.log(planeaux.position.z);
-      console.log(planeaux.position.z);
       createEnemy();
-      createEnemyReto();
-      createGroundEnemy();
       createGroundEnemy();
       auxiliarEnemy1++;
     }
@@ -779,7 +772,7 @@ function jogo() {
       auxiliarCura++;
     }
     if (planeaux.position.z > 300 + 100 * auxiliarEnemy2) {
-      createEnemy();
+      //createGroundEnemy();
       createGroundEnemy();
       createEnemyDiagonal2();
       createEnemyReto2();
@@ -788,6 +781,7 @@ function jogo() {
     if (planeaux.position.z > 800 + 40 * auxiliarEnemy3) {
       createEnemyDiagonal();
       createEnemyReto();
+      createGroundEnemy();
       auxiliarEnemy3++;
     }
 
@@ -1152,7 +1146,7 @@ function checkCollision() {
         }
 
         console.log(hp);
-        
+
         scene.remove(groundTiros[i]);
         groundTiros[i] = null;
         groundTirosBB[i] = null;
@@ -1401,4 +1395,5 @@ function render() {
   keyboardUpdate(gameover);
   renderer.render(scene, camera); // Render scene
   limpavetor();
+  console.log(hp);
 }
