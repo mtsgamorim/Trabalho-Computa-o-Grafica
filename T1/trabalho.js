@@ -1393,4 +1393,7 @@ function render() {
   keyboardUpdate(gameover);
   renderer.render(scene, camera); // Render scene
   limpavetor();
+  if (hp >= 0) {
+    console.log(`HP ATUAL = ${hp}`);
+  }
 }
