@@ -165,6 +165,7 @@ var sphereMaterial2 = new THREE.MeshLambertMaterial({
   color: "rgb(255, 255, 255)",
 });
 var sphereMaterial3 = new THREE.MeshLambertMaterial({ color: "rgb(255,0,0)" });
+var sphereMaterial4 = new THREE.MeshLambertMaterial({ color: "rgb(0,255,0)" });
 
 let qntdTiro = 0;
 let qntdTiro2 = 0;
@@ -581,7 +582,7 @@ function createGroundEnemy() {
   groundEnemys[groundEnemys.length - 1].castShadow = true;
   groundEnemys[groundEnemys.length - 1].receiveShadow = true;
   scene.add(groundEnemys[groundEnemys.length - 1]);
-  groundTiros.push(new THREE.Mesh(sphereGeometry, sphereMaterial3));
+  groundTiros.push(new THREE.Mesh(sphereGeometry, sphereMaterial4));
   setTimeout(
     () =>
       tiroInimigoGround(groundEnemys[groundEnemys.length - 1], groundTiros[groundTiros.length - 1]),
