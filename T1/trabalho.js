@@ -494,7 +494,6 @@ function createEnemyDiagonal() {
 
 function createEnemyDiagonal2() {
   enemysDiagonal2.push(new THREE.Mesh(geometryEnemy, materialEnemy));
-  console.log(enemysDiagonal2);
   loader.load(
     "./assets/aviao2.glb",
     function (gltf) {
@@ -718,9 +717,12 @@ function jogo() {
     }
     if (planeaux.position.z > 300 + 40 * auxiliarEnemy1) {
       //console.log(planeaux.position.z);
+      console.log(planeaux.position.z);
       createEnemy();
       createEnemyReto();
       createEnemyReto2();
+      createGroundEnemy();
+      createGroundEnemy();
       auxiliarEnemy1++;
     }
     if (planeaux.position.z > 300 + 200 * auxiliarCura) {
@@ -733,26 +735,10 @@ function jogo() {
       createEnemyDiagonal2();
       auxiliarEnemy2++;
     }
-    if (
-      planeaux.position.z > 300 + 40 * auxiliarEnemy1 &&
-      auxiliarEnemy1 >= 10
-    ) {
+    if (planeaux.position.z > 800 + 40 * auxiliarEnemy3) {
       createEnemyDiagonal();
       createEnemyReto();
-      auxiliarEnemy1++;
-    }
-    if (
-      planeaux.position.z > 300 + 40 * auxiliarEnemy1 &&
-      auxiliarEnemy1 >= 20
-    ) {
-      createEnemyDiagonal2();
-      createEnemyReto2();
-      createEnemy();
-      createEnemy();
-      createEnemy();
-      createGroundEnemy();
-      createGroundEnemy();
-      auxiliarEnemy1++;
+      auxiliarEnemy3++;
     }
 
     for (let i = 0; i < enemys.length; i++) {
