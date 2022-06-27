@@ -97,8 +97,8 @@ dirLight.shadow.blurSamples = 1;
 var trackballControls = new TrackballControls(camera, renderer.domElement);
 
 // Show axes (parameter is size of each axis)
-var axesHelper = new THREE.AxesHelper(12);
-scene.add(axesHelper);
+//var axesHelper = new THREE.AxesHelper(12);
+//scene.add(axesHelper);
 
 // create the ground plane
 let plane1 = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,128,0)");
@@ -767,7 +767,7 @@ function jogo() {
       createGroundEnemy();
       auxiliarEnemy1++;
     }
-    if (planeaux.position.z > 300 + 200 * auxiliarCura) {
+    if (planeaux.position.z > 300 + 80 * auxiliarCura) {
       createObjetoCura();
       auxiliarCura++;
     }
@@ -1393,5 +1393,4 @@ function render() {
   keyboardUpdate(gameover);
   renderer.render(scene, camera); // Render scene
   limpavetor();
-  console.log(hp);
 }
