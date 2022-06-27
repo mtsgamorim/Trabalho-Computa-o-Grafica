@@ -219,6 +219,12 @@ let groundEnemys = [];
 let groundEnemysBB = [];
 
 let auxiliarEnemy1 = 1;
+let auxiliarCura = 1;
+let auxiliarEnemy2 = 1;
+let auxiliarEnemy3 = 1;
+let auxiliarEnemy4 = 1;
+let auxiliarEnemy5 = 1;
+let auxiliarEnemy6 = 1;
 
 // Listen window size changes
 window.addEventListener(
@@ -570,7 +576,7 @@ function createGroundEnemy() {
     groundEnemys[groundEnemys.length - 1]
   );
   let posicaoX = getRandomArbitrary(-90, 90);
-  let posicaoZ = cameraHolder.position.z - 140;
+  let posicaoZ = cameraHolder.position.z - 280;
 
   groundEnemys[groundEnemys.length - 1].position.set(posicaoX, 4, posicaoZ);
   groundEnemys[groundEnemys.length - 1].castShadow = true;
@@ -710,17 +716,45 @@ function jogo() {
       planoInfinito();
       auxiliarPosCamera++;
     }
-    if (planeaux.position.z > 300 + 10 * auxiliarEnemy1) {
+    if (planeaux.position.z > 300 + 40 * auxiliarEnemy1) {
       //console.log(planeaux.position.z);
       createEnemy();
-      //createEnemyReto();
-      //createEnemyReto2();
-      //createEnemyDiagonal();
-      //createEnemyDiagonal2();
-      //createGroundEnemy();
-      createObjetoCura();
+      createEnemyReto();
+      createEnemyReto2();
       auxiliarEnemy1++;
     }
+    if (planeaux.position.z > 300 + 200 * auxiliarCura) {
+      createObjetoCura();
+      auxiliarCura++;
+    }
+    if (planeaux.position.z > 300 + 100 * auxiliarEnemy2) {
+      createGroundEnemy();
+      createGroundEnemy();
+      createEnemyDiagonal2();
+      auxiliarEnemy2++;
+    }
+    if (
+      planeaux.position.z > 300 + 40 * auxiliarEnemy1 &&
+      auxiliarEnemy1 >= 10
+    ) {
+      createEnemyDiagonal();
+      createEnemyReto();
+      auxiliarEnemy1++;
+    }
+    if (
+      planeaux.position.z > 300 + 40 * auxiliarEnemy1 &&
+      auxiliarEnemy1 >= 20
+    ) {
+      createEnemyDiagonal2();
+      createEnemyReto2();
+      createEnemy();
+      createEnemy();
+      createEnemy();
+      createGroundEnemy();
+      createGroundEnemy();
+      auxiliarEnemy1++;
+    }
+
     for (let i = 0; i < enemys.length; i++) {
       if (enemys[i] !== null) {
         if (enemys[i].position.z > cameraHolder.position.z + 120) {
@@ -869,6 +903,14 @@ function aviaoMorte() {
   scene.remove(aviao);
   if (animationOn === true) {
     alert("Fim de jogo");
+  }
+  animationOn = false;
+}
+
+function Venceu() {
+  scene.remove(aviao);
+  if (animationOn === true) {
+    alert("Você venceu!");
   }
   animationOn = false;
 }
@@ -1282,7 +1324,7 @@ function render() {
   }
 
   setTimeout(function () {
-    aviaoMorte();
+    Venceu();
     gameover = true;
     keyboardUpdate(gameover);
   }, 120000);
