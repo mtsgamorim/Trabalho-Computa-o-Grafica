@@ -19,6 +19,12 @@ import { FogExp2, SplineCurve } from "../build/three.module.js";
 import { GLTFLoader } from "../build/jsm/loaders/GLTFLoader.js";
 
 var scene = new THREE.Scene(); // Create main scene
+var scene2 = new THREE.Scene();
+var luz2 = new THREE.AmbientLight("rgb(255,255,255)")
+scene2.add(luz2);
+//scene2.background = new THREE.Color("rgb(255,255,0)");
+
+
 
 let renderer = new THREE.WebGLRenderer({ alpha: true });
 document.getElementById("webgl-output").appendChild(renderer.domElement);
@@ -28,7 +34,9 @@ renderer.shadowMap.type = THREE.VSMShadowMap; // default
 renderer.autoClear = false;
 
 //Camera virtual para a viewport
-var camPosition = new THREE.Vector3(0, -200, 30);
+var camPosition = new THREE.Vector3(0, 80, 120);
+//var lookAtVec = new THREE.Vector3(0,15,0);
+//var upVec = new THREE.Vector3(0,1,0);
 var vcWidth = 400;
 var vcHeidth = 300;
 var virtualCamera = new THREE.PerspectiveCamera(
@@ -38,7 +46,11 @@ var virtualCamera = new THREE.PerspectiveCamera(
   300
 );
 virtualCamera.position.copy(camPosition);
-scene.add(virtualCamera);
+//virtualCamera.up.copy(upVec);
+virtualCamera.lookAt(0,0,0);
+var cameraHelper = new THREE.CameraHelper(virtualCamera);
+scene2.add(cameraHelper);
+//scene2.add(virtualCamera);
 
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
@@ -167,6 +179,7 @@ var sphereMaterial2 = new THREE.MeshLambertMaterial({
 var sphereMaterial3 = new THREE.MeshLambertMaterial({ color: "rgb(255,0,0)" });
 var sphereMaterial4 = new THREE.MeshLambertMaterial({ color: "rgb(0,255,0)" });
 
+
 let qntdTiro = 0;
 let qntdTiro2 = 0;
 let tiros = [];
@@ -177,6 +190,10 @@ let enemyTiros = [];
 let enemyTirosBB = [];
 let groundTiros = [];
 let groundTirosBB = [];
+var sphere2Material = new THREE.MeshLambertMaterial({ color: "rgb(255,0,0)" });
+let esferaTeste = new THREE.Mesh(sphereGeometry, sphere2Material);
+scene2.add(esferaTeste);
+
 
 for (let i = 0; i < 20; i++) {
   tiros[i] = new THREE.Mesh(sphereGeometry, sphereMaterial);
@@ -1338,7 +1355,8 @@ function controlledRender() {
   renderer.setViewport(offset, height - vcHeidth - offset, vcWidth, vcHeidth); // Set virtual camera viewport
   renderer.setScissor(offset, height - vcHeidth - offset, vcWidth, vcHeidth); // Set scissor with the same size as the viewport
   renderer.setScissorTest(true); // Enable scissor to paint only the scissor are (i.e., the small viewport)
-  renderer.render(scene, virtualCamera); // Render scene of the virtual camera
+  //renderer.clear();
+  renderer.render(scene2, virtualCamera); // Render scene of the virtual camera
 }
 
 function render() {
@@ -1389,9 +1407,9 @@ function render() {
   }, 120000);
   checkCollision();
   requestAnimationFrame(render);
-  // controlledRender();
   keyboardUpdate(gameover);
-  renderer.render(scene, camera); // Render scene
+  //renderer.render(scene, camera); // Render scene
+  controlledRender();
   limpavetor();
   if (hp >= 0) {
     console.log(`HP ATUAL = ${hp}`);
