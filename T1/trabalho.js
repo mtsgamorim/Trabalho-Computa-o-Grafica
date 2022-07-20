@@ -89,21 +89,20 @@ var dirLight = new THREE.DirectionalLight("rgb(255,255,255)");
 dirLight.position.copy(lightPosition);
 dirLight.castShadow = true;
 // Shadow Parameters
-dirLight.shadow.mapSize.width = 700;
-dirLight.shadow.mapSize.height = 300;
-dirLight.shadow.camera.near = 0.1;
+dirLight.shadow.mapSize.width = 512;
+dirLight.shadow.mapSize.height = 512;
+dirLight.castShadow = true;
+dirLight.shadow.camera.near = .1;
 dirLight.shadow.camera.far = 600;
-dirLight.shadow.camera.left = -360;
-dirLight.shadow.camera.right = 360;
-dirLight.shadow.camera.bottom = -200;
+dirLight.shadow.camera.left = -110;
+dirLight.shadow.camera.right = 110;
 dirLight.shadow.camera.top = 200;
-dirLight.shadow.bias = -0.05;
+dirLight.shadow.camera.bottom = -200;
+
+dirLight.shadow.bias = -0.009;
 
 // No effect on Basic and PCFSoft
-dirLight.shadow.radius = 0.2;
-
-// Just for VSM - to be added in threejs.r132
-dirLight.shadow.blurSamples = 1;
+dirLight.shadow.radius = 1
 
 // Enable mouse rotation, pan, zoom etc.
 var trackballControls = new TrackballControls(camera, renderer.domElement);
@@ -190,9 +189,23 @@ let enemyTiros = [];
 let enemyTirosBB = [];
 let groundTiros = [];
 let groundTirosBB = [];
-var sphere2Material = new THREE.MeshLambertMaterial({ color: "rgb(255,0,0)" });
-let esferaTeste = new THREE.Mesh(sphereGeometry, sphere2Material);
-scene2.add(esferaTeste);
+
+var geometry = new THREE.BoxGeometry( 10, 30, 0 );
+var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+//let cube = new THREE.Mesh( geometry, material );
+//var sphere2Material = new THREE.MeshLambertMaterial({ color: "rgb(255,0,0)" });
+//let esferaTeste = new THREE.Mesh(sphereGeometry, sphere2Material);
+var life = [];
+
+for(var i=0; i<5; i++){
+  
+  life[i] = new THREE.Mesh(geometry, material);
+  life[i].position.set(i*-15, 0, 0);
+  scene2.add(life[i]);
+}
+
+
+
 
 
 for (let i = 0; i < 20; i++) {
