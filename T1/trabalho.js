@@ -332,7 +332,20 @@ function keyboardUpdate(gameover) {
         }, 1000 / cadencia);
       }
     }
-
+    if (keyboard.up("ctrl")){
+      tiros[qntdTiro].position.set(
+        aviao.position.x,
+        aviao.position.y,
+        aviao.position.z
+      );
+      scene.add(tiros[qntdTiro]);
+      if (qntdTiro === 19) {
+        qntdTiro = 0;
+      }
+      qntdTiro++;
+    }
+    
+  
     if (keyboard.pressed("G")) {
       hp = -1;
     }
