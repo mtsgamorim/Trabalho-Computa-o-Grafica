@@ -20,11 +20,9 @@ import { GLTFLoader } from "../build/jsm/loaders/GLTFLoader.js";
 
 var scene = new THREE.Scene(); // Create main scene
 var scene2 = new THREE.Scene();
-var luz2 = new THREE.AmbientLight("rgb(255,255,255)")
+var luz2 = new THREE.AmbientLight("rgb(255,255,255)");
 scene2.add(luz2);
 //scene2.background = new THREE.Color("rgb(255,255,0)");
-
-
 
 let renderer = new THREE.WebGLRenderer({ alpha: true });
 document.getElementById("webgl-output").appendChild(renderer.domElement);
@@ -47,7 +45,7 @@ var virtualCamera = new THREE.PerspectiveCamera(
 );
 virtualCamera.position.copy(camPosition);
 //virtualCamera.up.copy(upVec);
-virtualCamera.lookAt(0,0,0);
+virtualCamera.lookAt(0, 0, 0);
 var cameraHelper = new THREE.CameraHelper(virtualCamera);
 scene2.add(cameraHelper);
 //scene2.add(virtualCamera);
@@ -92,7 +90,7 @@ dirLight.castShadow = true;
 dirLight.shadow.mapSize.width = 512;
 dirLight.shadow.mapSize.height = 512;
 dirLight.castShadow = true;
-dirLight.shadow.camera.near = .1;
+dirLight.shadow.camera.near = 0.1;
 dirLight.shadow.camera.far = 600;
 dirLight.shadow.camera.left = -110;
 dirLight.shadow.camera.right = 110;
@@ -102,7 +100,7 @@ dirLight.shadow.camera.bottom = -200;
 dirLight.shadow.bias = -0.009;
 
 // No effect on Basic and PCFSoft
-dirLight.shadow.radius = 1
+dirLight.shadow.radius = 1;
 
 // Enable mouse rotation, pan, zoom etc.
 var trackballControls = new TrackballControls(camera, renderer.domElement);
@@ -112,20 +110,94 @@ var trackballControls = new TrackballControls(camera, renderer.domElement);
 //scene.add(axesHelper);
 
 // create the ground plane
-let plane1 = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,128,0)");
+let plane1 = createGroundPlaneWired(150, 300, 10, 10, "red");
 plane1.receiveShadow = true;
-let plane2 = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,128,0)");
+let plane2 = createGroundPlaneWired(150, 300, 10, 10, "rgb(0,128,0)");
 plane2.receiveShadow = true;
-let plane3 = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,128,0)");
+let plane3 = createGroundPlaneWired(150, 300, 10, 10, "rgb(0,128,0)");
 plane3.receiveShadow = true;
-let planeaux = createGroundPlaneWired(700, 300, 10, 10, "rgb(0,0,0)");
+let planeaux = createGroundPlaneWired(150, 300, 10, 10, "rgb(0,0,0)");
+
+let curvedPlane1 = createGroundPlaneWired(300, 45, 10, 10, "rgb(0,128,0)");
+let curvedPlane2 = createGroundPlaneWired(300, 45, 10, 10, "rgb(0,128,0)");
+let curvedPlane3 = createGroundPlaneWired(300, 45, 10, 10, "rgb(0,128,0)");
+let curvedPlane4 = createGroundPlaneWired(300, 45, 10, 10, "rgb(0,128,0)");
+let curvedPlane5 = createGroundPlaneWired(300, 45, 10, 10, "rgb(0,128,0)");
+let curvedPlane6 = createGroundPlaneWired(300, 45, 10, 10, "rgb(0,128,0)");
+
+let glassPlane1 = createGroundPlaneWired(300, 180, 10, 10, "blue");
+let glassPlane2 = createGroundPlaneWired(300, 180, 10, 10, "purple");
+glassPlane1.rotateY(Math.PI / 2);
+glassPlane1.rotateX(Math.PI / 2);
+glassPlane1.translateY(177);
+glassPlane1.translateZ(19);
+plane1.add(glassPlane1);
+glassPlane2.rotateY(Math.PI / 2);
+glassPlane2.rotateX(Math.PI / 2);
+glassPlane2.translateY(-177);
+glassPlane2.translateZ(19);
+plane1.add(glassPlane2);
+
+let glassPlane3 = createGroundPlaneWired(300, 180, 10, 10, "blue");
+let glassPlane4 = createGroundPlaneWired(300, 180, 10, 10, "purple");
+glassPlane3.rotateY(Math.PI / 2);
+glassPlane3.rotateX(Math.PI / 2);
+glassPlane3.translateY(177);
+glassPlane3.translateZ(19);
+plane2.add(glassPlane3);
+glassPlane4.rotateY(Math.PI / 2);
+glassPlane4.rotateX(Math.PI / 2);
+glassPlane4.translateY(-177);
+glassPlane4.translateZ(19);
+plane2.add(glassPlane4);
+
+let glassPlane5 = createGroundPlaneWired(300, 180, 10, 10, "blue");
+let glassPlane6 = createGroundPlaneWired(300, 180, 10, 10, "purple");
+glassPlane5.rotateY(Math.PI / 2);
+glassPlane5.rotateX(Math.PI / 2);
+glassPlane5.translateY(177);
+glassPlane5.translateZ(19);
+plane3.add(glassPlane5);
+glassPlane6.rotateY(Math.PI / 2);
+glassPlane6.rotateX(Math.PI / 2);
+glassPlane6.translateY(-177);
+glassPlane6.translateZ(19);
+plane3.add(glassPlane6);
+
+curvedPlane1.translateX(75);
+curvedPlane2.translateX(-75);
+curvedPlane3.translateX(75);
+curvedPlane4.translateX(-75);
+curvedPlane5.translateX(75);
+curvedPlane6.translateX(-75);
+curvedPlane1.rotateY(Math.PI / 2);
+curvedPlane1.rotateX(-Math.PI / 0.85);
+curvedPlane2.rotateY(Math.PI / 2);
+curvedPlane2.rotateX(Math.PI / 0.85);
+
+curvedPlane3.rotateY(Math.PI / 2);
+curvedPlane3.rotateX(-Math.PI / 0.85);
+curvedPlane4.rotateY(Math.PI / 2);
+curvedPlane4.rotateX(Math.PI / 0.85);
+
+curvedPlane5.rotateY(Math.PI / 2);
+curvedPlane5.rotateX(-Math.PI / 0.85);
+curvedPlane6.rotateY(Math.PI / 2);
+curvedPlane6.rotateX(Math.PI / 0.85);
 
 scene.add(plane1);
 scene.add(plane2);
 scene.add(plane3);
 scene.add(planeaux);
+plane1.add(curvedPlane1);
+plane1.add(curvedPlane2);
+plane2.add(curvedPlane3);
+plane2.add(curvedPlane4);
+plane3.add(curvedPlane5);
+plane3.add(curvedPlane6);
 plane2.translateY(300);
 plane3.translateY(600);
+
 planeaux.translateY(-300);
 
 // create a cube for camera
@@ -178,7 +250,6 @@ var sphereMaterial2 = new THREE.MeshLambertMaterial({
 var sphereMaterial3 = new THREE.MeshLambertMaterial({ color: "rgb(255,0,0)" });
 var sphereMaterial4 = new THREE.MeshLambertMaterial({ color: "rgb(0,255,0)" });
 
-
 let qntdTiro = 0;
 let qntdTiro2 = 0;
 let tiros = [];
@@ -190,23 +261,18 @@ let enemyTirosBB = [];
 let groundTiros = [];
 let groundTirosBB = [];
 
-var geometry = new THREE.BoxGeometry( 10, 30, 0 );
-var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+var geometry = new THREE.BoxGeometry(10, 30, 0);
+var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 //let cube = new THREE.Mesh( geometry, material );
 //var sphere2Material = new THREE.MeshLambertMaterial({ color: "rgb(255,0,0)" });
 //let esferaTeste = new THREE.Mesh(sphereGeometry, sphere2Material);
 var life = [];
 
-for(var i=0; i<5; i++){
-  
+for (var i = 0; i < 5; i++) {
   life[i] = new THREE.Mesh(geometry, material);
-  life[i].position.set(i*-15, 0, 0);
+  life[i].position.set(i * -15, 0, 0);
   scene2.add(life[i]);
 }
-
-
-
-
 
 for (let i = 0; i < 20; i++) {
   tiros[i] = new THREE.Mesh(sphereGeometry, sphereMaterial);
@@ -335,7 +401,20 @@ function keyboardUpdate(gameover) {
         }, 1000 / cadencia);
       }
     }
-
+    if (keyboard.up("ctrl")){
+      tiros[qntdTiro].position.set(
+        aviao.position.x,
+        aviao.position.y,
+        aviao.position.z
+      );
+      scene.add(tiros[qntdTiro]);
+      if (qntdTiro === 19) {
+        qntdTiro = 0;
+      }
+      qntdTiro++;
+    }
+    
+  
     if (keyboard.pressed("G")) {
       hp = -1;
     }
