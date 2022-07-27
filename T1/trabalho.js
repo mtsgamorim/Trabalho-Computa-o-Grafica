@@ -20,6 +20,7 @@ import { GLTFLoader } from "../build/jsm/loaders/GLTFLoader.js";
 import { Water } from "../build/jsm/objects/Water.js";
 
 const textureLoader = new THREE.TextureLoader();
+let auxDoTiro = 0;
 var scene = new THREE.Scene(); // Create main scene
 var scene2 = new THREE.Scene();
 var luz2 = new THREE.AmbientLight("rgb(255,255,255)");
@@ -349,8 +350,8 @@ let auxiliarCura = 1;
 let auxiliarEnemy2 = 1;
 let auxiliarEnemy3 = 1;
 
-let Cgeometry = new THREE.CylinderGeometry( 1, 2, 5, 32 );
-let Cmaterial = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+let Cgeometry = new THREE.CylinderGeometry(1, 2, 5, 32);
+let Cmaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 
 // Listen window size changes
 window.addEventListener(
@@ -686,8 +687,6 @@ function tiroInimigo(inimigo, tiroInimigo) {
   tiroInimigo.lookAt(aviao.position);
 }
 
-
-
 function createGroundEnemy() {
   groundEnemys.push(new THREE.Mesh(groundGeometryEnemy, groundMaterialEnemy));
   loader.load(
@@ -714,7 +713,7 @@ function createGroundEnemy() {
   groundEnemysBB[groundEnemysBB.length - 1].setFromObject(
     groundEnemys[groundEnemys.length - 1]
   );
-  let posicaoX = getRandomArbitrary(-90, 90);
+  let posicaoX = getRandomArbitrary(-60, 60);
   let posicaoZ = cameraHolder.position.z - 180;
 
   groundEnemys[groundEnemys.length - 1].position.set(posicaoX, 4, posicaoZ);
@@ -741,8 +740,6 @@ function tiroInimigoGround(inimigo, tiroInimigo) {
   );
   scene.add(tiroInimigo);
 }
-
-
 
 function jogo() {
   if (animationOn) {
@@ -785,24 +782,15 @@ function jogo() {
     }
 
     for (let i = 0; i < groundTiros.length; i++) {
-     
-      let c = 0;
-
       if (groundTiros[i] !== null) {
-        
-        if (groundTiros[i].position.y > 28 && groundTiros[i].position.y <= 30 && c == 0) {
-         // groundTiros[i].rotateX(90 * (Math.PI / 180));
-          groundTiros[i].lookAt(aviao.position);
-          groundTiros[i].rotateX(90 * (Math.PI / 180));
-          c++;        
-        }
-        c++;
-
         if (groundTiros[i].position.y < 30) {
           groundTiros[i].translateY(0.3);
-        
-        }else if (groundTiros[i].position.y >= 30) {
-          
+        } else if (groundTiros[i].position.y >= 30) {
+          if (auxDoTiro === 0) {
+            groundTiros[i].rotateZ(Math.PI / 2);
+            groundTiros[i].lookAt(aviao.position);
+            auxDoTiro++;
+          }
           groundTiros[i].translateZ(veloc);
           groundTiros[i].castShadow = true;
 
@@ -816,6 +804,7 @@ function jogo() {
             scene.remove(groundTiros[i]);
             groundTiros[i] = null;
             groundTirosBB[i] = null;
+            auxDoTiro = 0;
           }
         }
       }
@@ -913,10 +902,11 @@ function jogo() {
       planoInfinito();
       auxiliarPosCamera++;
     }
+
+    //GAMEPLAY
     if (planeaux.position.z > 300 + 20 * auxiliarEnemy1) {
       //console.log(planeaux.position.z);
       createEnemy();
-      createGroundEnemy();
       auxiliarEnemy1++;
     }
     if (planeaux.position.z > 300 + 80 * auxiliarCura) {
