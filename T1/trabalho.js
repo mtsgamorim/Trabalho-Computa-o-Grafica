@@ -17,7 +17,9 @@ import KeyboardState from "../libs/util/KeyboardState.js";
 import { CSG } from "../libs/other/CSGMesh.js";
 import { FogExp2, SplineCurve } from "../build/three.module.js";
 import { GLTFLoader } from "../build/jsm/loaders/GLTFLoader.js";
+import { Water } from "../build/jsm/objects/Water.js";
 
+const textureLoader = new THREE.TextureLoader();
 var scene = new THREE.Scene(); // Create main scene
 var scene2 = new THREE.Scene();
 var luz2 = new THREE.AmbientLight("rgb(255,255,255)");
@@ -172,18 +174,18 @@ curvedPlane5.translateX(75);
 curvedPlane6.translateX(-75);
 curvedPlane1.rotateY(Math.PI / 2);
 curvedPlane1.rotateX(-Math.PI / 0.85);
-curvedPlane2.rotateY(Math.PI / 2);
-curvedPlane2.rotateX(Math.PI / 0.85);
+curvedPlane2.rotateY(-Math.PI / 2);
+curvedPlane2.rotateX(-Math.PI / 0.85);
 
 curvedPlane3.rotateY(Math.PI / 2);
 curvedPlane3.rotateX(-Math.PI / 0.85);
-curvedPlane4.rotateY(Math.PI / 2);
-curvedPlane4.rotateX(Math.PI / 0.85);
+curvedPlane4.rotateY(-Math.PI / 2);
+curvedPlane4.rotateX(-Math.PI / 0.85);
 
 curvedPlane5.rotateY(Math.PI / 2);
 curvedPlane5.rotateX(-Math.PI / 0.85);
-curvedPlane6.rotateY(Math.PI / 2);
-curvedPlane6.rotateX(Math.PI / 0.85);
+curvedPlane6.rotateY(-Math.PI / 2);
+curvedPlane6.rotateX(-Math.PI / 0.85);
 
 scene.add(plane1);
 scene.add(plane2);
@@ -199,6 +201,30 @@ plane2.translateY(300);
 plane3.translateY(600);
 
 planeaux.translateY(-300);
+
+//water
+const waterGeometry = new THREE.PlaneGeometry(150, 600);
+
+// Water shader parameters
+let water = new Water(waterGeometry, {
+  textureWidth: 512,
+  textureHeight: 512,
+  waterNormals: new THREE.TextureLoader().load(
+    "../assets/textures/waternormals.jpg",
+    function (texture) {
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    }
+  ),
+  //sunDirection: new THREE.Vector3(),
+  //sunColor: 0xffffff,
+  waterColor: "rgba(0,255,255)",
+  distortionScale: 7,
+});
+water.material.transparent = true;
+water.material.opacity = 0.2;
+water.translateY(5);
+water.rotation.x = -Math.PI / 2;
+scene.add(water);
 
 // create a cube for camera
 var cameraHolder = new THREE.Object3D();
@@ -398,7 +424,7 @@ function keyboardUpdate(gameover) {
         }, 1000 / cadencia);
       }
     }
-    if (keyboard.up("ctrl")){
+    if (keyboard.up("ctrl")) {
       tiros[qntdTiro].position.set(
         aviao.position.x,
         aviao.position.y,
@@ -410,8 +436,7 @@ function keyboardUpdate(gameover) {
       }
       qntdTiro++;
     }
-    
-  
+
     if (keyboard.pressed("G")) {
       hp = -1;
     }
@@ -1453,6 +1478,7 @@ function controlledRender() {
 
 function render() {
   jogo();
+  water.material.uniforms["time"].value += 0.01;
   for (let i = 0; i < enemys.length; i++) {
     if (enemys[i] !== null) {
       enemys[i].translateZ(getRandomArbitrary(0.2, 1));
@@ -1505,5 +1531,43 @@ function render() {
   limpavetor();
   if (hp >= 0) {
     console.log(`HP ATUAL = ${hp}`);
+  }
+
+  if (hp === 5) {
+    scene2.add(life[0]);
+    scene2.add(life[1]);
+    scene2.add(life[2]);
+    scene2.add(life[3]);
+    scene2.add(life[4]);
+  } else if (hp === 4) {
+    scene2.remove(life[0]);
+    scene2.add(life[1]);
+    scene2.add(life[2]);
+    scene2.add(life[3]);
+    scene2.add(life[4]);
+  } else if (hp === 3) {
+    scene2.remove(life[0]);
+    scene2.remove(life[1]);
+    scene2.add(life[2]);
+    scene2.add(life[3]);
+    scene2.add(life[4]);
+  } else if (hp === 2) {
+    scene2.remove(life[0]);
+    scene2.remove(life[1]);
+    scene2.remove(life[2]);
+    scene2.add(life[3]);
+    scene2.add(life[4]);
+  } else if (hp === 1) {
+    scene2.remove(life[0]);
+    scene2.remove(life[1]);
+    scene2.remove(life[2]);
+    scene2.remove(life[3]);
+    scene2.add(life[4]);
+  } else if (hp === 0) {
+    scene2.remove(life[0]);
+    scene2.remove(life[1]);
+    scene2.remove(life[2]);
+    scene2.remove(life[3]);
+    scene2.remove(life[4]);
   }
 }
