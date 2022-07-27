@@ -349,6 +349,9 @@ let auxiliarCura = 1;
 let auxiliarEnemy2 = 1;
 let auxiliarEnemy3 = 1;
 
+let Cgeometry = new THREE.CylinderGeometry( 1, 2, 5, 32 );
+let Cmaterial = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+
 // Listen window size changes
 window.addEventListener(
   "resize",
@@ -683,6 +686,8 @@ function tiroInimigo(inimigo, tiroInimigo) {
   tiroInimigo.lookAt(aviao.position);
 }
 
+
+
 function createGroundEnemy() {
   groundEnemys.push(new THREE.Mesh(groundGeometryEnemy, groundMaterialEnemy));
   loader.load(
@@ -716,7 +721,7 @@ function createGroundEnemy() {
   groundEnemys[groundEnemys.length - 1].castShadow = true;
   groundEnemys[groundEnemys.length - 1].receiveShadow = true;
   scene.add(groundEnemys[groundEnemys.length - 1]);
-  groundTiros.push(new THREE.Mesh(sphereGeometry, sphereMaterial4));
+  groundTiros.push(new THREE.Mesh(Cgeometry, Cmaterial));
   if (groundEnemys[groundEnemys.length - 1].position.z < -100) {
     groundTirosBB.push(
       new THREE.Sphere(groundTiros[groundTiros.length - 1].position, 1)
@@ -736,6 +741,8 @@ function tiroInimigoGround(inimigo, tiroInimigo) {
   );
   scene.add(tiroInimigo);
 }
+
+
 
 function jogo() {
   if (animationOn) {
@@ -778,13 +785,24 @@ function jogo() {
     }
 
     for (let i = 0; i < groundTiros.length; i++) {
+     
+      let c = 0;
+
       if (groundTiros[i] !== null) {
-        if (groundTiros[i].position.y > 28 && groundTiros[i].position.y <= 30) {
+        
+        if (groundTiros[i].position.y > 28 && groundTiros[i].position.y <= 30 && c == 0) {
+         // groundTiros[i].rotateX(90 * (Math.PI / 180));
           groundTiros[i].lookAt(aviao.position);
+          groundTiros[i].rotateX(90 * (Math.PI / 180));
+          c++;        
         }
+        c++;
+
         if (groundTiros[i].position.y < 30) {
           groundTiros[i].translateY(0.3);
-        } else if (groundTiros[i].position.y >= 30) {
+        
+        }else if (groundTiros[i].position.y >= 30) {
+          
           groundTiros[i].translateZ(veloc);
           groundTiros[i].castShadow = true;
 
