@@ -11,15 +11,20 @@ import {
   createLightSphere,
   degreesToRadians,
   createGroundPlaneXZ,
+  createGroundPlane,
 } from "../libs/util/util.js";
 import createAviao from "./criarAviao.js";
 import KeyboardState from "../libs/util/KeyboardState.js";
 import { CSG } from "../libs/other/CSGMesh.js";
-import { FogExp2, SplineCurve } from "../build/three.module.js";
+import { FogExp2, Line, SplineCurve } from "../build/three.module.js";
 import { GLTFLoader } from "../build/jsm/loaders/GLTFLoader.js";
 import { Water } from "../build/jsm/objects/Water.js";
+import { Line3 } from "three";
 
 const textureLoader = new THREE.TextureLoader();
+let grass = textureLoader.load("../assets/textures/grass.jpg");
+let stone = textureLoader.load("./assets/stone.jpg");
+let plaster = textureLoader.load("../assets/textures/plaster.jpg");
 let auxDoTiro = 0;
 var scene = new THREE.Scene(); // Create main scene
 var scene2 = new THREE.Scene();
@@ -113,57 +118,46 @@ var trackballControls = new TrackballControls(camera, renderer.domElement);
 //scene.add(axesHelper);
 
 // create the ground plane
-let plane1 = createGroundPlaneWired(150, 300, 10, 10, "red");
+
+let plane1 = createGroundPlaneWired(150, 300, 10, 10, "lightgray");
 plane1.receiveShadow = true;
-let plane2 = createGroundPlaneWired(150, 300, 10, 10, "rgb(0,128,0)");
+let plane2 = createGroundPlaneWired(150, 300, 10, 10, "lightgray");
 plane2.receiveShadow = true;
-let plane3 = createGroundPlaneWired(150, 300, 10, 10, "rgb(0,128,0)");
+let plane3 = createGroundPlaneWired(150, 300, 10, 10, "lightgray");
 plane3.receiveShadow = true;
-let planeaux = createGroundPlaneWired(150, 300, 10, 10, "rgb(0,0,0)");
+let planeaux = createGroundPlaneWired(150, 300, 10, 10, "lightgray");
 
-let curvedPlane1 = createGroundPlaneWired(300, 45, 10, 10, "rgb(0,128,0)");
-let curvedPlane2 = createGroundPlaneWired(300, 45, 10, 10, "rgb(0,128,0)");
-let curvedPlane3 = createGroundPlaneWired(300, 45, 10, 10, "rgb(0,128,0)");
-let curvedPlane4 = createGroundPlaneWired(300, 45, 10, 10, "rgb(0,128,0)");
-let curvedPlane5 = createGroundPlaneWired(300, 45, 10, 10, "rgb(0,128,0)");
-let curvedPlane6 = createGroundPlaneWired(300, 45, 10, 10, "rgb(0,128,0)");
+let curvedPlane1 = createGroundPlane(45, 300, 10, 10, "lightgray");
+let curvedPlane2 = createGroundPlane(45, 300, 10, 10, "lightgray");
+let curvedPlane3 = createGroundPlane(45, 300, 10, 10, "lightgray");
+let curvedPlane4 = createGroundPlane(45, 300, 10, 10, "lightgray");
+let curvedPlane5 = createGroundPlane(45, 300, 10, 10, "lightgray");
+let curvedPlane6 = createGroundPlane(45, 300, 10, 10, "lightgray");
 
-let glassPlane1 = createGroundPlaneWired(300, 180, 10, 10, "blue");
-let glassPlane2 = createGroundPlaneWired(300, 180, 10, 10, "purple");
-glassPlane1.rotateY(Math.PI / 2);
-glassPlane1.rotateX(Math.PI / 2);
-glassPlane1.translateY(177);
+let glassPlane1 = createGroundPlane(180, 300, 10, 10, "rgb(0,255,0)");
+let glassPlane2 = createGroundPlane(180, 300, 10, 10, "rgb(0,255,0)");
+glassPlane1.translateX(177);
 glassPlane1.translateZ(19);
 plane1.add(glassPlane1);
-glassPlane2.rotateY(Math.PI / 2);
-glassPlane2.rotateX(Math.PI / 2);
-glassPlane2.translateY(-177);
+glassPlane2.translateX(-177);
 glassPlane2.translateZ(19);
 plane1.add(glassPlane2);
 
-let glassPlane3 = createGroundPlaneWired(300, 180, 10, 10, "blue");
-let glassPlane4 = createGroundPlaneWired(300, 180, 10, 10, "purple");
-glassPlane3.rotateY(Math.PI / 2);
-glassPlane3.rotateX(Math.PI / 2);
-glassPlane3.translateY(177);
+let glassPlane3 = createGroundPlane(180, 300, 10, 10, "rgb(0,255,0)");
+let glassPlane4 = createGroundPlane(180, 300, 10, 10, "rgb(0,255,0)");
+glassPlane3.translateX(177);
 glassPlane3.translateZ(19);
 plane2.add(glassPlane3);
-glassPlane4.rotateY(Math.PI / 2);
-glassPlane4.rotateX(Math.PI / 2);
-glassPlane4.translateY(-177);
+glassPlane4.translateX(-177);
 glassPlane4.translateZ(19);
 plane2.add(glassPlane4);
 
-let glassPlane5 = createGroundPlaneWired(300, 180, 10, 10, "blue");
-let glassPlane6 = createGroundPlaneWired(300, 180, 10, 10, "purple");
-glassPlane5.rotateY(Math.PI / 2);
-glassPlane5.rotateX(Math.PI / 2);
-glassPlane5.translateY(177);
+let glassPlane5 = createGroundPlane(180, 300, 10, 10, "rgb(0,255,0)");
+let glassPlane6 = createGroundPlane(180, 300, 10, 10, "rgb(0,255,0)");
+glassPlane5.translateX(177);
 glassPlane5.translateZ(19);
 plane3.add(glassPlane5);
-glassPlane6.rotateY(Math.PI / 2);
-glassPlane6.rotateX(Math.PI / 2);
-glassPlane6.translateY(-177);
+glassPlane6.translateX(-177);
 glassPlane6.translateZ(19);
 plane3.add(glassPlane6);
 
@@ -173,20 +167,34 @@ curvedPlane3.translateX(75);
 curvedPlane4.translateX(-75);
 curvedPlane5.translateX(75);
 curvedPlane6.translateX(-75);
-curvedPlane1.rotateY(Math.PI / 2);
-curvedPlane1.rotateX(-Math.PI / 0.85);
-curvedPlane2.rotateY(-Math.PI / 2);
-curvedPlane2.rotateX(-Math.PI / 0.85);
+curvedPlane1.rotateY(Math.PI / 1.5);
+curvedPlane2.rotateY(-Math.PI / 1.5);
 
-curvedPlane3.rotateY(Math.PI / 2);
-curvedPlane3.rotateX(-Math.PI / 0.85);
-curvedPlane4.rotateY(-Math.PI / 2);
-curvedPlane4.rotateX(-Math.PI / 0.85);
+curvedPlane3.rotateY(Math.PI / 1.5);
 
-curvedPlane5.rotateY(Math.PI / 2);
-curvedPlane5.rotateX(-Math.PI / 0.85);
-curvedPlane6.rotateY(-Math.PI / 2);
-curvedPlane6.rotateX(-Math.PI / 0.85);
+curvedPlane4.rotateY(-Math.PI / 1.5);
+
+curvedPlane5.rotateY(Math.PI / 1.5);
+
+curvedPlane6.rotateY(-Math.PI / 1.5);
+
+glassPlane1.material.map = grass;
+glassPlane2.material.map = grass;
+glassPlane3.material.map = grass;
+glassPlane4.material.map = grass;
+glassPlane5.material.map = grass;
+glassPlane6.material.map = grass;
+
+plane1.material.map = stone;
+plane2.material.map = stone;
+plane3.material.map = stone;
+
+curvedPlane1.material.map = plaster;
+curvedPlane2.material.map = plaster;
+curvedPlane3.material.map = plaster;
+curvedPlane4.material.map = plaster;
+curvedPlane5.material.map = plaster;
+curvedPlane6.material.map = plaster;
 
 scene.add(plane1);
 scene.add(plane2);
@@ -225,7 +233,7 @@ water.material.transparent = true;
 water.material.opacity = 0.2;
 water.translateY(5);
 water.rotation.x = -Math.PI / 2;
-//scene.add(water);
+scene.add(water);
 
 // create a cube for camera
 var cameraHolder = new THREE.Object3D();
