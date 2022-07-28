@@ -225,7 +225,7 @@ water.material.transparent = true;
 water.material.opacity = 0.2;
 water.translateY(5);
 water.rotation.x = -Math.PI / 2;
-scene.add(water);
+//scene.add(water);
 
 // create a cube for camera
 var cameraHolder = new THREE.Object3D();
@@ -783,15 +783,17 @@ function jogo() {
 
     for (let i = 0; i < groundTiros.length; i++) {
       if (groundTiros[i] !== null) {
-        if (groundTiros[i].position.y < 30) {
+        if (groundTiros[i].position.y < 30 && auxDoTiro === 0) {
           groundTiros[i].translateY(0.3);
-        } else if (groundTiros[i].position.y >= 30) {
+        } else {
           if (auxDoTiro === 0) {
-            groundTiros[i].rotateZ(Math.PI / 2);
             groundTiros[i].lookAt(aviao.position);
+            groundTiros[i].rotateX(Math.PI / 2);
             auxDoTiro++;
           }
-          groundTiros[i].translateZ(veloc);
+          console.log(`Posiçao aviao: ${aviao.position.z}`);
+          console.log(`Posiçao tiro: ${groundTiros[i].position.x}`);
+          groundTiros[i].translateY(veloc);
           groundTiros[i].castShadow = true;
 
           groundTirosBB[i].center.set(
@@ -923,7 +925,6 @@ function jogo() {
     if (planeaux.position.z > 800 + 40 * auxiliarEnemy3) {
       createEnemyDiagonal();
       createEnemyReto();
-      createGroundEnemy();
       auxiliarEnemy3++;
     }
 
