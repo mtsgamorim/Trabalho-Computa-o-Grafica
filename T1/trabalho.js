@@ -190,9 +190,9 @@ glassPlane4.material.map = grass;
 glassPlane5.material.map = grass;
 glassPlane6.material.map = grass;
 
-plane1.material.map = stone;
-plane2.material.map = stone;
-plane3.material.map = stone;
+plane1.material.map = plaster;
+plane2.material.map = plaster;
+plane3.material.map = plaster;
 
 curvedPlane1.material.map = plaster;
 curvedPlane2.material.map = plaster;
@@ -278,112 +278,114 @@ const explosionG = new THREE.SphereGeometry(6, 32, 16);
 const explosionM = new THREE.MeshBasicMaterial({ color: "lightred" });
 const sphere = new THREE.Mesh(explosionG, explosionM);
 sphere.rotateX(Math.PI / 2);
-function explode1() {
-  aviao.remove(sphere);
+function explode1(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[0];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode2() {
-  aviao.remove(sphere);
+function explode2(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[1];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode3() {
-  aviao.remove(sphere);
+function explode3(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[2];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode4() {
-  aviao.remove(sphere);
+function explode4(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[3];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode5() {
-  aviao.remove(sphere);
+function explode5(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[4];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode6() {
-  aviao.remove(sphere);
+function explode6(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[5];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode7() {
-  aviao.remove(sphere);
+function explode7(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[6];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode8() {
-  aviao.remove(sphere);
+function explode8(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[7];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode9() {
-  aviao.remove(sphere);
+function explode9(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[8];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode10() {
-  aviao.remove(sphere);
+function explode10(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[9];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode11() {
-  aviao.remove(sphere);
+function explode11(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[10];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode12() {
-  aviao.remove(sphere);
+function explode12(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[11];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode13() {
-  aviao.remove(sphere);
+function explode13(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[12];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode14() {
-  aviao.remove(sphere);
+function explode14(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[13];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode15() {
-  aviao.remove(sphere);
+function explode15(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[14];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode16() {
-  aviao.remove(sphere);
+function explode16(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[15];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function explode17() {
-  aviao.remove(sphere);
+function explode17(name) {
+  name.remove(sphere);
   sphere.material.map = explosion[16];
-  aviao.add(sphere);
+  name.add(sphere);
 }
-function fimExplosion() {
-  aviao.remove(sphere);
+function fimExplosion(name) {
+  name.remove(sphere);
 }
-setTimeout(explode1, 2000);
-setTimeout(explode2, 2030);
-setTimeout(explode3, 2060);
-setTimeout(explode4, 2090);
-setTimeout(explode5, 2120);
-setTimeout(explode6, 2150);
-setTimeout(explode7, 2180);
-setTimeout(explode8, 2210);
-setTimeout(explode9, 2240);
-setTimeout(explode10, 2270);
-setTimeout(explode11, 2300);
-setTimeout(explode12, 2330);
-setTimeout(explode13, 2360);
-setTimeout(explode14, 2390);
-setTimeout(explode15, 2420);
-setTimeout(explode16, 2450);
-setTimeout(explode17, 2480);
-setTimeout(fimExplosion, 2500);
+function explode(name) {
+  setTimeout(() => explode1(name), 2000);
+  setTimeout(() => explode2(name), 2030);
+  setTimeout(() => explode3(name), 2060);
+  setTimeout(() => explode4(name), 2090);
+  setTimeout(() => explode5(name), 2120);
+  setTimeout(() => explode6(name), 2150);
+  setTimeout(() => explode7(name), 2180);
+  setTimeout(() => explode8(name), 2210);
+  setTimeout(() => explode9(name), 2240);
+  setTimeout(() => explode10(name), 2270);
+  setTimeout(() => explode11(name), 2300);
+  setTimeout(() => explode12(name), 2330);
+  setTimeout(() => explode13(name), 2360);
+  setTimeout(() => explode14(name), 2390);
+  setTimeout(() => explode15(name), 2420);
+  setTimeout(() => explode16(name), 2450);
+  setTimeout(() => explode17(name), 2480);
+  setTimeout(() => fimExplosion(name), 2500);
+}
 
 //criando a BB do aviao
 let aviaoBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
@@ -590,7 +592,7 @@ function keyboardUpdate(gameover) {
     if (keyboard.pressed("G")) {
       hp = -1;
     }
-    if (keyboard.pressed("P")) {
+    if (keyboard.up("P")) {
       if (pause === false) {
         pause = true;
       } else {
