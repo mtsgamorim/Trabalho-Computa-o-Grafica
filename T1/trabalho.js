@@ -25,6 +25,10 @@ const textureLoader = new THREE.TextureLoader();
 let grass = textureLoader.load("../assets/textures/grass.jpg");
 let stone = textureLoader.load("./assets/stone.jpg");
 let plaster = textureLoader.load("../assets/textures/plaster.jpg");
+let explosion = [];
+for (let i = 1; i < 17; i++) {
+  explosion[i - 1] = textureLoader.load(`../assets/textures/${i}.png`);
+}
 let auxDoTiro = 0;
 var scene = new THREE.Scene(); // Create main scene
 var scene2 = new THREE.Scene();
@@ -269,6 +273,116 @@ loader.load(
   null,
   null
 );
+const explosionG = new THREE.SphereGeometry(6, 32, 16);
+const explosionM = new THREE.MeshBasicMaterial({ color: "lightred" });
+const sphere = new THREE.Mesh(explosionG, explosionM);
+sphere.rotateX(Math.PI / 2);
+function explode1() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[0];
+  aviao.add(sphere);
+}
+function explode2() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[1];
+  aviao.add(sphere);
+}
+function explode3() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[2];
+  aviao.add(sphere);
+}
+function explode4() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[3];
+  aviao.add(sphere);
+}
+function explode5() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[4];
+  aviao.add(sphere);
+}
+function explode6() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[5];
+  aviao.add(sphere);
+}
+function explode7() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[6];
+  aviao.add(sphere);
+}
+function explode8() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[7];
+  aviao.add(sphere);
+}
+function explode9() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[8];
+  aviao.add(sphere);
+}
+function explode10() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[9];
+  aviao.add(sphere);
+}
+function explode11() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[10];
+  aviao.add(sphere);
+}
+function explode12() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[11];
+  aviao.add(sphere);
+}
+function explode13() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[12];
+  aviao.add(sphere);
+}
+function explode14() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[13];
+  aviao.add(sphere);
+}
+function explode15() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[14];
+  aviao.add(sphere);
+}
+function explode16() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[15];
+  aviao.add(sphere);
+}
+function explode17() {
+  aviao.remove(sphere);
+  sphere.material.map = explosion[16];
+  aviao.add(sphere);
+}
+function fimExplosion() {
+  aviao.remove(sphere);
+}
+setTimeout(explode1, 2000);
+setTimeout(explode2, 2030);
+setTimeout(explode3, 2060);
+setTimeout(explode4, 2090);
+setTimeout(explode5, 2120);
+setTimeout(explode6, 2150);
+setTimeout(explode7, 2180);
+setTimeout(explode8, 2210);
+setTimeout(explode9, 2240);
+setTimeout(explode10, 2270);
+setTimeout(explode11, 2300);
+setTimeout(explode12, 2330);
+setTimeout(explode13, 2360);
+setTimeout(explode14, 2390);
+setTimeout(explode15, 2420);
+setTimeout(explode16, 2450);
+setTimeout(explode17, 2480);
+setTimeout(fimExplosion, 2500);
 
 //criando a BB do aviao
 let aviaoBB = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3());
@@ -385,38 +499,40 @@ function keyboardUpdate(gameover) {
     var angle = degreesToRadians(12);
 
     // Keyboard.pressed - execute while is pressed
-    if (keyboard.pressed("left") && aviao.position.x > -80){
+    if (keyboard.pressed("left") && aviao.position.x > -80) {
       aviao.position.y = 30;
       aviao.translateX(-moveDistance);
 
-      if(aviao.rotation.y > -angle)
-        aviao.rotateY(-angle);
+      if (aviao.rotation.y > -angle) aviao.rotateY(-angle);
     }
 
-    if (keyboard.up("left")){
+    if (keyboard.up("left")) {
       aviao.position.y = 30;
       aviao.rotateY(angle);
     }
 
-      
-    if (keyboard.pressed("right") && aviao.position.x < 80){
+    if (keyboard.pressed("right") && aviao.position.x < 80) {
       aviao.position.y = 30;
       aviao.translateX(moveDistance);
 
-      if(aviao.rotation.y < angle)
-        aviao.rotateY(angle);
-
+      if (aviao.rotation.y < angle) aviao.rotateY(angle);
     }
 
-    if (keyboard.up("right")){
+    if (keyboard.up("right")) {
       aviao.position.y = 30;
       aviao.rotateY(-angle);
     }
 
-    if (keyboard.pressed("up") && aviao.position.z > cameraHolder.position.z - 90)
+    if (
+      keyboard.pressed("up") &&
+      aviao.position.z > cameraHolder.position.z - 90
+    )
       aviao.translateY(moveDistance);
 
-    if (keyboard.pressed("down") && aviao.position.z < cameraHolder.position.z + 70)
+    if (
+      keyboard.pressed("down") &&
+      aviao.position.z < cameraHolder.position.z + 70
+    )
       aviao.translateY(-moveDistance);
 
     if (keyboard.pressed("space")) {
@@ -819,8 +935,6 @@ function jogo() {
             groundTiros[i].rotateX(Math.PI / 2);
             auxDoTiro++;
           }
-          console.log(`Posiçao aviao: ${aviao.position.z}`);
-          console.log(`Posiçao tiro: ${groundTiros[i].position.x}`);
           groundTiros[i].translateY(veloc);
           groundTiros[i].castShadow = true;
 
