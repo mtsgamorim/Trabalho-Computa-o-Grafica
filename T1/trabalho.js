@@ -22,6 +22,7 @@ import { Water } from "../build/jsm/objects/Water.js";
 import { Line3 } from "three";
 
 const textureLoader = new THREE.TextureLoader();
+let pause = false;
 let grass = textureLoader.load("../assets/textures/grass.jpg");
 let stone = textureLoader.load("./assets/stone.jpg");
 let plaster = textureLoader.load("../assets/textures/plaster.jpg");
@@ -498,95 +499,103 @@ function keyboardUpdate(gameover) {
     var moveDistance = speed * clock.getDelta();
     var angle = degreesToRadians(12);
 
-    // Keyboard.pressed - execute while is pressed
-    if (keyboard.pressed("left") && aviao.position.x > -80) {
-      aviao.position.y = 30;
-      aviao.translateX(-moveDistance);
+    if (pause === false) {
+      // Keyboard.pressed - execute while is pressed
+      if (keyboard.pressed("left") && aviao.position.x > -80) {
+        aviao.position.y = 30;
+        aviao.translateX(-moveDistance);
 
-      if (aviao.rotation.y > -angle) aviao.rotateY(-angle);
-    }
+        if (aviao.rotation.y > -angle) aviao.rotateY(-angle);
+      }
 
-    if (keyboard.up("left")) {
-      aviao.position.y = 30;
-      aviao.rotateY(angle);
-    }
+      if (keyboard.up("left")) {
+        aviao.position.y = 30;
+        aviao.rotateY(angle);
+      }
 
-    if (keyboard.pressed("right") && aviao.position.x < 80) {
-      aviao.position.y = 30;
-      aviao.translateX(moveDistance);
+      if (keyboard.pressed("right") && aviao.position.x < 80) {
+        aviao.position.y = 30;
+        aviao.translateX(moveDistance);
 
-      if (aviao.rotation.y < angle) aviao.rotateY(angle);
-    }
+        if (aviao.rotation.y < angle) aviao.rotateY(angle);
+      }
 
-    if (keyboard.up("right")) {
-      aviao.position.y = 30;
-      aviao.rotateY(-angle);
-    }
+      if (keyboard.up("right")) {
+        aviao.position.y = 30;
+        aviao.rotateY(-angle);
+      }
 
-    if (
-      keyboard.pressed("up") &&
-      aviao.position.z > cameraHolder.position.z - 90
-    )
-      aviao.translateY(moveDistance);
+      if (
+        keyboard.pressed("up") &&
+        aviao.position.z > cameraHolder.position.z - 90
+      )
+        aviao.translateY(moveDistance);
 
-    if (
-      keyboard.pressed("down") &&
-      aviao.position.z < cameraHolder.position.z + 70
-    )
-      aviao.translateY(-moveDistance);
+      if (
+        keyboard.pressed("down") &&
+        aviao.position.z < cameraHolder.position.z + 70
+      )
+        aviao.translateY(-moveDistance);
 
-    if (keyboard.pressed("space")) {
-      if (shootM) {
-        shootM = false;
-        setTimeout(function () {
-          shootM = true;
-          misseis[qntdTiro2].position.set(
-            aviao.position.x,
-            aviao.position.y,
-            aviao.position.z
-          );
-          scene.add(misseis[qntdTiro2]);
-          if (qntdTiro2 === 19) {
-            qntdTiro2 = 0;
-          }
-          qntdTiro2++;
-        }, 1000 / cadencia);
+      if (keyboard.pressed("space")) {
+        if (shootM) {
+          shootM = false;
+          setTimeout(function () {
+            shootM = true;
+            misseis[qntdTiro2].position.set(
+              aviao.position.x,
+              aviao.position.y,
+              aviao.position.z
+            );
+            scene.add(misseis[qntdTiro2]);
+            if (qntdTiro2 === 19) {
+              qntdTiro2 = 0;
+            }
+            qntdTiro2++;
+          }, 1000 / cadencia);
+        }
+      }
+
+      if (keyboard.pressed("ctrl")) {
+        if (shoot) {
+          shoot = false;
+          setTimeout(function () {
+            shoot = true;
+            tiros[qntdTiro].position.set(
+              aviao.position.x,
+              aviao.position.y,
+              aviao.position.z
+            );
+            scene.add(tiros[qntdTiro]);
+            if (qntdTiro === 19) {
+              qntdTiro = 0;
+            }
+            qntdTiro++;
+          }, 1000 / cadencia);
+        }
+      }
+      if (keyboard.up("ctrl")) {
+        tiros[qntdTiro].position.set(
+          aviao.position.x,
+          aviao.position.y,
+          aviao.position.z
+        );
+        scene.add(tiros[qntdTiro]);
+        if (qntdTiro === 19) {
+          qntdTiro = 0;
+        }
+        qntdTiro++;
       }
     }
-
-    if (keyboard.pressed("ctrl")) {
-      if (shoot) {
-        shoot = false;
-        setTimeout(function () {
-          shoot = true;
-          tiros[qntdTiro].position.set(
-            aviao.position.x,
-            aviao.position.y,
-            aviao.position.z
-          );
-          scene.add(tiros[qntdTiro]);
-          if (qntdTiro === 19) {
-            qntdTiro = 0;
-          }
-          qntdTiro++;
-        }, 1000 / cadencia);
-      }
-    }
-    if (keyboard.up("ctrl")) {
-      tiros[qntdTiro].position.set(
-        aviao.position.x,
-        aviao.position.y,
-        aviao.position.z
-      );
-      scene.add(tiros[qntdTiro]);
-      if (qntdTiro === 19) {
-        qntdTiro = 0;
-      }
-      qntdTiro++;
-    }
-
     if (keyboard.pressed("G")) {
       hp = -1;
+    }
+    if (keyboard.pressed("P")) {
+      if (pause === false) {
+        pause = true;
+      } else {
+        pause = false;
+      }
     }
   }
 }
@@ -1628,97 +1637,97 @@ function controlledRender() {
 }
 
 function render() {
-  jogo();
-  water.material.uniforms["time"].value += 0.01;
-  for (let i = 0; i < enemys.length; i++) {
-    if (enemys[i] !== null) {
-      enemys[i].translateZ(getRandomArbitrary(0.2, 1));
+  if (pause === false) {
+    jogo();
+    water.material.uniforms["time"].value += 0.01;
+    for (let i = 0; i < enemys.length; i++) {
+      if (enemys[i] !== null) {
+        enemys[i].translateZ(getRandomArbitrary(0.2, 1));
+      }
     }
-  }
-  for (let i = 0; i < groundEnemys.length; i++) {
-    if (groundEnemys[i] !== null) {
-      groundEnemys[i].translateZ(getRandomArbitrary(0.2, 1));
+    for (let i = 0; i < groundEnemys.length; i++) {
+      if (groundEnemys[i] !== null) {
+        groundEnemys[i].translateZ(getRandomArbitrary(0.2, 1));
+      }
     }
-  }
-  for (let i = 0; i < enemysReto.length; i++) {
-    if (enemysReto[i] !== null) {
-      enemysReto[i].translateX(getRandomArbitrary(0.2, 1));
+    for (let i = 0; i < enemysReto.length; i++) {
+      if (enemysReto[i] !== null) {
+        enemysReto[i].translateX(getRandomArbitrary(0.2, 1));
+      }
     }
-  }
-  for (let i = 0; i < enemysReto2.length; i++) {
-    if (enemysReto2[i] !== null) {
-      enemysReto2[i].translateX(-0.5);
+    for (let i = 0; i < enemysReto2.length; i++) {
+      if (enemysReto2[i] !== null) {
+        enemysReto2[i].translateX(-0.5);
+      }
     }
-  }
-  for (let i = 0; i < enemysDiagonal.length; i++) {
-    if (enemysDiagonal[i] !== null) {
-      enemysDiagonal[i].translateX(0.5);
-      enemysDiagonal[i].translateZ(0.5);
+    for (let i = 0; i < enemysDiagonal.length; i++) {
+      if (enemysDiagonal[i] !== null) {
+        enemysDiagonal[i].translateX(0.5);
+        enemysDiagonal[i].translateZ(0.5);
+      }
     }
-  }
-  for (let i = 0; i < enemysDiagonal2.length; i++) {
-    if (enemysDiagonal2[i] !== null) {
-      enemysDiagonal2[i].translateX(-0.5);
-      enemysDiagonal2[i].translateZ(0.5);
+    for (let i = 0; i < enemysDiagonal2.length; i++) {
+      if (enemysDiagonal2[i] !== null) {
+        enemysDiagonal2[i].translateX(-0.5);
+        enemysDiagonal2[i].translateZ(0.5);
+      }
     }
-  }
 
-  for (let i = 0; i < objetoCura.length; i++) {
-    if (objetoCura[i] !== null) {
-      objetoCura[i].translateY(0.5);
+    for (let i = 0; i < objetoCura.length; i++) {
+      if (objetoCura[i] !== null) {
+        objetoCura[i].translateY(0.5);
+      }
     }
+    if (hp === 5) {
+      scene2.add(life[0]);
+      scene2.add(life[1]);
+      scene2.add(life[2]);
+      scene2.add(life[3]);
+      scene2.add(life[4]);
+    } else if (hp === 4) {
+      scene2.remove(life[0]);
+      scene2.add(life[1]);
+      scene2.add(life[2]);
+      scene2.add(life[3]);
+      scene2.add(life[4]);
+    } else if (hp === 3) {
+      scene2.remove(life[0]);
+      scene2.remove(life[1]);
+      scene2.add(life[2]);
+      scene2.add(life[3]);
+      scene2.add(life[4]);
+    } else if (hp === 2) {
+      scene2.remove(life[0]);
+      scene2.remove(life[1]);
+      scene2.remove(life[2]);
+      scene2.add(life[3]);
+      scene2.add(life[4]);
+    } else if (hp === 1) {
+      scene2.remove(life[0]);
+      scene2.remove(life[1]);
+      scene2.remove(life[2]);
+      scene2.remove(life[3]);
+      scene2.add(life[4]);
+    } else if (hp === 0) {
+      scene2.remove(life[0]);
+      scene2.remove(life[1]);
+      scene2.remove(life[2]);
+      scene2.remove(life[3]);
+      scene2.remove(life[4]);
+    }
+    checkCollision();
   }
-
   setTimeout(function () {
     Venceu();
     gameover = true;
     keyboardUpdate(gameover);
   }, 120000);
-  checkCollision();
-  requestAnimationFrame(render);
   keyboardUpdate(gameover);
+  requestAnimationFrame(render);
   //renderer.render(scene, camera); // Render scene
   controlledRender();
   limpavetor();
   if (hp >= 0) {
     console.log(`HP ATUAL = ${hp}`);
-  }
-
-  if (hp === 5) {
-    scene2.add(life[0]);
-    scene2.add(life[1]);
-    scene2.add(life[2]);
-    scene2.add(life[3]);
-    scene2.add(life[4]);
-  } else if (hp === 4) {
-    scene2.remove(life[0]);
-    scene2.add(life[1]);
-    scene2.add(life[2]);
-    scene2.add(life[3]);
-    scene2.add(life[4]);
-  } else if (hp === 3) {
-    scene2.remove(life[0]);
-    scene2.remove(life[1]);
-    scene2.add(life[2]);
-    scene2.add(life[3]);
-    scene2.add(life[4]);
-  } else if (hp === 2) {
-    scene2.remove(life[0]);
-    scene2.remove(life[1]);
-    scene2.remove(life[2]);
-    scene2.add(life[3]);
-    scene2.add(life[4]);
-  } else if (hp === 1) {
-    scene2.remove(life[0]);
-    scene2.remove(life[1]);
-    scene2.remove(life[2]);
-    scene2.remove(life[3]);
-    scene2.add(life[4]);
-  } else if (hp === 0) {
-    scene2.remove(life[0]);
-    scene2.remove(life[1]);
-    scene2.remove(life[2]);
-    scene2.remove(life[3]);
-    scene2.remove(life[4]);
   }
 }
