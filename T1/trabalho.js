@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import GUI from '../libs/util/dat.gui.module.js'
 import { TrackballControls } from "../build/jsm/controls/TrackballControls.js";
 import { ShadowMapViewer } from "../build/jsm/utils/ShadowMapViewer.js";
 import {
