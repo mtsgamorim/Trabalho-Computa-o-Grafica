@@ -367,24 +367,24 @@ function fimExplosion(name) {
   name.remove(sphere);
 }
 function explode(name) {
-  setTimeout(() => explode1(name), 2000);
-  setTimeout(() => explode2(name), 2030);
-  setTimeout(() => explode3(name), 2060);
-  setTimeout(() => explode4(name), 2090);
-  setTimeout(() => explode5(name), 2120);
-  setTimeout(() => explode6(name), 2150);
-  setTimeout(() => explode7(name), 2180);
-  setTimeout(() => explode8(name), 2210);
-  setTimeout(() => explode9(name), 2240);
-  setTimeout(() => explode10(name), 2270);
-  setTimeout(() => explode11(name), 2300);
-  setTimeout(() => explode12(name), 2330);
-  setTimeout(() => explode13(name), 2360);
-  setTimeout(() => explode14(name), 2390);
-  setTimeout(() => explode15(name), 2420);
-  setTimeout(() => explode16(name), 2450);
-  setTimeout(() => explode17(name), 2480);
-  setTimeout(() => fimExplosion(name), 2500);
+  setTimeout(() => explode1(name), 1);
+  setTimeout(() => explode2(name), 30);
+  setTimeout(() => explode3(name), 60);
+  setTimeout(() => explode4(name), 90);
+  setTimeout(() => explode5(name), 120);
+  setTimeout(() => explode6(name), 150);
+  setTimeout(() => explode7(name), 180);
+  setTimeout(() => explode8(name), 210);
+  setTimeout(() => explode9(name), 240);
+  setTimeout(() => explode10(name), 270);
+  setTimeout(() => explode11(name), 300);
+  setTimeout(() => explode12(name), 330);
+  setTimeout(() => explode13(name), 360);
+  setTimeout(() => explode14(name), 390);
+  setTimeout(() => explode15(name), 420);
+  setTimeout(() => explode16(name), 450);
+  setTimeout(() => explode17(name), 480);
+  setTimeout(() => fimExplosion(name),500);
 }
 
 //criando a BB do aviao
