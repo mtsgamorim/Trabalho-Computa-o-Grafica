@@ -382,21 +382,41 @@ function keyboardUpdate(gameover) {
 
     var speed = 100;
     var moveDistance = speed * clock.getDelta();
+    var angle = degreesToRadians(12);
 
     // Keyboard.pressed - execute while is pressed
-    if (keyboard.pressed("left") && aviao.position.x > -80)
+    if (keyboard.pressed("left") && aviao.position.x > -80){
+      aviao.position.y = 30;
       aviao.translateX(-moveDistance);
-    if (keyboard.pressed("right") && aviao.position.x < 80)
+
+      if(aviao.rotation.y > -angle)
+        aviao.rotateY(-angle);
+    }
+
+    if (keyboard.up("left")){
+      aviao.position.y = 30;
+      aviao.rotateY(angle);
+    }
+
+      
+    if (keyboard.pressed("right") && aviao.position.x < 80){
+      aviao.position.y = 30;
       aviao.translateX(moveDistance);
-    if (
-      keyboard.pressed("up") &&
-      aviao.position.z > cameraHolder.position.z - 90
-    )
+
+      if(aviao.rotation.y < angle)
+        aviao.rotateY(angle);
+
+    }
+
+    if (keyboard.up("right")){
+      aviao.position.y = 30;
+      aviao.rotateY(-angle);
+    }
+
+    if (keyboard.pressed("up") && aviao.position.z > cameraHolder.position.z - 90)
       aviao.translateY(moveDistance);
-    if (
-      keyboard.pressed("down") &&
-      aviao.position.z < cameraHolder.position.z + 70
-    )
+
+    if (keyboard.pressed("down") && aviao.position.z < cameraHolder.position.z + 70)
       aviao.translateY(-moveDistance);
 
     if (keyboard.pressed("space")) {
