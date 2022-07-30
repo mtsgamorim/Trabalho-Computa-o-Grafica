@@ -275,7 +275,7 @@ loader.load(
   null,
   null
 );
-const explosionG = new THREE.SphereGeometry(6, 32, 16);
+const explosionG = new THREE.SphereGeometry(9, 32, 16);
 const explosionM = new THREE.MeshBasicMaterial({ color: "lightred" });
 const sphere = new THREE.Mesh(explosionG, explosionM);
 sphere.rotateX(Math.PI / 2);
@@ -1162,6 +1162,7 @@ function removeInimigo(i) {
   enemysBB[i] = null;
   limpavetor();
   auxAnimation = true;
+  auxColision = true;
 }
 
 function removeInimigoReto(i) {
@@ -1171,6 +1172,7 @@ function removeInimigoReto(i) {
   enemysRetoBB[i] = null;
   limpavetor();
   auxAnimation = true;
+  auxColision = true;
 }
 
 function removeInimigoReto2(i) {
@@ -1180,6 +1182,7 @@ function removeInimigoReto2(i) {
   enemysReto2BB[i] = null;
   limpavetor();
   auxAnimation = true;
+  auxColision = true;
 }
 
 function removeInimigoDiagonal(i) {
@@ -1189,6 +1192,7 @@ function removeInimigoDiagonal(i) {
   enemysDiagonalBB[i] = null;
   limpavetor();
   auxAnimation = true;
+  auxColision = true;
 }
 
 function removeInimigoDiagonal2(i) {
@@ -1198,6 +1202,7 @@ function removeInimigoDiagonal2(i) {
   enemysDiagonal2BB[i] = null;
   limpavetor();
   auxAnimation = true;
+  auxColision = true;
 }
 
 function removeInimigoChao(i) {
@@ -1221,9 +1226,10 @@ function removeObjetoCura(i) {
 function animationEndGame() {
   gameover = true;
   keyboardUpdate(gameover);
-  aviao.rotateZ(70);
-  aviao.rotateY(40);
-  setInterval(aviaoMorte, 200);
+  explode(aviao);
+  //aviao.rotateZ(70);
+  //aviao.rotateY(40);
+  setInterval(aviaoMorte, 500);
 }
 
 function aviaoMorte() {
@@ -1300,11 +1306,13 @@ function limpavetor() {
   }
 }
 
+let auxColision = true;
+
 function checkCollision() {
   //colisao entre o aviao e os inimigos verticais
   for (let i = 0; i < enemys.length; i++) {
     if (enemys[i] !== null) {
-      if (aviaoBB.intersectsBox(enemysBB[i])) {
+      if ((aviaoBB.intersectsBox(enemysBB[i])) && (auxColision === true)) {
         if (hp === -1) {
           break;
         }
@@ -1314,19 +1322,30 @@ function checkCollision() {
           hp = hp - 2;
         }
 
-        scene.remove(enemys[i]);
-        enemys[i] = null;
-        enemysBB[i] = null;
+        //scene.remove(enemys[i]);
+        //enemys[i] = null;
+        //enemysBB[i] = null;
+        auxColision = false;
+        explode(enemys[i]);
         if (hp === 0) {
           animationEndGame();
         }
+
+          //enemys[i].rotateZ(70);
+          //enemys[i].rotateY(40);
+          if (auxAnimation === true) {
+            setTimeout(() => removeInimigo(i), 500);
+            auxAnimation = false;
+            break;
+          }
+        
       }
     }
   }
   //colisao entre o aviao e os inimigos horizontais
   for (let i = 0; i < enemysReto.length; i++) {
     if (enemysReto[i] !== null) {
-      if (aviaoBB.intersectsBox(enemysRetoBB[i])) {
+      if ((aviaoBB.intersectsBox(enemysRetoBB[i])) && (auxColision === true)) {
         if (hp === -1) {
           break;
         }
@@ -1336,18 +1355,29 @@ function checkCollision() {
           hp = hp - 2;
         }
 
-        scene.remove(enemysReto[i]);
-        enemysReto[i] = null;
-        enemysRetoBB[i] = null;
+        //scene.remove(enemysReto[i]);
+        //enemysReto[i] = null;
+        //enemysRetoBB[i] = null;
+        auxColision = false;
+        explode(enemysReto[i]);
         if (hp === 0) {
           animationEndGame();
         }
+          //enemysReto[i].rotateZ(70);
+          //enemysReto[i].rotateY(40);
+          if (auxAnimation === true) {
+            setTimeout(() => removeInimigoReto(i), 500);
+            auxAnimation = false;
+            break;
+          }
+
+    
       }
     }
   }
   for (let i = 0; i < enemysReto2.length; i++) {
     if (enemysReto2[i] !== null) {
-      if (aviaoBB.intersectsBox(enemysReto2BB[i])) {
+      if ((aviaoBB.intersectsBox(enemysReto2BB[i])) && (auxColision === true)) {
         if (hp === -1) {
           break;
         }
@@ -1357,19 +1387,30 @@ function checkCollision() {
           hp = hp - 2;
         }
 
-        scene.remove(enemysReto2[i]);
-        enemysReto2[i] = null;
-        enemysReto2BB[i] = null;
+        //scene.remove(enemysReto2[i]);
+        //enemysReto2[i] = null;
+        //enemysReto2BB[i] = null;
+        auxColision = false;
+        explode(enemysReto2[i]);
         if (hp === 0) {
           animationEndGame();
         }
+          //enemysReto[i].rotateZ(70);
+          //enemysReto[i].rotateY(40);
+          if (auxAnimation === true) {
+            setTimeout(() => removeInimigoReto2(i), 500);
+            auxAnimation = false;
+            break;
+          }
+        
+        
       }
     }
   }
   // colisao entre o aviao e os inimigos diagonais
   for (let i = 0; i < enemysDiagonal.length; i++) {
     if (enemysDiagonal[i] !== null) {
-      if (aviaoBB.intersectsBox(enemysDiagonalBB[i])) {
+      if ((aviaoBB.intersectsBox(enemysDiagonalBB[i])) && (auxColision === true)) {
         if (hp === -1) {
           break;
         }
@@ -1379,18 +1420,28 @@ function checkCollision() {
           hp = hp - 2;
         }
 
-        scene.remove(enemysDiagonal[i]);
-        enemysDiagonal[i] = null;
-        enemysDiagonalBB[i] = null;
+        //scene.remove(enemysDiagonal[i]);
+        //enemysDiagonal[i] = null;
+        //enemysDiagonalBB[i] = null;
+        auxColision = false;
+        explode(enemysDiagonal[i]);
         if (hp === 0) {
           animationEndGame();
         }
+          //enemysDiagonal[i].rotateZ(70);
+          //enemysDiagonal[i].rotateY(40);
+          if (auxAnimation === true) {
+            setTimeout(() => removeInimigoDiagonal(i), 500);
+            auxAnimation = false;
+            break;
+          }
+      
       }
     }
   }
   for (let i = 0; i < enemysDiagonal2.length; i++) {
     if (enemysDiagonal2[i] !== null) {
-      if (aviaoBB.intersectsBox(enemysDiagonal2BB[i])) {
+      if ((aviaoBB.intersectsBox(enemysDiagonal2BB[i])) && (auxColision === true)) {
         if (hp === -1) {
           break;
         }
@@ -1400,12 +1451,21 @@ function checkCollision() {
           hp = hp - 2;
         }
 
-        scene.remove(enemysDiagonal2[i]);
-        enemysDiagonal2[i] = null;
-        enemysDiagonal2BB[i] = null;
+        //scene.remove(enemysDiagonal2[i]);
+        //enemysDiagonal2[i] = null;
+        //enemysDiagonal2BB[i] = null;
+        auxColision = false;
+        explode(enemysDiagonal2[i]);
         if (hp === 0) {
           animationEndGame();
         }
+          //enemysDiagonal[i].rotateZ(70);
+          //enemysDiagonal[i].rotateY(40);
+          if (auxAnimation === true) {
+            setTimeout(() => removeInimigoDiagonal2(i), 500);
+            auxAnimation = false;
+            break;
+          }
       }
     }
   }
@@ -1457,10 +1517,11 @@ function checkCollision() {
     if (enemys[i] !== null) {
       for (let j = 0; j < 20; j++) {
         if (enemysBB[i].intersectsSphere(tirosBB[j])) {
-          enemys[i].rotateZ(70);
-          enemys[i].rotateY(40);
+          explode(enemys[i]);
+          //enemys[i].rotateZ(70);
+          //enemys[i].rotateY(40);
           if (auxAnimation === true) {
-            setTimeout(() => removeInimigo(i), 200);
+            setTimeout(() => removeInimigo(i), 500);
             auxAnimation = false;
             break;
           }
@@ -1474,10 +1535,11 @@ function checkCollision() {
     if (enemysReto[i] !== null) {
       for (let j = 0; j < 20; j++) {
         if (enemysRetoBB[i].intersectsSphere(tirosBB[j])) {
-          enemysReto[i].rotateZ(70);
-          enemysReto[i].rotateY(40);
+          explode(enemysReto[i]);
+          //enemysReto[i].rotateZ(70);
+          //enemysReto[i].rotateY(40);
           if (auxAnimation === true) {
-            setTimeout(() => removeInimigoReto(i), 200);
+            setTimeout(() => removeInimigoReto(i), 500);
             auxAnimation = false;
             break;
           }
@@ -1489,10 +1551,11 @@ function checkCollision() {
     if (enemysReto2[i] !== null) {
       for (let j = 0; j < 20; j++) {
         if (enemysReto2BB[i].intersectsSphere(tirosBB[j])) {
-          enemysReto2[i].rotateZ(70);
-          enemysReto2[i].rotateY(40);
+          explode(enemysReto2[i]);
+          //enemysReto2[i].rotateZ(70);
+          //enemysReto2[i].rotateY(40);
           if (auxAnimation === true) {
-            setTimeout(() => removeInimigoReto2(i), 200);
+            setTimeout(() => removeInimigoReto2(i), 500);
             auxAnimation = false;
             break;
           }
@@ -1506,10 +1569,11 @@ function checkCollision() {
     if (enemysDiagonal[i] !== null) {
       for (let j = 0; j < 20; j++) {
         if (enemysDiagonalBB[i].intersectsSphere(tirosBB[j])) {
-          enemysDiagonal[i].rotateZ(70);
-          enemysDiagonal[i].rotateY(40);
+          explode(enemysDiagonal[i]);
+          //enemysDiagonal[i].rotateZ(70);
+          //enemysDiagonal[i].rotateY(40);
           if (auxAnimation === true) {
-            setTimeout(() => removeInimigoDiagonal(i), 200);
+            setTimeout(() => removeInimigoDiagonal(i), 500);
             auxAnimation = false;
             break;
           }
@@ -1521,10 +1585,11 @@ function checkCollision() {
     if (enemysDiagonal2[i] !== null) {
       for (let j = 0; j < 20; j++) {
         if (enemysDiagonal2BB[i].intersectsSphere(tirosBB[j])) {
-          enemysDiagonal2[i].rotateZ(70);
-          enemysDiagonal2[i].rotateY(40);
+          explode(enemysDiagonal2[i]);
+          //enemysDiagonal2[i].rotateZ(70);
+          //enemysDiagonal2[i].rotateY(40);
           if (auxAnimation === true) {
-            setTimeout(() => removeInimigoDiagonal2(i), 200);
+            setTimeout(() => removeInimigoDiagonal2(i), 500);
             auxAnimation = false;
             break;
           }
@@ -1538,10 +1603,11 @@ function checkCollision() {
     if (groundEnemys[i] !== null) {
       for (let j = 0; j < 20; j++) {
         if (groundEnemysBB[i].intersectsSphere(misseisBB[j])) {
-          groundEnemys[i].rotateZ(70);
-          groundEnemys[i].rotateY(40);
+          explode(groundEnemys[i]);
+          //groundEnemys[i].rotateZ(70);
+          //groundEnemys[i].rotateY(40);
           if (auxAnimation === true) {
-            setTimeout(() => removeInimigoChao(i), 200);
+            setTimeout(() => removeInimigoChao(i), 500);
             auxAnimation = false;
             break;
           }
