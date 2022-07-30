@@ -5,6 +5,7 @@
 
     <link rel="shortcut icon" href="../favicon.ico" />
     <link rel="stylesheet" href="../html/resources/default.css" />
+    <link rel="stylesheet" href="../html/resources/loadingScreen.css">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
 
@@ -17,6 +18,11 @@
     <script type="importmap">
       { "imports": { "three": "../build/three.module.js" } }
     </script>
+
+    <section id="loading-screen">
+      <div id="loader"></div> 
+      <button class="button" id="myBtn">Loading...</button>
+    </section>
     
     <div id="webgl-output">
       <script type="module" src="trabalho.js"></script>

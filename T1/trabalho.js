@@ -23,7 +23,7 @@ import { Water } from "../build/jsm/objects/Water.js";
 import { Line3 } from "three";
 
 const textureLoader = new THREE.TextureLoader();
-let pause = false;
+let pause = true;
 let grass = textureLoader.load("../assets/textures/grass.jpg");
 let stone = textureLoader.load("./assets/stone.jpg");
 let plaster = textureLoader.load("../assets/textures/plaster.jpg");
@@ -63,6 +63,49 @@ virtualCamera.lookAt(0, 0, 0);
 var cameraHelper = new THREE.CameraHelper(virtualCamera);
 scene2.add(cameraHelper);
 //scene2.add(virtualCamera);
+
+let audioLoader, audioPath;
+
+const loadingManager = new THREE.LoadingManager( () => {
+  let loadingScreen = document.getElementById( 'loading-screen' );
+  loadingScreen.transition = 0;
+  loadingScreen.style.setProperty('--speed1', '0');  
+  loadingScreen.style.setProperty('--speed2', '0');  
+  loadingScreen.style.setProperty('--speed3', '0');      
+
+  let button  = document.getElementById("myBtn")
+  button.style.backgroundColor = 'Red';
+  button.innerHTML = 'Click to Enter';
+  button.addEventListener("click", onButtonPressed);
+});
+
+function onButtonPressed() {
+  const loadingScreen = document.getElementById( 'loading-screen' );
+  loadingScreen.transition = 0;
+  loadingScreen.classList.add( 'fade-out' );
+  loadingScreen.addEventListener( 'transitionend', (e) => {
+    const element = e.target;
+    element.remove();  
+  });  
+  pause = false;
+  // Config and play the loaded audio
+   let sound = new THREE.Audio( new THREE.AudioListener() );
+   audioLoader.load( audioPath, function( buffer ) {
+     sound.setBuffer( buffer );
+     sound.setLoop( true );
+     sound.play(); 
+   });
+}
+
+loadAudio(loadingManager, '../assets/sounds/imperial.mp3');
+
+function loadAudio(manager, audio)
+{
+  // Create ambient sound
+  audioLoader = new THREE.AudioLoader(manager);
+  audioPath = audio;
+}
+
 
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
@@ -251,7 +294,7 @@ cameraHolder.translateY(0);
 
 let aviao = createAviao();
 scene.add(aviao);
-var loader = new GLTFLoader();
+var loader = new GLTFLoader(loadingManager);
 
 loader.load(
   "./assets/aviao.glb",
