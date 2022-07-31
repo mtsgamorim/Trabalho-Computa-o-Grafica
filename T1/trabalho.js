@@ -894,14 +894,15 @@ function tiroInimigo(inimigo, tiroInimigo) {
 function createGroundEnemy() {
   groundEnemys.push(new THREE.Mesh(groundGeometryEnemy, groundMaterialEnemy));
   loader.load(
-    "./assets/toonTank.glb",
+    "./assets/ship.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
       objEnemy.visible = true;
       objEnemy.castShadow = true;
-      objEnemy.translateY(-4);
-      objEnemy.scale.set(3, 3, 3);
+      objEnemy.translateY(-2);
+      objEnemy.rotateY(-1.57);
+      objEnemy.scale.set(0.5, 0.5, 0.5);
       objEnemy.traverse(function (child) {
         if (child) {
           child.castShadow = true;

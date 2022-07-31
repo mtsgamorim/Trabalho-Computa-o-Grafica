@@ -71,7 +71,7 @@ loadGLTFFile("./assets/L-159.gltf", " L-159 ", 3.0, 180, false);
 loadGLTFFile("./assets/F-16D.gltf", " F-16D ", 3.0, 90, false);
 loadGLTFFile("./assets/missil.glb", " missil ", 1.0, 180, false);
 loadGLTFFile("./assets/aviao3.glb", " aviao3 ", 3.0, 0, false);
-loadGLTFFile("./assets/USS_Perch.glb", " USS_Perch ", 3.0, 0, false);
+loadGLTFFile("./assets/ship.glb", " ship ", 4.0, 0, false);
 loadGLTFFile("./assets/nave.glb", " nave ", 3.0, 45, false);
 
 
