@@ -25,8 +25,12 @@ import { Line3 } from "three";
 const textureLoader = new THREE.TextureLoader();
 let pause = true;
 let grass = textureLoader.load("../assets/textures/grass.jpg");
-let stone = textureLoader.load("./assets/stone.jpg");
-let plaster = textureLoader.load("../assets/textures/plaster.jpg");
+let stone = textureLoader.load("./assets/stonefloor.jpg");
+let stoneNormal = textureLoader.load("./assets/stoneNormal.jpg");
+let stoneDis = textureLoader.load("./assets/StoneDis.png");
+let lateral = textureLoader.load("./assets/lateral.jpg");
+let lateralN = textureLoader.load("./assets/lateralNormal.jpg");
+let lateralD = textureLoader.load("./assets/lateralDis.png");
 let explosion = [];
 for (let i = 1; i < 17; i++) {
   explosion[i - 1] = textureLoader.load(`../assets/textures/${i}.png`);
@@ -91,14 +95,14 @@ function onButtonPressed() {
   // Config and play the loaded audio
   let sound = new THREE.Audio(new THREE.AudioListener());
   audioLoader.load(audioPath, function (buffer) {
-    sound.setVolume(0.01);
+    sound.setVolume(0);
     sound.setBuffer(buffer);
     sound.setLoop(true);
     sound.play();
   });
 }
 
-loadAudio(loadingManager, "../assets/sounds/imperial.mp3");
+loadAudio(loadingManager, "../assets/sounds/sampleMusic.mp3");
 
 function loadAudio(manager, audio) {
   // Create ambient sound
@@ -234,16 +238,61 @@ glassPlane4.material.map = grass;
 glassPlane5.material.map = grass;
 glassPlane6.material.map = grass;
 
-plane1.material.map = plaster;
-plane2.material.map = plaster;
-plane3.material.map = plaster;
+plane1.material.map = stone;
+plane1.material.normalMap = stoneNormal;
+plane1.material.displacementMap = stoneDis;
+plane1.material.displacementScale = 3;
 
-curvedPlane1.material.map = plaster;
-curvedPlane2.material.map = plaster;
-curvedPlane3.material.map = plaster;
-curvedPlane4.material.map = plaster;
-curvedPlane5.material.map = plaster;
-curvedPlane6.material.map = plaster;
+plane2.material.map = stone;
+plane2.material.normalMap = stoneNormal;
+plane2.material.displacementMap = stoneDis;
+plane2.material.displacementScale = 3;
+
+plane3.material.map = stone;
+plane3.material.normalMap = stoneNormal;
+plane3.material.displacementMap = stoneDis;
+plane3.material.displacementScale = 3;
+
+curvedPlane1.material.map = lateral;
+curvedPlane1.material.normalMap = lateralN;
+curvedPlane1.material.displacementMap = lateralD;
+
+curvedPlane2.material.map = lateral;
+curvedPlane2.material.normalMap = lateralN;
+curvedPlane2.material.displacementMap = lateralD;
+
+curvedPlane3.material.map = lateral;
+curvedPlane3.material.normalMap = lateralN;
+curvedPlane3.material.displacementMap = lateralD;
+
+curvedPlane4.material.map = lateral;
+curvedPlane4.material.normalMap = lateralN;
+curvedPlane4.material.displacementMap = lateralD;
+
+curvedPlane5.material.map = lateral;
+curvedPlane5.material.normalMap = lateralN;
+curvedPlane5.material.displacementMap = lateralD;
+
+curvedPlane6.material.map = lateral;
+curvedPlane6.material.normalMap = lateralN;
+curvedPlane6.material.displacementMap = lateralD;
+
+function setTextureOptions(material, repu, repv) {
+  material.map.repeat.set(repu, repv);
+  material.displacementMap.repeat.set(repu, repv);
+  material.normalMap.repeat.set(repu, repv);
+
+  material.map.wrapS =
+    material.displacementMap.wrapS =
+    material.normalMap.wrapS =
+      THREE.RepeatWrapping;
+  material.map.wrapT =
+    material.displacementMap.wrapT =
+    material.normalMap.wrapT =
+      THREE.RepeatWrapping;
+}
+
+setTextureOptions(curvedPlane1.material, 1, 2);
 
 scene.add(plane1);
 scene.add(plane2);
@@ -670,25 +719,25 @@ function planoInfinito() {
 
 function createEnemy() {
   enemys.push(new THREE.Mesh(geometryEnemy, materialEnemy));
-  loader.load(
-    "./assets/L-159.gltf",
-    function (gltf) {
-      var objEnemy = gltf.scene;
-      objEnemy.name = "Inimigo1";
-      objEnemy.visible = true;
-      objEnemy.castShadow = true;
-      objEnemy.rotateY(1.57);
-      objEnemy.scale.set(1.2, 1.2, 1.2);
-      objEnemy.traverse(function (child) {
-        if (child) {
-          child.castShadow = true;
-        }
-      });
-      enemys[enemys.length - 1].add(objEnemy);
-    },
-    null,
-    null
-  );
+  // loader.load(
+  //  "./assets/L-159.gltf",
+  //  function (gltf) {
+  //   var objEnemy = gltf.scene;
+  //   objEnemy.name = "Inimigo1";
+  //   objEnemy.visible = true;
+  //   objEnemy.castShadow = true;
+  //   objEnemy.rotateY(1.57);
+  //  objEnemy.scale.set(1.2, 1.2, 1.2);
+  //   objEnemy.traverse(function (child) {
+  //     if (child) {
+  //      child.castShadow = true;
+  //   }
+  // });
+  // enemys[enemys.length - 1].add(objEnemy);
+  // },
+  // null,
+  // null
+  //);
   enemysBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
   enemysBB[enemysBB.length - 1].setFromObject(enemys[enemys.length - 1]);
   let posicaoX = getRandomArbitrary(-90, 90);
@@ -1861,7 +1910,4 @@ function render() {
   //renderer.render(scene, camera); // Render scene
   controlledRender();
   limpavetor();
-  if (hp >= 0) {
-    console.log(`HP ATUAL = ${hp}`);
-  }
 }
