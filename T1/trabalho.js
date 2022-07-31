@@ -19,6 +19,8 @@ import KeyboardState from "../libs/util/KeyboardState.js";
 import { CSG } from "../libs/other/CSGMesh.js";
 import { FogExp2, Line, SplineCurve } from "../build/three.module.js";
 import { GLTFLoader } from "../build/jsm/loaders/GLTFLoader.js";
+import { OBJLoader } from "../build/jsm/loaders/OBJLoader.js";
+import { MTLLoader } from "../build/jsm/loaders/MTLLoader.js";
 import { Water } from "../build/jsm/objects/Water.js";
 import { Line3 } from "three";
 
@@ -671,14 +673,14 @@ function planoInfinito() {
 function createEnemy() {
   enemys.push(new THREE.Mesh(geometryEnemy, materialEnemy));
   loader.load(
-    "./assets/L-159.gltf",
+    "./assets/space.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
       objEnemy.visible = true;
       objEnemy.castShadow = true;
-      objEnemy.rotateY(1.57);
-      objEnemy.scale.set(1.2, 1.2, 1.2);
+      //objEnemy.rotateY(1.57);
+      objEnemy.scale.set(1, 1, 1);
       objEnemy.traverse(function (child) {
         if (child) {
           child.castShadow = true;
@@ -689,6 +691,9 @@ function createEnemy() {
     null,
     null
   );
+  
+  //var obj = loadOBJFile("./assets/", "plane", 1.0, 0, true)
+  //enemys[enemys.length - 1].add(obj);
   enemysBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
   enemysBB[enemysBB.length - 1].setFromObject(enemys[enemys.length - 1]);
   let posicaoX = getRandomArbitrary(-90, 90);
@@ -747,6 +752,47 @@ function createEnemyReto() {
   //     tiroInimigo(enemys[enemys.length - 1], enemyTiros[enemyTiros.length - 1]),
   //   600
   // );
+}
+
+function loadOBJFile(modelPath, modelName, desiredScale, angle, visibility) {
+  var currentModel = modelName;
+  var manager = new THREE.LoadingManager();
+
+  var mtlLoader = new MTLLoader(manager);
+  mtlLoader.setPath(modelPath);
+  mtlLoader.load(modelName + ".mtl", function (materials) {
+    materials.preload();
+
+    var objLoader = new OBJLoader(manager);
+    objLoader.setMaterials(materials);
+    objLoader.setPath(modelPath);
+    objLoader.load(
+      modelName + ".obj",
+      function (obj) {
+        obj.visible = visibility;
+        obj.name = modelName;
+        // Set 'castShadow' property for each children of the group
+        obj.traverse(function (child) {
+          child.castShadow = true;
+        });
+
+        obj.traverse(function (node) {
+          if (node.material) node.material.side = THREE.DoubleSide;
+        });
+
+        var obj = normalizeAndRescale(obj, desiredScale);
+        var obj = fixPosition(obj);
+        obj.rotateY(degreesToRadians(angle));
+
+        //scene.add(obj);
+        //objectArray.push(obj);
+
+       
+      },
+      onProgress,
+      onError
+    );
+  });
 }
 
 function createEnemyReto2() {

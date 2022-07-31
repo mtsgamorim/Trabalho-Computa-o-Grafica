@@ -67,7 +67,7 @@ var infoBox = new SecondaryBox("");
 var objectArray = new Array();
 var activeObject = 0; // View first object
 
-loadGLTFFile("./assets/L-159.gltf", " L-159 ", 3.0, 180, false);
+loadGLTFFile("./assets/space.glb", " space ", 1.0, 90, false);
 loadGLTFFile("./assets/F-16D.gltf", " F-16D ", 3.0, 90, false);
 loadGLTFFile("./assets/missil.glb", " missil ", 1.0, 180, false);
 loadGLTFFile("./assets/aviao3.glb", " aviao3 ", 3.0, 0, false);
