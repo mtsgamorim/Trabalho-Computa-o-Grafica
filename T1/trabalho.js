@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import GUI from '../libs/util/dat.gui.module.js'
+import GUI from "../libs/util/dat.gui.module.js";
 import { TrackballControls } from "../build/jsm/controls/TrackballControls.js";
 import { ShadowMapViewer } from "../build/jsm/utils/ShadowMapViewer.js";
 import {
@@ -66,46 +66,45 @@ scene2.add(cameraHelper);
 
 let audioLoader, audioPath;
 
-const loadingManager = new THREE.LoadingManager( () => {
-  let loadingScreen = document.getElementById( 'loading-screen' );
+const loadingManager = new THREE.LoadingManager(() => {
+  let loadingScreen = document.getElementById("loading-screen");
   loadingScreen.transition = 0;
-  loadingScreen.style.setProperty('--speed1', '0');  
-  loadingScreen.style.setProperty('--speed2', '0');  
-  loadingScreen.style.setProperty('--speed3', '0');      
+  loadingScreen.style.setProperty("--speed1", "0");
+  loadingScreen.style.setProperty("--speed2", "0");
+  loadingScreen.style.setProperty("--speed3", "0");
 
-  let button  = document.getElementById("myBtn")
-  button.style.backgroundColor = 'Red';
-  button.innerHTML = 'Click to Enter';
+  let button = document.getElementById("myBtn");
+  button.style.backgroundColor = "Red";
+  button.innerHTML = "Click to Enter";
   button.addEventListener("click", onButtonPressed);
 });
 
 function onButtonPressed() {
-  const loadingScreen = document.getElementById( 'loading-screen' );
+  const loadingScreen = document.getElementById("loading-screen");
   loadingScreen.transition = 0;
-  loadingScreen.classList.add( 'fade-out' );
-  loadingScreen.addEventListener( 'transitionend', (e) => {
+  loadingScreen.classList.add("fade-out");
+  loadingScreen.addEventListener("transitionend", (e) => {
     const element = e.target;
-    element.remove();  
-  });  
+    //element.remove();
+  });
   pause = false;
   // Config and play the loaded audio
-   let sound = new THREE.Audio( new THREE.AudioListener() );
-   audioLoader.load( audioPath, function( buffer ) {
-     sound.setBuffer( buffer );
-     sound.setLoop( true );
-     sound.play(); 
-   });
+  let sound = new THREE.Audio(new THREE.AudioListener());
+  audioLoader.load(audioPath, function (buffer) {
+    sound.setVolume(0.01);
+    sound.setBuffer(buffer);
+    sound.setLoop(true);
+    sound.play();
+  });
 }
 
-loadAudio(loadingManager, '../assets/sounds/imperial.mp3');
+loadAudio(loadingManager, "../assets/sounds/imperial.mp3");
 
-function loadAudio(manager, audio)
-{
+function loadAudio(manager, audio) {
   // Create ambient sound
   audioLoader = new THREE.AudioLoader(manager);
   audioPath = audio;
 }
-
 
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
@@ -279,8 +278,8 @@ let water = new Water(waterGeometry, {
   waterColor: "rgba(0,255,255)",
   distortionScale: 7,
 });
-water.material.transparent = true;
-water.material.opacity = 0.2;
+//water.material.transparent = true;
+//water.material.opacity = 0.2;
 water.translateY(5);
 water.rotation.x = -Math.PI / 2;
 scene.add(water);
@@ -305,7 +304,7 @@ loader.load(
     objAviao.visible = true;
     //objAviao.castShadow = true;
     //objAviao.receiveShadow = true;
-    objAviao.rotateZ(2*-1.57);
+    objAviao.rotateZ(2 * -1.57);
     objAviao.rotateX(1.5);
     objAviao.traverse(function (child) {
       if (child) {
@@ -320,12 +319,10 @@ loader.load(
   null
 );
 
-
-
-const explosionG = new THREE.SphereGeometry(9, 32, 16);
+const explosionG = new THREE.SphereGeometry(6, 32, 16);
 const explosionM = new THREE.MeshBasicMaterial({ color: "lightred" });
 const sphere = new THREE.Mesh(explosionG, explosionM);
-sphere.rotateX(Math.PI / 2);
+//sphere.rotateX(Math.PI / 2);
 function explode1(name) {
   name.remove(sphere);
   sphere.material.map = explosion[0];
@@ -432,7 +429,7 @@ function explode(name) {
   setTimeout(() => explode15(name), 420);
   setTimeout(() => explode16(name), 450);
   setTimeout(() => explode17(name), 480);
-  setTimeout(() => fimExplosion(name),500);
+  setTimeout(() => fimExplosion(name), 500);
 }
 
 //criando a BB do aviao
@@ -524,7 +521,10 @@ let auxiliarEnemy2 = 1;
 let auxiliarEnemy3 = 1;
 
 let Cgeometry = new THREE.CylinderGeometry(1, 2, 5, 32);
-let Cmaterial = new THREE.MeshBasicMaterial({ color: 0xffff00, visible: false });
+let Cmaterial = new THREE.MeshBasicMaterial({
+  color: 0xffff00,
+  visible: false,
+});
 
 // Listen window size changes
 window.addEventListener(
@@ -791,25 +791,25 @@ function createEnemyReto2() {
 
 function createEnemyDiagonal() {
   enemysDiagonal.push(new THREE.Mesh(geometryEnemy, materialEnemy));
-  loader.load(
-    "./assets/nave.glb",
-    function (gltf) {
-      var objEnemy = gltf.scene;
-      objEnemy.name = "Inimigo1";
-      objEnemy.visible = true;
-      objEnemy.castShadow = true;
-      objEnemy.scale.set(6, 6, 6);
-      objEnemy.rotateY(0.785398);
-      objEnemy.traverse(function (child) {
-        if (child) {
-          child.castShadow = true;
-        }
-      });
-      enemysDiagonal[enemysDiagonal.length - 1].add(objEnemy);
-    },
-    null,
-    null
-  );
+  // loader.load(
+  //   "./assets/nave.glb",
+  //   function (gltf) {
+  //     var objEnemy = gltf.scene;
+  //     objEnemy.name = "Inimigo1";
+  //     objEnemy.visible = true;
+  //     objEnemy.castShadow = true;
+  //     objEnemy.scale.set(6, 6, 6);
+  //     objEnemy.rotateY(0.785398);
+  //     objEnemy.traverse(function (child) {
+  //       if (child) {
+  //         child.castShadow = true;
+  //       }
+  //     });
+  //     enemysDiagonal[enemysDiagonal.length - 1].add(objEnemy);
+  //   },
+  //   null,
+  //   null
+  // );
   enemysDiagonalBB.push(
     new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
   );
@@ -837,25 +837,25 @@ function createEnemyDiagonal() {
 
 function createEnemyDiagonal2() {
   enemysDiagonal2.push(new THREE.Mesh(geometryEnemy, materialEnemy));
-  loader.load(
-    "./assets/nave.glb",
-    function (gltf) {
-      var objEnemy = gltf.scene;
-      objEnemy.name = "Inimigo1";
-      objEnemy.visible = true;
-      objEnemy.castShadow = true;
-      objEnemy.scale.set(6, 6, 6);
-      objEnemy.rotateY(-0.785398);
-      objEnemy.traverse(function (child) {
-        if (child) {
-          child.castShadow = true;
-        }
-      });
-      enemysDiagonal2[enemysDiagonal2.length - 1].add(objEnemy);
-    },
-    null,
-    null
-  );
+  // loader.load(
+  //   "./assets/nave.glb",
+  //   function (gltf) {
+  //     var objEnemy = gltf.scene;
+  //     objEnemy.name = "Inimigo1";
+  //     objEnemy.visible = true;
+  //     objEnemy.castShadow = true;
+  //     objEnemy.scale.set(6, 6, 6);
+  //     objEnemy.rotateY(-0.785398);
+  //     objEnemy.traverse(function (child) {
+  //       if (child) {
+  //         child.castShadow = true;
+  //       }
+  //     });
+  //     enemysDiagonal2[enemysDiagonal2.length - 1].add(objEnemy);
+  //   },
+  //   null,
+  //   null
+  // );
   enemysDiagonal2BB.push(
     new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
   );
@@ -940,9 +940,9 @@ function createGroundEnemy() {
           child.receiveShadow = true;
         }
       });
-  
+
       //aviao.add(objAviao);
-      groundTiros[groundTiros.length -1].add(objM);
+      groundTiros[groundTiros.length - 1].add(objM);
     },
     null,
     null
@@ -1382,7 +1382,7 @@ function checkCollision() {
   //colisao entre o aviao e os inimigos verticais
   for (let i = 0; i < enemys.length; i++) {
     if (enemys[i] !== null) {
-      if ((aviaoBB.intersectsBox(enemysBB[i])) && (auxColision === true)) {
+      if (aviaoBB.intersectsBox(enemysBB[i]) && auxColision === true) {
         if (hp === -1) {
           break;
         }
@@ -1401,21 +1401,20 @@ function checkCollision() {
           animationEndGame();
         }
 
-          //enemys[i].rotateZ(70);
-          //enemys[i].rotateY(40);
-          if (auxAnimation === true) {
-            setTimeout(() => removeInimigo(i), 500);
-            auxAnimation = false;
-            break;
-          }
-        
+        //enemys[i].rotateZ(70);
+        //enemys[i].rotateY(40);
+        if (auxAnimation === true) {
+          setTimeout(() => removeInimigo(i), 500);
+          auxAnimation = false;
+          break;
+        }
       }
     }
   }
   //colisao entre o aviao e os inimigos horizontais
   for (let i = 0; i < enemysReto.length; i++) {
     if (enemysReto[i] !== null) {
-      if ((aviaoBB.intersectsBox(enemysRetoBB[i])) && (auxColision === true)) {
+      if (aviaoBB.intersectsBox(enemysRetoBB[i]) && auxColision === true) {
         if (hp === -1) {
           break;
         }
@@ -1433,21 +1432,19 @@ function checkCollision() {
         if (hp === 0) {
           animationEndGame();
         }
-          //enemysReto[i].rotateZ(70);
-          //enemysReto[i].rotateY(40);
-          if (auxAnimation === true) {
-            setTimeout(() => removeInimigoReto(i), 500);
-            auxAnimation = false;
-            break;
-          }
-
-    
+        //enemysReto[i].rotateZ(70);
+        //enemysReto[i].rotateY(40);
+        if (auxAnimation === true) {
+          setTimeout(() => removeInimigoReto(i), 500);
+          auxAnimation = false;
+          break;
+        }
       }
     }
   }
   for (let i = 0; i < enemysReto2.length; i++) {
     if (enemysReto2[i] !== null) {
-      if ((aviaoBB.intersectsBox(enemysReto2BB[i])) && (auxColision === true)) {
+      if (aviaoBB.intersectsBox(enemysReto2BB[i]) && auxColision === true) {
         if (hp === -1) {
           break;
         }
@@ -1465,22 +1462,20 @@ function checkCollision() {
         if (hp === 0) {
           animationEndGame();
         }
-          //enemysReto[i].rotateZ(70);
-          //enemysReto[i].rotateY(40);
-          if (auxAnimation === true) {
-            setTimeout(() => removeInimigoReto2(i), 500);
-            auxAnimation = false;
-            break;
-          }
-        
-        
+        //enemysReto[i].rotateZ(70);
+        //enemysReto[i].rotateY(40);
+        if (auxAnimation === true) {
+          setTimeout(() => removeInimigoReto2(i), 500);
+          auxAnimation = false;
+          break;
+        }
       }
     }
   }
   // colisao entre o aviao e os inimigos diagonais
   for (let i = 0; i < enemysDiagonal.length; i++) {
     if (enemysDiagonal[i] !== null) {
-      if ((aviaoBB.intersectsBox(enemysDiagonalBB[i])) && (auxColision === true)) {
+      if (aviaoBB.intersectsBox(enemysDiagonalBB[i]) && auxColision === true) {
         if (hp === -1) {
           break;
         }
@@ -1498,20 +1493,19 @@ function checkCollision() {
         if (hp === 0) {
           animationEndGame();
         }
-          //enemysDiagonal[i].rotateZ(70);
-          //enemysDiagonal[i].rotateY(40);
-          if (auxAnimation === true) {
-            setTimeout(() => removeInimigoDiagonal(i), 500);
-            auxAnimation = false;
-            break;
-          }
-      
+        //enemysDiagonal[i].rotateZ(70);
+        //enemysDiagonal[i].rotateY(40);
+        if (auxAnimation === true) {
+          setTimeout(() => removeInimigoDiagonal(i), 500);
+          auxAnimation = false;
+          break;
+        }
       }
     }
   }
   for (let i = 0; i < enemysDiagonal2.length; i++) {
     if (enemysDiagonal2[i] !== null) {
-      if ((aviaoBB.intersectsBox(enemysDiagonal2BB[i])) && (auxColision === true)) {
+      if (aviaoBB.intersectsBox(enemysDiagonal2BB[i]) && auxColision === true) {
         if (hp === -1) {
           break;
         }
@@ -1529,13 +1523,13 @@ function checkCollision() {
         if (hp === 0) {
           animationEndGame();
         }
-          //enemysDiagonal[i].rotateZ(70);
-          //enemysDiagonal[i].rotateY(40);
-          if (auxAnimation === true) {
-            setTimeout(() => removeInimigoDiagonal2(i), 500);
-            auxAnimation = false;
-            break;
-          }
+        //enemysDiagonal[i].rotateZ(70);
+        //enemysDiagonal[i].rotateY(40);
+        if (auxAnimation === true) {
+          setTimeout(() => removeInimigoDiagonal2(i), 500);
+          auxAnimation = false;
+          break;
+        }
       }
     }
   }
