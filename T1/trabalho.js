@@ -121,7 +121,7 @@ let objetoCuraBB = [];
 
 // Use this to show information onscreen
 var controls = new InfoBox();
-controls.add("TRABALHO CG - GRUPO 13");
+controls.add("TRABALHO CG - GRUPO 12");
 controls.addParagraph();
 controls.add("Use keyboard to interact:");
 controls.add("* UP button to translate forward");
@@ -132,6 +132,7 @@ controls.addParagraph();
 controls.add("* SPACE button to ground bomb.");
 controls.add("* CTRL button to simple shot.");
 controls.add("* G button to 'God Mode'");
+controls.add("* P button to pause and play game");
 controls.show();
 
 //LUZ AMBIENTE
@@ -297,14 +298,14 @@ scene.add(aviao);
 var loader = new GLTFLoader(loadingManager);
 
 loader.load(
-  "./assets/aviao.glb",
+  "./assets/F-16D.gltf",
   function (gltf) {
     var objAviao = gltf.scene;
     objAviao.name = "objAviao";
     objAviao.visible = true;
     //objAviao.castShadow = true;
     //objAviao.receiveShadow = true;
-    objAviao.rotateZ(-1.55);
+    objAviao.rotateZ(2*-1.57);
     objAviao.rotateX(1.5);
     objAviao.traverse(function (child) {
       if (child) {
@@ -318,6 +319,9 @@ loader.load(
   null,
   null
 );
+
+
+
 const explosionG = new THREE.SphereGeometry(9, 32, 16);
 const explosionM = new THREE.MeshBasicMaterial({ color: "lightred" });
 const sphere = new THREE.Mesh(explosionG, explosionM);
@@ -520,7 +524,7 @@ let auxiliarEnemy2 = 1;
 let auxiliarEnemy3 = 1;
 
 let Cgeometry = new THREE.CylinderGeometry(1, 2, 5, 32);
-let Cmaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+let Cmaterial = new THREE.MeshBasicMaterial({ color: 0xffff00, visible: false });
 
 // Listen window size changes
 window.addEventListener(
@@ -667,13 +671,14 @@ function planoInfinito() {
 function createEnemy() {
   enemys.push(new THREE.Mesh(geometryEnemy, materialEnemy));
   loader.load(
-    "./assets/aviao2.glb",
+    "./assets/L-159.gltf",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
       objEnemy.visible = true;
       objEnemy.castShadow = true;
-      objEnemy.scale.set(0.7, 0.7, 0.7);
+      objEnemy.rotateY(1.57);
+      objEnemy.scale.set(1.2, 1.2, 1.2);
       objEnemy.traverse(function (child) {
         if (child) {
           child.castShadow = true;
@@ -787,14 +792,14 @@ function createEnemyReto2() {
 function createEnemyDiagonal() {
   enemysDiagonal.push(new THREE.Mesh(geometryEnemy, materialEnemy));
   loader.load(
-    "./assets/aviao4.glb",
+    "./assets/nave.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
       objEnemy.visible = true;
       objEnemy.castShadow = true;
-      objEnemy.scale.set(0.5, 0.5, 0.5);
-      objEnemy.rotateY(-1.2);
+      objEnemy.scale.set(6, 6, 6);
+      objEnemy.rotateY(0.785398);
       objEnemy.traverse(function (child) {
         if (child) {
           child.castShadow = true;
@@ -833,14 +838,14 @@ function createEnemyDiagonal() {
 function createEnemyDiagonal2() {
   enemysDiagonal2.push(new THREE.Mesh(geometryEnemy, materialEnemy));
   loader.load(
-    "./assets/aviao4.glb",
+    "./assets/nave.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
       objEnemy.visible = true;
       objEnemy.castShadow = true;
-      objEnemy.scale.set(0.5, 0.5, 0.5);
-      objEnemy.rotateY(-1.7);
+      objEnemy.scale.set(6, 6, 6);
+      objEnemy.rotateY(-0.785398);
       objEnemy.traverse(function (child) {
         if (child) {
           child.castShadow = true;
@@ -920,6 +925,28 @@ function createGroundEnemy() {
   groundEnemys[groundEnemys.length - 1].receiveShadow = true;
   scene.add(groundEnemys[groundEnemys.length - 1]);
   groundTiros.push(new THREE.Mesh(Cgeometry, Cmaterial));
+  loader.load(
+    "./assets/missil.glb",
+    function (gltf) {
+      var objM = gltf.scene;
+      objM.name = "objM";
+      objM.visible = true;
+      //objM.castShadow = true;
+      //objM.receiveShadow = true;
+      objM.scale.set(1, 1, 1);
+      objM.traverse(function (child) {
+        if (child) {
+          child.castShadow = true;
+          child.receiveShadow = true;
+        }
+      });
+  
+      //aviao.add(objAviao);
+      groundTiros[groundTiros.length -1].add(objM);
+    },
+    null,
+    null
+  );
   if (groundEnemys[groundEnemys.length - 1].position.z < -100) {
     groundTirosBB.push(
       new THREE.Sphere(groundTiros[groundTiros.length - 1].position, 1)
