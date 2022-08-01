@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import GUI from "../libs/util/dat.gui.module.js";
-import { TrackballControls } from "../build/jsm/controls/TrackballControls.js";
-import { ShadowMapViewer } from "../build/jsm/utils/ShadowMapViewer.js";
-import { OrbitControls } from "../build/jsm/controls/OrbitControls.js";
+import GUI from "./libs/util/dat.gui.module.js";
+import { TrackballControls } from "./build/jsm/controls/TrackballControls.js";
+import { ShadowMapViewer } from "./build/jsm/utils/ShadowMapViewer.js";
+import { OrbitControls } from "./build/jsm/controls/OrbitControls.js";
 import {
   initRenderer,
   initCamera,
@@ -13,33 +13,33 @@ import {
   degreesToRadians,
   createGroundPlaneXZ,
   createGroundPlane,
-} from "../libs/util/util.js";
-import createAviao from "./criarAviao.js";
-import KeyboardState from "../libs/util/KeyboardState.js";
-import { CSG } from "../libs/other/CSGMesh.js";
-import { FogExp2, Line, SplineCurve } from "../build/three.module.js";
-import { GLTFLoader } from "../build/jsm/loaders/GLTFLoader.js";
-import { OBJLoader } from "../build/jsm/loaders/OBJLoader.js";
-import { MTLLoader } from "../build/jsm/loaders/MTLLoader.js";
-import { Water } from "../build/jsm/objects/Water.js";
+} from "./libs/util/util.js";
+import createAviao from "./T1/criarAviao.js";
+import KeyboardState from "./libs/util/KeyboardState.js";
+import { CSG } from "./libs/other/CSGMesh.js";
+import { FogExp2, Line, SplineCurve } from "./build/three.module.js";
+import { GLTFLoader } from "./build/jsm/loaders/GLTFLoader.js";
+import { OBJLoader } from "./build/jsm/loaders/OBJLoader.js";
+import { MTLLoader } from "./build/jsm/loaders/MTLLoader.js";
+import { Water } from "./build/jsm/objects/Water.js";
 import { Line3 } from "three";
-import { Buttons } from "../libs/other/buttons.js";
+import { Buttons } from "./libs/other/buttons.js";
 
 const textureLoader = new THREE.TextureLoader();
 var buttons = new Buttons(onButtonDown, onButtonUp);
 var pressedA = false;
 var pressedB = false;
 let pause = true;
-let grass = textureLoader.load("../assets/textures/grass.jpg");
-let stone = textureLoader.load("./assets/stonefloor.jpg");
-let stoneNormal = textureLoader.load("./assets/stoneNormal.jpg");
-let stoneDis = textureLoader.load("./assets/StoneDis.png");
-let lateral = textureLoader.load("./assets/lateral.jpg");
-let lateralN = textureLoader.load("./assets/lateralNormal.jpg");
-let lateralD = textureLoader.load("./assets/lateralDis.png");
+let grass = textureLoader.load("./assets/textures/grass.jpg");
+let stone = textureLoader.load("./T1/assets/stonefloor.jpg");
+let stoneNormal = textureLoader.load("./T1/assets/stoneNormal.jpg");
+let stoneDis = textureLoader.load("./T1/assets/StoneDis.png");
+let lateral = textureLoader.load("./T1/assets/lateral.jpg");
+let lateralN = textureLoader.load("./T1/assets/lateralNormal.jpg");
+let lateralD = textureLoader.load("./T1/assets/lateralDis.png");
 let explosion = [];
 for (let i = 1; i < 17; i++) {
-  explosion[i - 1] = textureLoader.load(`../assets/textures/${i}.png`);
+  explosion[i - 1] = textureLoader.load(`./assets/textures/${i}.png`);
 }
 let auxDoTiro = 0;
 var scene = new THREE.Scene(); // Create main scene
@@ -101,7 +101,7 @@ function onButtonPressed() {
   // Config and play the loaded audio
   let sound = new THREE.Audio(new THREE.AudioListener());
   audioLoader.load(audioPath, function (buffer) {
-    sound.setVolume(0);
+    sound.setVolume(0.01);
     sound.setBuffer(buffer);
     sound.setLoop(true);
     sound.play();
@@ -110,14 +110,14 @@ function onButtonPressed() {
 
 let soundMissilLoader = new THREE.AudioLoader();
 let soundMissil = new THREE.Audio(new THREE.AudioListener());
-soundMissilLoader.load("./assets/missil.mp3", function (buffer) {
+soundMissilLoader.load("./T1/assets/missil.mp3", function (buffer) {
   soundMissil.setVolume(0.01);
   soundMissil.setBuffer(buffer);
 });
 
 let soundTirosLoader = new THREE.AudioLoader();
 let soundTiros = new THREE.Audio(new THREE.AudioListener());
-soundTirosLoader.load("./assets/tiros.mp3", function (buffer) {
+soundTirosLoader.load("./T1/assets/tiros.mp3", function (buffer) {
   soundTiros.setVolume(0.01);
   soundTiros.setBuffer(buffer);
   soundTiros.duration = 0.06;
@@ -125,13 +125,13 @@ soundTirosLoader.load("./assets/tiros.mp3", function (buffer) {
 
 let soundExplosaoLoader = new THREE.AudioLoader();
 let soundExplosao = new THREE.Audio(new THREE.AudioListener());
-soundExplosaoLoader.load("./assets/explosao.mp3", function (buffer) {
+soundExplosaoLoader.load("./T1/assets/explosao.mp3", function (buffer) {
   soundExplosao.setVolume(0.01);
   soundExplosao.setBuffer(buffer);
   soundExplosao.duration = 0.8;
 });
 
-loadAudio(loadingManager, "../assets/sounds/sampleMusic.mp3");
+loadAudio(loadingManager, "./assets/sounds/sampleMusic.mp3");
 
 function loadAudio(manager, audio) {
   // Create ambient sound
@@ -348,7 +348,7 @@ let water = new Water(waterGeometry, {
   textureWidth: 512,
   textureHeight: 512,
   waterNormals: new THREE.TextureLoader().load(
-    "../assets/textures/waternormals.jpg",
+    "./assets/textures/waternormals.jpg",
     function (texture) {
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
     }
@@ -377,7 +377,7 @@ scene.add(aviao);
 var loader = new GLTFLoader(loadingManager);
 
 loader.load(
-  "./assets/F-16D.gltf",
+  "./T1/assets/F-16D.gltf",
   function (gltf) {
     var objAviao = gltf.scene;
     objAviao.name = "objAviao";
@@ -742,16 +742,11 @@ function onButtonDown(event) {
                     qntdTiro2++;
                 }, 1000 / cadencia);
             }*/
-<<<<<<< HEAD
-            break;
-        case "full":
-            buttons.setFullScreen();
-            break; 
-    }
-=======
+      break;
+    case "full":
+      buttons.setFullScreen();
       break;
   }
->>>>>>> f60c71af1fd1378aa0af575852c04fdbaa19fad8
 }
 
 function onButtonUp(event) {
@@ -929,7 +924,7 @@ function planoInfinito() {
 function createEnemy() {
   enemys.push(new THREE.Mesh(geometryEnemy, materialEnemy));
   loader.load(
-    "./assets/space.glb",
+    "./T1/assets/space.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
@@ -973,7 +968,7 @@ function createEnemy() {
 function createEnemyReto() {
   enemysReto.push(new THREE.Mesh(geometryEnemy, materialEnemy));
   loader.load(
-    "./assets/aviao3.glb",
+    "./T1/assets/aviao3.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
@@ -1052,7 +1047,7 @@ function loadOBJFile(modelPath, modelName, desiredScale, angle, visibility) {
 function createEnemyReto2() {
   enemysReto2.push(new THREE.Mesh(geometryEnemy, materialEnemy));
   loader.load(
-    "./assets/aviao3.glb",
+    "./T1/assets/aviao3.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
@@ -1092,7 +1087,7 @@ function createEnemyReto2() {
 function createEnemyDiagonal() {
   enemysDiagonal.push(new THREE.Mesh(geometryEnemy, materialEnemy));
   loader.load(
-    "./assets/nave.glb",
+    "./T1/assets/nave.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
@@ -1138,7 +1133,7 @@ function createEnemyDiagonal() {
 function createEnemyDiagonal2() {
   enemysDiagonal2.push(new THREE.Mesh(geometryEnemy, materialEnemy));
   loader.load(
-    "./assets/nave.glb",
+    "./T1/assets/nave.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
@@ -1195,7 +1190,7 @@ function tiroInimigo(inimigo, tiroInimigo) {
 function createGroundEnemy() {
   groundEnemys.push(new THREE.Mesh(groundGeometryEnemy, groundMaterialEnemy));
   loader.load(
-    "./assets/ship.glb",
+    "./T1/assets/ship.glb",
     function (gltf) {
       var objEnemy = gltf.scene;
       objEnemy.name = "Inimigo1";
@@ -1228,7 +1223,7 @@ function createGroundEnemy() {
   scene.add(groundEnemys[groundEnemys.length - 1]);
   groundTiros.push(new THREE.Mesh(Cgeometry, Cmaterial));
   loader.load(
-    "./assets/missil.glb",
+    "./T1/assets/missil.glb",
     function (gltf) {
       var objM = gltf.scene;
       objM.name = "objM";
