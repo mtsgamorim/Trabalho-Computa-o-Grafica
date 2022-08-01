@@ -730,6 +730,9 @@ function onButtonDown(event) {
                 }, 1000 / cadencia);
             }*/
             break;
+        case "full":
+            buttons.setFullScreen();
+            break; 
     }
 }
 
