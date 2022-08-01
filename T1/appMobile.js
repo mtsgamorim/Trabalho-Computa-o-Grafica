@@ -742,8 +742,16 @@ function onButtonDown(event) {
                     qntdTiro2++;
                 }, 1000 / cadencia);
             }*/
+<<<<<<< HEAD
+            break;
+        case "full":
+            buttons.setFullScreen();
+            break; 
+    }
+=======
       break;
   }
+>>>>>>> f60c71af1fd1378aa0af575852c04fdbaa19fad8
 }
 
 function onButtonUp(event) {
