@@ -903,25 +903,25 @@ function createEnemyReto2() {
 
 function createEnemyDiagonal() {
   enemysDiagonal.push(new THREE.Mesh(geometryEnemy, materialEnemy));
-  // loader.load(
-  //   "./assets/nave.glb",
-  //   function (gltf) {
-  //     var objEnemy = gltf.scene;
-  //     objEnemy.name = "Inimigo1";
-  //     objEnemy.visible = true;
-  //     objEnemy.castShadow = true;
-  //     objEnemy.scale.set(6, 6, 6);
-  //     objEnemy.rotateY(0.785398);
-  //     objEnemy.traverse(function (child) {
-  //       if (child) {
-  //         child.castShadow = true;
-  //       }
-  //     });
-  //     enemysDiagonal[enemysDiagonal.length - 1].add(objEnemy);
-  //   },
-  //   null,
-  //   null
-  // );
+   loader.load(
+     "./assets/nave.glb",
+     function (gltf) {
+       var objEnemy = gltf.scene;
+       objEnemy.name = "Inimigo1";
+       objEnemy.visible = true;
+       objEnemy.castShadow = true;
+       objEnemy.scale.set(6, 6, 6);
+       objEnemy.rotateY(0.785398);
+       objEnemy.traverse(function (child) {
+         if (child) {
+           child.castShadow = true;
+         }
+       });
+      enemysDiagonal[enemysDiagonal.length - 1].add(objEnemy);
+     },
+     null,
+     null
+   );
   enemysDiagonalBB.push(
     new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
   );
@@ -949,25 +949,25 @@ function createEnemyDiagonal() {
 
 function createEnemyDiagonal2() {
   enemysDiagonal2.push(new THREE.Mesh(geometryEnemy, materialEnemy));
-  // loader.load(
-  //   "./assets/nave.glb",
-  //   function (gltf) {
-  //     var objEnemy = gltf.scene;
-  //     objEnemy.name = "Inimigo1";
-  //     objEnemy.visible = true;
-  //     objEnemy.castShadow = true;
-  //     objEnemy.scale.set(6, 6, 6);
-  //     objEnemy.rotateY(-0.785398);
-  //     objEnemy.traverse(function (child) {
-  //       if (child) {
-  //         child.castShadow = true;
-  //       }
-  //     });
-  //     enemysDiagonal2[enemysDiagonal2.length - 1].add(objEnemy);
-  //   },
-  //   null,
-  //   null
-  // );
+   loader.load(
+     "./assets/nave.glb",
+     function (gltf) {
+       var objEnemy = gltf.scene;
+       objEnemy.name = "Inimigo1";
+       objEnemy.visible = true;
+       objEnemy.castShadow = true;
+       objEnemy.scale.set(6, 6, 6);
+       objEnemy.rotateY(-0.785398);
+       objEnemy.traverse(function (child) {
+         if (child) {
+           child.castShadow = true;
+         }
+       });
+       enemysDiagonal2[enemysDiagonal2.length - 1].add(objEnemy);
+     },
+     null,
+     null
+   );
   enemysDiagonal2BB.push(
     new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
   );
@@ -1046,7 +1046,7 @@ function createGroundEnemy() {
       objM.visible = true;
       //objM.castShadow = true;
       //objM.receiveShadow = true;
-      objM.scale.set(1, 1, 1);
+      objM.scale.set(2, 2, 2);
       objM.traverse(function (child) {
         if (child) {
           child.castShadow = true;
