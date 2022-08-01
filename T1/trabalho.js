@@ -97,7 +97,7 @@ function onButtonPressed() {
   // Config and play the loaded audio
   let sound = new THREE.Audio(new THREE.AudioListener());
   audioLoader.load(audioPath, function (buffer) {
-    sound.setVolume(0);
+    sound.setVolume(0.01);
     sound.setBuffer(buffer);
     sound.setLoop(true);
     sound.play();
@@ -1046,7 +1046,7 @@ function createGroundEnemy() {
       objM.visible = true;
       //objM.castShadow = true;
       //objM.receiveShadow = true;
-      objM.scale.set(1, 1, 1);
+      objM.scale.set(2, 2, 2);
       objM.traverse(function (child) {
         if (child) {
           child.castShadow = true;
