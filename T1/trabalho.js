@@ -19,6 +19,8 @@ import KeyboardState from "../libs/util/KeyboardState.js";
 import { CSG } from "../libs/other/CSGMesh.js";
 import { FogExp2, Line, SplineCurve } from "../build/three.module.js";
 import { GLTFLoader } from "../build/jsm/loaders/GLTFLoader.js";
+import { OBJLoader } from "../build/jsm/loaders/OBJLoader.js";
+import { MTLLoader } from "../build/jsm/loaders/MTLLoader.js";
 import { Water } from "../build/jsm/objects/Water.js";
 import { Line3 } from "three";
 
@@ -172,45 +174,45 @@ var trackballControls = new TrackballControls(camera, renderer.domElement);
 
 // create the ground plane
 
-let plane1 = createGroundPlaneWired(150, 300, 10, 10, "lightgray");
+let plane1 = createGroundPlaneWired(150, 305, 10, 10, "lightgray");
 plane1.receiveShadow = true;
-let plane2 = createGroundPlaneWired(150, 300, 10, 10, "lightgray");
+let plane2 = createGroundPlaneWired(150, 305, 10, 10, "lightgray");
 plane2.receiveShadow = true;
-let plane3 = createGroundPlaneWired(150, 300, 10, 10, "lightgray");
+let plane3 = createGroundPlaneWired(150, 305, 10, 10, "lightgray");
 plane3.receiveShadow = true;
-let planeaux = createGroundPlaneWired(150, 300, 10, 10, "lightgray");
+let planeaux = createGroundPlaneWired(150, 305, 10, 10, "lightgray");
 
-let curvedPlane1 = createGroundPlane(45, 300, 10, 10, "lightgray");
-let curvedPlane2 = createGroundPlane(45, 300, 10, 10, "lightgray");
-let curvedPlane3 = createGroundPlane(45, 300, 10, 10, "lightgray");
-let curvedPlane4 = createGroundPlane(45, 300, 10, 10, "lightgray");
-let curvedPlane5 = createGroundPlane(45, 300, 10, 10, "lightgray");
-let curvedPlane6 = createGroundPlane(45, 300, 10, 10, "lightgray");
+let curvedPlane1 = createGroundPlaneWired(300, 45, 10, 10, "lightgray");
+let curvedPlane2 = createGroundPlaneWired(300, 45, 10, 10, "lightgray");
+let curvedPlane3 = createGroundPlaneWired(300, 45, 10, 10, "lightgray");
+let curvedPlane4 = createGroundPlaneWired(300, 45, 10, 10, "lightgray");
+let curvedPlane5 = createGroundPlaneWired(300, 45, 10, 10, "lightgray");
+let curvedPlane6 = createGroundPlaneWired(300, 45, 10, 10, "lightgray");
 
 let glassPlane1 = createGroundPlane(180, 300, 10, 10, "rgb(0,255,0)");
 let glassPlane2 = createGroundPlane(180, 300, 10, 10, "rgb(0,255,0)");
-glassPlane1.translateX(177);
+glassPlane1.translateX(175);
 glassPlane1.translateZ(19);
 plane1.add(glassPlane1);
-glassPlane2.translateX(-177);
+glassPlane2.translateX(-175);
 glassPlane2.translateZ(19);
 plane1.add(glassPlane2);
 
 let glassPlane3 = createGroundPlane(180, 300, 10, 10, "rgb(0,255,0)");
 let glassPlane4 = createGroundPlane(180, 300, 10, 10, "rgb(0,255,0)");
-glassPlane3.translateX(177);
+glassPlane3.translateX(175);
 glassPlane3.translateZ(19);
 plane2.add(glassPlane3);
-glassPlane4.translateX(-177);
+glassPlane4.translateX(-175);
 glassPlane4.translateZ(19);
 plane2.add(glassPlane4);
 
 let glassPlane5 = createGroundPlane(180, 300, 10, 10, "rgb(0,255,0)");
 let glassPlane6 = createGroundPlane(180, 300, 10, 10, "rgb(0,255,0)");
-glassPlane5.translateX(177);
+glassPlane5.translateX(175);
 glassPlane5.translateZ(19);
 plane3.add(glassPlane5);
-glassPlane6.translateX(-177);
+glassPlane6.translateX(-175);
 glassPlane6.translateZ(19);
 plane3.add(glassPlane6);
 
@@ -220,16 +222,28 @@ curvedPlane3.translateX(75);
 curvedPlane4.translateX(-75);
 curvedPlane5.translateX(75);
 curvedPlane6.translateX(-75);
-curvedPlane1.rotateY(Math.PI / 1.5);
-curvedPlane2.rotateY(-Math.PI / 1.5);
+//curvedPlane1.rotateY(Math.PI / 1.5);
+curvedPlane1.rotateY(Math.PI / 2);
+curvedPlane1.rotateX(-Math.PI / 0.85);
+//curvedPlane2.rotateY(-Math.PI / 1.5);
+curvedPlane2.rotateY(-Math.PI / 2);
+curvedPlane2.rotateX(-Math.PI / 0.85);
 
-curvedPlane3.rotateY(Math.PI / 1.5);
+//curvedPlane3.rotateY(Math.PI / 1.5);
+curvedPlane3.rotateY(Math.PI / 2);
+curvedPlane3.rotateX(-Math.PI / 0.85);
 
-curvedPlane4.rotateY(-Math.PI / 1.5);
+//curvedPlane4.rotateY(-Math.PI / 1.5);
+curvedPlane4.rotateY(-Math.PI / 2);
+curvedPlane4.rotateX(-Math.PI / 0.85);
 
-curvedPlane5.rotateY(Math.PI / 1.5);
+//curvedPlane5.rotateY(Math.PI / 1.5);
+curvedPlane5.rotateY(Math.PI / 2);
+curvedPlane5.rotateX(-Math.PI / 0.85);
 
-curvedPlane6.rotateY(-Math.PI / 1.5);
+//curvedPlane6.rotateY(-Math.PI / 1.5);
+curvedPlane6.rotateY(-Math.PI / 2);
+curvedPlane6.rotateX(-Math.PI / 0.85);
 
 glassPlane1.material.map = grass;
 glassPlane2.material.map = grass;
@@ -238,44 +252,50 @@ glassPlane4.material.map = grass;
 glassPlane5.material.map = grass;
 glassPlane6.material.map = grass;
 
-plane1.material.map = stone;
-plane1.material.normalMap = stoneNormal;
-plane1.material.displacementMap = stoneDis;
+plane1.material.map = lateral;
+plane1.material.normalMap = lateralN;
+plane1.material.displacementMap = lateralD;
 plane1.material.displacementScale = 3;
 
-plane2.material.map = stone;
-plane2.material.normalMap = stoneNormal;
-plane2.material.displacementMap = stoneDis;
+plane2.material.map = lateral;
+plane2.material.normalMap = lateralN;
+plane2.material.displacementMap = lateralD;
 plane2.material.displacementScale = 3;
 
-plane3.material.map = stone;
-plane3.material.normalMap = stoneNormal;
-plane3.material.displacementMap = stoneDis;
+plane3.material.map = lateral;
+plane3.material.normalMap = lateralN;
+plane3.material.displacementMap = lateralD;
 plane3.material.displacementScale = 3;
 
-curvedPlane1.material.map = lateral;
-curvedPlane1.material.normalMap = lateralN;
-curvedPlane1.material.displacementMap = lateralD;
+curvedPlane1.material.map = stone;
+curvedPlane1.material.normalMap = stoneNormal;
+curvedPlane1.material.displacementMap = stoneDis;
+curvedPlane1.material.displacementScale = 4;
 
-curvedPlane2.material.map = lateral;
-curvedPlane2.material.normalMap = lateralN;
-curvedPlane2.material.displacementMap = lateralD;
+curvedPlane2.material.map = stone;
+curvedPlane2.material.normalMap = stoneNormal;
+curvedPlane2.material.displacementMap = stoneDis;
+curvedPlane2.material.displacementScale = 4;
 
-curvedPlane3.material.map = lateral;
-curvedPlane3.material.normalMap = lateralN;
-curvedPlane3.material.displacementMap = lateralD;
+curvedPlane3.material.map = stone;
+curvedPlane3.material.normalMap = stoneNormal;
+curvedPlane3.material.displacementMap = stoneDis;
+curvedPlane3.material.displacementScale = 4;
 
-curvedPlane4.material.map = lateral;
-curvedPlane4.material.normalMap = lateralN;
-curvedPlane4.material.displacementMap = lateralD;
+curvedPlane4.material.map = stone;
+curvedPlane4.material.normalMap = stoneNormal;
+curvedPlane4.material.displacementMap = stoneDis;
+curvedPlane4.material.displacementScale = 4;
 
-curvedPlane5.material.map = lateral;
-curvedPlane5.material.normalMap = lateralN;
-curvedPlane5.material.displacementMap = lateralD;
+curvedPlane5.material.map = stone;
+curvedPlane5.material.normalMap = stoneNormal;
+curvedPlane5.material.displacementMap = stoneDis;
+curvedPlane5.material.displacementScale = 4;
 
-curvedPlane6.material.map = lateral;
-curvedPlane6.material.normalMap = lateralN;
-curvedPlane6.material.displacementMap = lateralD;
+curvedPlane6.material.map = stone;
+curvedPlane6.material.normalMap = stoneNormal;
+curvedPlane6.material.displacementMap = stoneDis;
+curvedPlane6.material.displacementScale = 4;
 
 function setTextureOptions(material, repu, repv) {
   material.map.repeat.set(repu, repv);
@@ -292,7 +312,7 @@ function setTextureOptions(material, repu, repv) {
       THREE.RepeatWrapping;
 }
 
-setTextureOptions(curvedPlane1.material, 1, 2);
+setTextureOptions(curvedPlane1.material, 8, 1);
 
 scene.add(plane1);
 scene.add(plane2);
@@ -371,6 +391,7 @@ loader.load(
 const explosionG = new THREE.SphereGeometry(6, 32, 16);
 const explosionM = new THREE.MeshBasicMaterial({ color: "lightred" });
 const sphere = new THREE.Mesh(explosionG, explosionM);
+
 //sphere.rotateX(Math.PI / 2);
 function explode1(name) {
   name.remove(sphere);
@@ -719,25 +740,28 @@ function planoInfinito() {
 
 function createEnemy() {
   enemys.push(new THREE.Mesh(geometryEnemy, materialEnemy));
-  // loader.load(
-  //  "./assets/L-159.gltf",
-  //  function (gltf) {
-  //   var objEnemy = gltf.scene;
-  //   objEnemy.name = "Inimigo1";
-  //   objEnemy.visible = true;
-  //   objEnemy.castShadow = true;
-  //   objEnemy.rotateY(1.57);
-  //  objEnemy.scale.set(1.2, 1.2, 1.2);
-  //   objEnemy.traverse(function (child) {
-  //     if (child) {
-  //      child.castShadow = true;
-  //   }
-  // });
-  // enemys[enemys.length - 1].add(objEnemy);
-  // },
-  // null,
-  // null
-  //);
+  loader.load(
+    "./assets/space.glb",
+    function (gltf) {
+      var objEnemy = gltf.scene;
+      objEnemy.name = "Inimigo1";
+      objEnemy.visible = true;
+      objEnemy.castShadow = true;
+      //objEnemy.rotateY(1.57);
+      objEnemy.scale.set(1, 1, 1);
+      objEnemy.traverse(function (child) {
+        if (child) {
+          child.castShadow = true;
+        }
+      });
+      enemys[enemys.length - 1].add(objEnemy);
+    },
+    null,
+    null
+  );
+
+  //var obj = loadOBJFile("./assets/", "plane", 1.0, 0, true)
+  //enemys[enemys.length - 1].add(obj);
   enemysBB.push(new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()));
   enemysBB[enemysBB.length - 1].setFromObject(enemys[enemys.length - 1]);
   let posicaoX = getRandomArbitrary(-90, 90);
@@ -796,6 +820,45 @@ function createEnemyReto() {
   //     tiroInimigo(enemys[enemys.length - 1], enemyTiros[enemyTiros.length - 1]),
   //   600
   // );
+}
+
+function loadOBJFile(modelPath, modelName, desiredScale, angle, visibility) {
+  var currentModel = modelName;
+  var manager = new THREE.LoadingManager();
+
+  var mtlLoader = new MTLLoader(manager);
+  mtlLoader.setPath(modelPath);
+  mtlLoader.load(modelName + ".mtl", function (materials) {
+    materials.preload();
+
+    var objLoader = new OBJLoader(manager);
+    objLoader.setMaterials(materials);
+    objLoader.setPath(modelPath);
+    objLoader.load(
+      modelName + ".obj",
+      function (obj) {
+        obj.visible = visibility;
+        obj.name = modelName;
+        // Set 'castShadow' property for each children of the group
+        obj.traverse(function (child) {
+          child.castShadow = true;
+        });
+
+        obj.traverse(function (node) {
+          if (node.material) node.material.side = THREE.DoubleSide;
+        });
+
+        var obj = normalizeAndRescale(obj, desiredScale);
+        var obj = fixPosition(obj);
+        obj.rotateY(degreesToRadians(angle));
+
+        //scene.add(obj);
+        //objectArray.push(obj);
+      },
+      onProgress,
+      onError
+    );
+  });
 }
 
 function createEnemyReto2() {
