@@ -1046,7 +1046,7 @@ function createGroundEnemy() {
       objM.visible = true;
       //objM.castShadow = true;
       //objM.receiveShadow = true;
-      objM.scale.set(1, 1, 1);
+      objM.scale.set(2, 2, 2);
       objM.traverse(function (child) {
         if (child) {
           child.castShadow = true;
