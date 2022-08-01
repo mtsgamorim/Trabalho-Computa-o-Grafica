@@ -34,6 +34,7 @@ let lateral = textureLoader.load("./assets/lateral.jpg");
 let lateralN = textureLoader.load("./assets/lateralNormal.jpg");
 let lateralD = textureLoader.load("./assets/lateralDis.png");
 let explosion = [];
+let auxiliarHP = -1;
 for (let i = 1; i < 17; i++) {
   explosion[i - 1] = textureLoader.load(`../assets/textures/${i}.png`);
 }
@@ -97,12 +98,34 @@ function onButtonPressed() {
   // Config and play the loaded audio
   let sound = new THREE.Audio(new THREE.AudioListener());
   audioLoader.load(audioPath, function (buffer) {
-    sound.setVolume(0);
+    sound.setVolume(0.01);
     sound.setBuffer(buffer);
     sound.setLoop(true);
     sound.play();
   });
 }
+let soundMissilLoader = new THREE.AudioLoader();
+let soundMissil = new THREE.Audio(new THREE.AudioListener());
+soundMissilLoader.load("./assets/missil.mp3", function (buffer) {
+  soundMissil.setVolume(0.01);
+  soundMissil.setBuffer(buffer);
+});
+
+let soundTirosLoader = new THREE.AudioLoader();
+let soundTiros = new THREE.Audio(new THREE.AudioListener());
+soundTirosLoader.load("./assets/tiros.mp3", function (buffer) {
+  soundTiros.setVolume(0.01);
+  soundTiros.setBuffer(buffer);
+  soundTiros.duration = 0.06;
+});
+
+let soundExplosaoLoader = new THREE.AudioLoader();
+let soundExplosao = new THREE.Audio(new THREE.AudioListener());
+soundExplosaoLoader.load("./assets/explosao.mp3", function (buffer) {
+  soundExplosao.setVolume(0.01);
+  soundExplosao.setBuffer(buffer);
+  soundExplosao.duration = 0.8;
+});
 
 loadAudio(loadingManager, "../assets/sounds/sampleMusic.mp3");
 
@@ -138,6 +161,7 @@ controls.add("* SPACE button to ground bomb.");
 controls.add("* CTRL button to simple shot.");
 controls.add("* G button to 'God Mode'");
 controls.add("* P button to pause and play game");
+controls.add("* ENTER button to restart");
 controls.show();
 
 //LUZ AMBIENTE
@@ -397,6 +421,7 @@ function explode1(name) {
   name.remove(sphere);
   sphere.material.map = explosion[0];
   name.add(sphere);
+  soundExplosao.play();
 }
 function explode2(name) {
   name.remove(sphere);
@@ -668,12 +693,17 @@ function keyboardUpdate(gameover) {
               aviao.position.z
             );
             scene.add(misseis[qntdTiro2]);
+            soundTiros.play();
             if (qntdTiro2 === 19) {
               qntdTiro2 = 0;
             }
             qntdTiro2++;
           }, 1000 / cadencia);
         }
+      }
+
+      if (keyboard.pressed("enter")) {
+        document.location.reload(true);
       }
 
       if (keyboard.pressed("ctrl")) {
@@ -687,6 +717,7 @@ function keyboardUpdate(gameover) {
               aviao.position.z
             );
             scene.add(tiros[qntdTiro]);
+            soundTiros.play();
             if (qntdTiro === 19) {
               qntdTiro = 0;
             }
@@ -707,8 +738,14 @@ function keyboardUpdate(gameover) {
         qntdTiro++;
       }
     }
-    if (keyboard.pressed("G")) {
-      hp = -1;
+    if (keyboard.up("G")) {
+      if (hp !== -1) {
+        auxiliarHP = hp;
+        hp = -1;
+      } else {
+        hp = auxiliarHP;
+        auxiliarHP = -1;
+      }
     }
     if (keyboard.up("P")) {
       if (pause === false) {
@@ -903,25 +940,25 @@ function createEnemyReto2() {
 
 function createEnemyDiagonal() {
   enemysDiagonal.push(new THREE.Mesh(geometryEnemy, materialEnemy));
-   loader.load(
-     "./assets/nave.glb",
-     function (gltf) {
-       var objEnemy = gltf.scene;
-       objEnemy.name = "Inimigo1";
-       objEnemy.visible = true;
-       objEnemy.castShadow = true;
-       objEnemy.scale.set(6, 6, 6);
-       objEnemy.rotateY(0.785398);
-       objEnemy.traverse(function (child) {
-         if (child) {
-           child.castShadow = true;
-         }
-       });
+  loader.load(
+    "./assets/nave.glb",
+    function (gltf) {
+      var objEnemy = gltf.scene;
+      objEnemy.name = "Inimigo1";
+      objEnemy.visible = true;
+      objEnemy.castShadow = true;
+      objEnemy.scale.set(6, 6, 6);
+      objEnemy.rotateY(0.785398);
+      objEnemy.traverse(function (child) {
+        if (child) {
+          child.castShadow = true;
+        }
+      });
       enemysDiagonal[enemysDiagonal.length - 1].add(objEnemy);
-     },
-     null,
-     null
-   );
+    },
+    null,
+    null
+  );
   enemysDiagonalBB.push(
     new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
   );
@@ -949,25 +986,25 @@ function createEnemyDiagonal() {
 
 function createEnemyDiagonal2() {
   enemysDiagonal2.push(new THREE.Mesh(geometryEnemy, materialEnemy));
-   loader.load(
-     "./assets/nave.glb",
-     function (gltf) {
-       var objEnemy = gltf.scene;
-       objEnemy.name = "Inimigo1";
-       objEnemy.visible = true;
-       objEnemy.castShadow = true;
-       objEnemy.scale.set(6, 6, 6);
-       objEnemy.rotateY(-0.785398);
-       objEnemy.traverse(function (child) {
-         if (child) {
-           child.castShadow = true;
-         }
-       });
-       enemysDiagonal2[enemysDiagonal2.length - 1].add(objEnemy);
-     },
-     null,
-     null
-   );
+  loader.load(
+    "./assets/nave.glb",
+    function (gltf) {
+      var objEnemy = gltf.scene;
+      objEnemy.name = "Inimigo1";
+      objEnemy.visible = true;
+      objEnemy.castShadow = true;
+      objEnemy.scale.set(6, 6, 6);
+      objEnemy.rotateY(-0.785398);
+      objEnemy.traverse(function (child) {
+        if (child) {
+          child.castShadow = true;
+        }
+      });
+      enemysDiagonal2[enemysDiagonal2.length - 1].add(objEnemy);
+    },
+    null,
+    null
+  );
   enemysDiagonal2BB.push(
     new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
   );
@@ -1000,6 +1037,7 @@ function tiroInimigo(inimigo, tiroInimigo) {
     inimigo.position.z
   );
   scene.add(tiroInimigo);
+  soundTiros.play();
   tiroInimigo.lookAt(aviao.position);
 }
 
@@ -1078,6 +1116,7 @@ function tiroInimigoGround(inimigo, tiroInimigo) {
     inimigo.position.z
   );
   scene.add(tiroInimigo);
+  soundMissil.play();
 }
 
 function jogo() {
@@ -1419,6 +1458,7 @@ function aviaoMorte() {
   scene.remove(aviao);
   if (animationOn === true) {
     alert("Fim de jogo");
+    document.location.reload(true);
   }
   animationOn = false;
 }
@@ -1427,6 +1467,7 @@ function Venceu() {
   scene.remove(aviao);
   if (animationOn === true) {
     alert("Você venceu!");
+    document.location.reload(true);
   }
   animationOn = false;
 }
