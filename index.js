@@ -1604,6 +1604,7 @@ function aviaoMorte() {
   scene.remove(aviao);
   if (animationOn === true) {
     alert("Fim de jogo");
+    document.location.reload(true);
   }
   animationOn = false;
 }
@@ -1612,6 +1613,7 @@ function Venceu() {
   scene.remove(aviao);
   if (animationOn === true) {
     alert("Você venceu!");
+    document.location.reload(true);
   }
   animationOn = false;
 }
