@@ -104,6 +104,28 @@ function onButtonPressed() {
     sound.play();
   });
 }
+let soundMissilLoader = new THREE.AudioLoader();
+let soundMissil = new THREE.Audio(new THREE.AudioListener());
+soundMissilLoader.load("./assets/missil.mp3", function (buffer) {
+  soundMissil.setVolume(0.01);
+  soundMissil.setBuffer(buffer);
+});
+
+let soundTirosLoader = new THREE.AudioLoader();
+let soundTiros = new THREE.Audio(new THREE.AudioListener());
+soundTirosLoader.load("./assets/tiros.mp3", function (buffer) {
+  soundTiros.setVolume(0.01);
+  soundTiros.setBuffer(buffer);
+  soundTiros.duration = 0.06;
+});
+
+let soundExplosaoLoader = new THREE.AudioLoader();
+let soundExplosao = new THREE.Audio(new THREE.AudioListener());
+soundExplosaoLoader.load("./assets/explosao.mp3", function (buffer) {
+  soundExplosao.setVolume(0.01);
+  soundExplosao.setBuffer(buffer);
+  soundExplosao.duration = 0.8;
+});
 
 loadAudio(loadingManager, "../assets/sounds/sampleMusic.mp3");
 
@@ -399,6 +421,7 @@ function explode1(name) {
   name.remove(sphere);
   sphere.material.map = explosion[0];
   name.add(sphere);
+  soundExplosao.play();
 }
 function explode2(name) {
   name.remove(sphere);
@@ -670,6 +693,7 @@ function keyboardUpdate(gameover) {
               aviao.position.z
             );
             scene.add(misseis[qntdTiro2]);
+            soundTiros.play();
             if (qntdTiro2 === 19) {
               qntdTiro2 = 0;
             }
@@ -693,6 +717,7 @@ function keyboardUpdate(gameover) {
               aviao.position.z
             );
             scene.add(tiros[qntdTiro]);
+            soundTiros.play();
             if (qntdTiro === 19) {
               qntdTiro = 0;
             }
@@ -1012,6 +1037,7 @@ function tiroInimigo(inimigo, tiroInimigo) {
     inimigo.position.z
   );
   scene.add(tiroInimigo);
+  soundTiros.play();
   tiroInimigo.lookAt(aviao.position);
 }
 
@@ -1090,6 +1116,7 @@ function tiroInimigoGround(inimigo, tiroInimigo) {
     inimigo.position.z
   );
   scene.add(tiroInimigo);
+  soundMissil.play();
 }
 
 function jogo() {
