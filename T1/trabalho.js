@@ -34,6 +34,7 @@ let lateral = textureLoader.load("./assets/lateral.jpg");
 let lateralN = textureLoader.load("./assets/lateralNormal.jpg");
 let lateralD = textureLoader.load("./assets/lateralDis.png");
 let explosion = [];
+let auxiliarHP = -1;
 for (let i = 1; i < 17; i++) {
   explosion[i - 1] = textureLoader.load(`../assets/textures/${i}.png`);
 }
@@ -138,6 +139,7 @@ controls.add("* SPACE button to ground bomb.");
 controls.add("* CTRL button to simple shot.");
 controls.add("* G button to 'God Mode'");
 controls.add("* P button to pause and play game");
+controls.add("* ENTER button to restart");
 controls.show();
 
 //LUZ AMBIENTE
@@ -676,6 +678,10 @@ function keyboardUpdate(gameover) {
         }
       }
 
+      if (keyboard.pressed("enter")) {
+        document.location.reload(true);
+      }
+
       if (keyboard.pressed("ctrl")) {
         if (shoot) {
           shoot = false;
@@ -707,8 +713,14 @@ function keyboardUpdate(gameover) {
         qntdTiro++;
       }
     }
-    if (keyboard.pressed("G")) {
-      hp = -1;
+    if (keyboard.up("G")) {
+      if (hp !== -1) {
+        auxiliarHP = hp;
+        hp = -1;
+      } else {
+        hp = auxiliarHP;
+        auxiliarHP = -1;
+      }
     }
     if (keyboard.up("P")) {
       if (pause === false) {
@@ -903,25 +915,25 @@ function createEnemyReto2() {
 
 function createEnemyDiagonal() {
   enemysDiagonal.push(new THREE.Mesh(geometryEnemy, materialEnemy));
-   loader.load(
-     "./assets/nave.glb",
-     function (gltf) {
-       var objEnemy = gltf.scene;
-       objEnemy.name = "Inimigo1";
-       objEnemy.visible = true;
-       objEnemy.castShadow = true;
-       objEnemy.scale.set(6, 6, 6);
-       objEnemy.rotateY(0.785398);
-       objEnemy.traverse(function (child) {
-         if (child) {
-           child.castShadow = true;
-         }
-       });
+  loader.load(
+    "./assets/nave.glb",
+    function (gltf) {
+      var objEnemy = gltf.scene;
+      objEnemy.name = "Inimigo1";
+      objEnemy.visible = true;
+      objEnemy.castShadow = true;
+      objEnemy.scale.set(6, 6, 6);
+      objEnemy.rotateY(0.785398);
+      objEnemy.traverse(function (child) {
+        if (child) {
+          child.castShadow = true;
+        }
+      });
       enemysDiagonal[enemysDiagonal.length - 1].add(objEnemy);
-     },
-     null,
-     null
-   );
+    },
+    null,
+    null
+  );
   enemysDiagonalBB.push(
     new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
   );
@@ -949,25 +961,25 @@ function createEnemyDiagonal() {
 
 function createEnemyDiagonal2() {
   enemysDiagonal2.push(new THREE.Mesh(geometryEnemy, materialEnemy));
-   loader.load(
-     "./assets/nave.glb",
-     function (gltf) {
-       var objEnemy = gltf.scene;
-       objEnemy.name = "Inimigo1";
-       objEnemy.visible = true;
-       objEnemy.castShadow = true;
-       objEnemy.scale.set(6, 6, 6);
-       objEnemy.rotateY(-0.785398);
-       objEnemy.traverse(function (child) {
-         if (child) {
-           child.castShadow = true;
-         }
-       });
-       enemysDiagonal2[enemysDiagonal2.length - 1].add(objEnemy);
-     },
-     null,
-     null
-   );
+  loader.load(
+    "./assets/nave.glb",
+    function (gltf) {
+      var objEnemy = gltf.scene;
+      objEnemy.name = "Inimigo1";
+      objEnemy.visible = true;
+      objEnemy.castShadow = true;
+      objEnemy.scale.set(6, 6, 6);
+      objEnemy.rotateY(-0.785398);
+      objEnemy.traverse(function (child) {
+        if (child) {
+          child.castShadow = true;
+        }
+      });
+      enemysDiagonal2[enemysDiagonal2.length - 1].add(objEnemy);
+    },
+    null,
+    null
+  );
   enemysDiagonal2BB.push(
     new THREE.Box3(new THREE.Vector3(), new THREE.Vector3())
   );
@@ -1419,6 +1431,7 @@ function aviaoMorte() {
   scene.remove(aviao);
   if (animationOn === true) {
     alert("Fim de jogo");
+    document.location.reload(true);
   }
   animationOn = false;
 }
@@ -1427,6 +1440,7 @@ function Venceu() {
   scene.remove(aviao);
   if (animationOn === true) {
     alert("Você venceu!");
+    document.location.reload(true);
   }
   animationOn = false;
 }
